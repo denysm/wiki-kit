@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__/
+.venv/
+# data never belongs in the kit
+topics/
+raw/
+inbox/
+*.local.md
+# compiled from pdf2txt.swift
+scripts/pdf2txt

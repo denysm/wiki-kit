@@ -1,0 +1,3 @@
+# Hooks and shell scripts run under sh, also in Git for Windows: keep LF endings.
+hooks/* text eol=lf
+*.sh text eol=lf

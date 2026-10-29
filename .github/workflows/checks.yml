@@ -1,0 +1,30 @@
+# Cheap checks on every push and pull request (Linux only).
+# The private names list never leaves the owner's computer, so the leak check here
+# covers paths, secrets and internal hosts only; the local pre-push hook stays the main guard.
+name: checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.9", "3.13"]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Scripts compile
+        run: python -I -c 'import sys; [compile(open(f, encoding="utf-8").read(), f, "exec") for f in sys.argv[1:]]' scripts/*.py
+      - name: Leak check (tree and whole history, without the private names list)
+        run: python -I scripts/leak_check.py --history --names /dev/null
+      - name: Shell syntax
+        run: for f in bootstrap.sh hooks/*; do sh -n "$f" || exit 1; done
+      - name: No symlinks (Git for Windows checks them out as text files)
+        run: |
+          if git ls-files -s | grep '^120000'; then echo "replace these symlinks with regular files"; exit 1; fi

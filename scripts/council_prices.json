@@ -1,0 +1,273 @@
+{
+ "note": "Per 1M tokens: in (cache miss), cached (cache hit), out. OpenAI USD Standard tier, short context <=272K; 'long' = [in,cached,out] above 272K input tokens. '-pro' models list no cached price: cached = in. DeepSeek in CNY, peak price; 'offpeak' (half) applies outside Beijing Mon-Fri 09-12, 14-18 (Chinese holidays not modelled). Claude via claude -p reports its own notional cost.",
+ "as_of": "2026-10-26",
+ "sources": {
+  "openai": "https://developers.openai.com/api/docs/pricing",
+  "deepseek": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing"
+ },
+ "fx_to_usd": {
+  "CNY": 0.149921,
+  "as_of": "2026-10-23",
+  "source": "ECB via api.frankfurter.dev"
+ },
+ "long_context_threshold": 272000,
+ "models": {
+  "openai:gpt-6-astra": {
+   "in": 10,
+   "cached": 1,
+   "out": 50,
+   "long": [
+    20,
+    2,
+    75
+   ]
+  },
+  "openai:gpt-6.1-sol": {
+   "in": 2,
+   "cached": 0.1,
+   "out": 10,
+   "long": [
+    4,
+    0.2,
+    15
+   ]
+  },
+  "openai:gpt-6-sol": {
+   "in": 2,
+   "cached": 0.2,
+   "out": 10,
+   "long": [
+    4,
+    0.4,
+    15
+   ]
+  },
+  "openai:gpt-6-luna": {
+   "in": 0.1,
+   "cached": 0.01,
+   "out": 0.5,
+   "long": [
+    0.2,
+    0.02,
+    0.75
+   ]
+  },
+  "openai:gpt-5.6-sol": {
+   "in": 4,
+   "cached": 0.4,
+   "out": 20,
+   "long": [
+    8,
+    0.8,
+    30
+   ]
+  },
+  "openai:gpt-5.6-terra": {
+   "in": 2,
+   "cached": 0.2,
+   "out": 12,
+   "long": [
+    4,
+    0.4,
+    18
+   ]
+  },
+  "openai:gpt-5.6-luna": {
+   "in": 0.2,
+   "cached": 0.02,
+   "out": 1.2,
+   "long": [
+    0.4,
+    0.04,
+    1.8
+   ]
+  },
+  "openai:gpt-5.5": {
+   "in": 5,
+   "cached": 0.5,
+   "out": 30,
+   "long": [
+    10,
+    1,
+    45
+   ]
+  },
+  "openai:gpt-5.5-pro": {
+   "in": 30,
+   "cached": 30,
+   "out": 180,
+   "long": [
+    60,
+    60,
+    270
+   ]
+  },
+  "openai:gpt-5.4": {
+   "in": 2.5,
+   "cached": 0.25,
+   "out": 15,
+   "long": [
+    5,
+    0.5,
+    22.5
+   ]
+  },
+  "openai:gpt-5.4-pro": {
+   "in": 30,
+   "cached": 30,
+   "out": 180,
+   "long": [
+    60,
+    60,
+    270
+   ]
+  },
+  "openai:gpt-5.4-mini": {
+   "in": 0.75,
+   "cached": 0.075,
+   "out": 4.5
+  },
+  "openai:gpt-5.4-nano": {
+   "in": 0.2,
+   "cached": 0.02,
+   "out": 1.25
+  },
+  "openai:gpt-5.2": {
+   "in": 1.75,
+   "cached": 0.175,
+   "out": 14
+  },
+  "openai:gpt-5.2-pro": {
+   "in": 21,
+   "cached": 21,
+   "out": 168
+  },
+  "openai:gpt-5.1": {
+   "in": 1.25,
+   "cached": 0.125,
+   "out": 10
+  },
+  "openai:gpt-5": {
+   "in": 1.25,
+   "cached": 0.125,
+   "out": 10
+  },
+  "openai:gpt-5-mini": {
+   "in": 0.25,
+   "cached": 0.025,
+   "out": 2
+  },
+  "openai:gpt-5-nano": {
+   "in": 0.05,
+   "cached": 0.005,
+   "out": 0.4
+  },
+  "openai:gpt-5-pro": {
+   "in": 15,
+   "cached": 15,
+   "out": 120
+  },
+  "openai:chat-latest": {
+   "in": 5,
+   "cached": 0.5,
+   "out": 30
+  },
+  "openai:gpt-5.3-codex": {
+   "in": 1.75,
+   "cached": 0.175,
+   "out": 14
+  },
+  "openai:gpt-5-search-api": {
+   "in": 1.25,
+   "cached": 0.125,
+   "out": 10
+  },
+  "openai:gpt-4.1": {
+   "in": 2,
+   "cached": 0.5,
+   "out": 8
+  },
+  "openai:gpt-4.1-mini": {
+   "in": 0.4,
+   "cached": 0.1,
+   "out": 1.6
+  },
+  "openai:gpt-4.1-nano": {
+   "in": 0.1,
+   "cached": 0.025,
+   "out": 0.4
+  },
+  "openai:gpt-4o": {
+   "in": 2.5,
+   "cached": 1.25,
+   "out": 10
+  },
+  "openai:gpt-4o-mini": {
+   "in": 0.15,
+   "cached": 0.075,
+   "out": 0.6
+  },
+  "openai:o1": {
+   "in": 15,
+   "cached": 7.5,
+   "out": 60
+  },
+  "openai:o1-pro": {
+   "in": 150,
+   "cached": 150,
+   "out": 600
+  },
+  "openai:o3": {
+   "in": 2,
+   "cached": 0.5,
+   "out": 8
+  },
+  "openai:o4-mini": {
+   "in": 1.1,
+   "cached": 0.275,
+   "out": 4.4
+  },
+  "openai:o3-mini": {
+   "in": 1.1,
+   "cached": 0.55,
+   "out": 4.4
+  },
+  "openai:gpt-4-turbo": {
+   "in": 10,
+   "cached": 10,
+   "out": 30
+  },
+  "openai:gpt-4": {
+   "in": 30,
+   "cached": 30,
+   "out": 60
+  },
+  "openai:gpt-3.5-turbo": {
+   "in": 0.5,
+   "cached": 0.5,
+   "out": 1.5
+  },
+  "deepseek:deepseek-flash": {
+   "currency": "CNY",
+   "in": 2,
+   "cached": 0.04,
+   "out": 8,
+   "offpeak": [
+    1,
+    0.02,
+    4
+   ]
+  },
+  "deepseek:deepseek-v4-pro": {
+   "currency": "CNY",
+   "in": 9,
+   "cached": 0.3,
+   "out": 27,
+   "offpeak": [
+    4.5,
+    0.15,
+    13.5
+   ]
+  }
+ }
+}

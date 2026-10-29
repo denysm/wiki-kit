@@ -1,0 +1,5 @@
+# Known false positives for scripts/leak_check.py: path kind count.
+# The file must hold exactly that many hits; any new hit fails the push.
+scripts/council.py internal-url 1   # local Ollama endpoint (localhost)
+scripts/mail2md.py assignment 1     # the secret-matching regex itself
+scripts/vtt2md.py assignment 1      # the secret-matching regex itself

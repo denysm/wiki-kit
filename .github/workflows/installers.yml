@@ -1,0 +1,74 @@
+# Run both installers on clean virtual machines, as a new user would.
+# Only when the installers or what they install change, or by hand (Actions tab),
+# because Windows minutes count double in the free quota.
+name: installers
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - bootstrap.sh
+      - bootstrap.ps1
+      - hooks/**
+      - skills/**
+      - specialists/**
+      - templates/**
+      - scripts/sync_specialists.py
+      - scripts/leak_check.py
+      - scripts/raw_check.py
+      - .github/workflows/installers.yml
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Install Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: bootstrap.sh
+        run: bash bootstrap.sh --lang ru
+      - name: Run it again (must be safe)
+        run: bash bootstrap.sh --lang ru
+      - name: pre-push hook blocks a leak
+        run: |
+          git config user.email ci@example.com; git config user.name ci
+          git init -q --bare "$RUNNER_TEMP/remote.git"
+          git push -q "$RUNNER_TEMP/remote.git" HEAD:refs/heads/main
+          echo "key AKIA""ABCDEFGHIJKLMNOP" > leak.md; git add leak.md; git commit -qm leak
+          if git push "$RUNNER_TEMP/remote.git" HEAD:refs/heads/main; then echo "the hook let a leak through"; exit 1; fi
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: bootstrap.ps1 in Windows PowerShell 5.1 (installs Claude Code itself)
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Continue'   # judge by the exit code, as a person would by the summary
+          powershell -ExecutionPolicy Bypass -File bootstrap.ps1 -Yes -Lang ru
+          exit $LASTEXITCODE
+      - name: Run it again (must be safe)
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Continue'   # judge by the exit code, as a person would by the summary
+          powershell -ExecutionPolicy Bypass -File bootstrap.ps1 -Yes -Lang ru
+          exit $LASTEXITCODE
+      - name: Claude Code is on the user PATH for new windows
+        shell: powershell
+        run: if (([Environment]::GetEnvironmentVariable('Path', 'User') -split ';') -notcontains (Join-Path $HOME '.local\bin')) { exit 1 }
+      - name: Show the log
+        if: always()
+        shell: powershell
+        run: Get-Content (Join-Path $env:TEMP "wiki-kit-bootstrap.log") -ErrorAction SilentlyContinue | Select-Object -Last 80
+      - name: pre-push hook blocks a leak (Git Bash)
+        shell: bash
+        run: |
+          git config user.email ci@example.com; git config user.name ci
+          git init -q --bare "$RUNNER_TEMP/remote.git"
+          git push -q "$RUNNER_TEMP/remote.git" HEAD:refs/heads/main
+          echo "key AKIA""ABCDEFGHIJKLMNOP" > leak.md; git add leak.md; git commit -qm leak
+          if git push "$RUNNER_TEMP/remote.git" HEAD:refs/heads/main; then echo "the hook let a leak through"; exit 1; fi
