@@ -8,7 +8,7 @@
 # Options:
 #   -Hub DIR    where your wiki lives (default: hub_path from
 #               ~\.config\llm-wiki\config.json, else ~\wiki)
-#   -Lang ru    language of the hub rules and of the chat (en or ru; default:
+#   -Lang ru    language of the hub rules and of the chat (en, ru or uk; default:
 #               the Windows display language)
 #   -NoPlugin   skip the Claude Code plugin step
 #   -Yes        install missing tools without asking
@@ -154,8 +154,8 @@ if (-not (Test-Path $Config)) {
   Write-Utf8 $Config ('{"hub_path": "' + $HubSetting + '"}')
   Good "hub path saved in $Config"
 }
-if (-not $Lang) { $Lang = (Get-UICulture).TwoLetterISOLanguageName; if ($Lang -eq "uk") { $Lang = "ru" } }
-if ($Lang -eq "ru") { $Language = "Russian" } else { $Language = "English" }
+if (-not $Lang) { $Lang = (Get-UICulture).TwoLetterISOLanguageName }
+if ($Lang -eq "ru") { $Language = "Russian" } elseif ($Lang -eq "uk") { $Language = "Ukrainian" } else { $Language = "English" }
 $today = Get-Date -Format "yyyy-MM-dd"
 if (Test-Path (Join-Path $Hub "_index.md")) {
   Good "hub exists at $Hub (left as it is)"
@@ -234,5 +234,5 @@ if ($LASTEXITCODE -eq 0) { Good "kit passes the leak check" } else { Bad "kit fa
 Say ""
 Say "Done: $($script:ok) ok, $($script:warn) note(s), $($script:fail) failure(s). Hub: $Hub"
 Say "Next: open the hub folder in VS Code, start Claude Code, sign in, and type:  /wiki init personal"
-Say "Guide: $Kit\docs\QUICKSTART.md (English), $Kit\docs\QUICKSTART.ru.md (Russian). Log: $Log"
+Say "Guide: $Kit\docs\QUICKSTART.md (English), $Kit\docs\QUICKSTART.ru.md (Russian), $Kit\docs\QUICKSTART.uk.md (Ukrainian). Log: $Log"
 if ($script:fail -eq 0) { Finish 0 } else { Finish 1 }

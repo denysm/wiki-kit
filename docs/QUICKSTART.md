@@ -1,6 +1,6 @@
 # Quickstart: your own knowledge wiki in about 30 minutes
 
-[Русская версия](QUICKSTART.ru.md)
+[Русская версия](QUICKSTART.ru.md) · [Українська версія](QUICKSTART.uk.md)
 
 You will get a private wiki on your own computer. You give it chats, notes, documents and links; an AI assistant (Claude) turns them into short articles with a source for every claim, and answers your questions from them. A set of "specialists" (a coach, help with decisions, documents, preparing for a doctor's visit, and more) works on top of it. Your data stays on your computer.
 
@@ -9,6 +9,7 @@ You will get a private wiki on your own computer. You give it chats, notes, docu
 - A Mac, a Linux computer, or Windows 10 or 11 (on Windows follow the [Windows section](#windows-10-or-11) instead of steps 2-5).
 - Internet access.
 - A paid Claude plan (Pro or higher) or an Anthropic API key. Installing everything is free; using the AI is not.
+- A GitHub account (free) is recommended. You do not need it to install or use the kit, but you need it to send your improvements back: [Share your improvements](#share-your-improvements).
 
 ## Step 1. Install VS Code
 
@@ -114,8 +115,43 @@ You can always just write what you want in plain words; Claude picks the right c
 - **One task per conversation.** Long conversations cost more. When a task is done, start a new one (the `+` button in the Claude panel).
 - **Get updates** once a week: `cd ~/Projects/wiki-kit && git pull`. The specialists in your wiki update by themselves.
 - **Secrets** (passwords, keys, bank details) do not belong in a wiki. Claude replaces them with `[REDACTED:secret]` when it notices them.
-- **The kit holds no data.** Your wiki is separate from the kit and has no copy on the internet. To suggest improvements to the kit you need a GitHub account (sign in with `gh auth login`, <https://cli.github.com>); the installer added a check that refuses to send anything that looks like your data. List the names that must never leave your computer (family, employer, clients) in `~/.config/wiki-kit/private-names.txt`, one per line, before your first contribution.
+- **The kit holds no data.** Your wiki is separate from the kit and has no copy on the internet.
 - **Draft specialists.** Every specialist except the coach is a draft (version 0.x) and says so. The health, money, paperwork and emotional-support specialists help you prepare; they do not replace a doctor, adviser, lawyer or therapist.
+
+## Share your improvements
+
+The kit grows from its users' experience: a step that was unclear, a script that failed, a phrase a specialist did not understand, a lesson it should learn. Your changes come back as a *pull request*: a proposal that the kit's maintainer reviews and then adds to the kit. Only the change itself travels; your wiki never leaves your computer.
+
+**Once:**
+
+1. Create a free account at <https://github.com/signup>. Then open <https://github.com/settings/emails>, turn on **Keep my email addresses private**, and copy the address on that page that ends in `@users.noreply.github.com`.
+2. Install the GitHub command line tool from <https://cli.github.com> (Windows: `winget install --id GitHub.cli -e`; Mac with Homebrew: `brew install gh`) and sign in: `gh auth login`, then choose GitHub.com, HTTPS and "Login with a web browser".
+3. Tell git who you are, for the kit folder only (the address from step 1 keeps your real email private; a nickname is fine instead of a name):
+
+   ```sh
+   cd ~/Projects/wiki-kit
+   git config user.name "Your Name"
+   git config user.email "ID+USERNAME@users.noreply.github.com"
+   ```
+4. List the names that must never leave your computer (family, employer, clients) in `~/.config/wiki-kit/private-names.txt`, one per line. The installer turned on a check that refuses to send anything matching them or anything that looks like a password or key.
+
+**Each change:**
+
+1. In VS Code open the folder `~/Projects/wiki-kit` and tell Claude what should work differently.
+2. When you are happy with it, ask Claude: "send my changes to the kit as a pull request". It makes your own copy of the kit on GitHub (a *fork*), puts the change on a separate branch and opens the pull request. By hand:
+
+   ```sh
+   cd ~/Projects/wiki-kit
+   gh repo fork --remote            # once: your copy on GitHub; the original kit becomes "upstream"
+   git switch -c short-change-name
+   git add -A
+   git commit -m "What changed and why"
+   git push -u origin HEAD          # the leak check runs here
+   gh pr create --fill              # if asked where to send it, choose the original kit, not your copy
+   ```
+3. The maintainer may ask questions in the pull request, then merges it. After that, go back to the main version and update: `git switch main`, then `git pull`.
+
+Write in any language: English, Ukrainian or Russian. Lessons for specialists have their own rules (no personal details, plus an example case): [specialists/README.md](../specialists/README.md#from-personal-lesson-to-shared-principle). Everything else: [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## If something goes wrong
 

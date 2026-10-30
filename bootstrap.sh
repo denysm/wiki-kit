@@ -3,7 +3,7 @@
 # specialists and the front desk, then a self-check. Safe to run again: it only
 # adds what is missing and never overwrites your files.
 #
-# Usage: bash bootstrap.sh [--hub DIR] [--lang en|ru] [--no-plugin]
+# Usage: bash bootstrap.sh [--hub DIR] [--lang en|ru|uk] [--no-plugin]
 #   --hub DIR    where your wiki lives (default: hub_path from
 #                ~/.config/llm-wiki/config.json, else ~/wiki)
 #   --lang       language of the hub rules and of the chat (default: from $LANG)
@@ -77,8 +77,8 @@ if [ ! -f "$CONFIG" ]; then
   python3 -I -c 'import json,sys; json.dump({"hub_path": sys.argv[1]}, open(sys.argv[2], "w"))' "$HUB" "$CONFIG"
   good "hub path saved in $CONFIG"
 fi
-if [ -z "$LANG_CODE" ]; then case "${LANG:-}" in ru*|uk*) LANG_CODE=ru ;; *) LANG_CODE=en ;; esac; fi
-case "$LANG_CODE" in ru) LANGUAGE=Russian ;; *) LANGUAGE=English ;; esac
+if [ -z "$LANG_CODE" ]; then case "${LANG:-}" in ru*) LANG_CODE=ru ;; uk*) LANG_CODE=uk ;; *) LANG_CODE=en ;; esac; fi
+case "$LANG_CODE" in ru) LANGUAGE=Russian ;; uk) LANGUAGE=Ukrainian ;; *) LANGUAGE=English ;; esac
 if [ -f "$HUB/_index.md" ]; then
   good "hub exists at $HUB (left as it is)"
 else
@@ -164,5 +164,5 @@ python3 -I "$KIT/scripts/leak_check.py" --repo "$KIT" >/dev/null 2>&1 && good "k
 say ""
 say "Done: $ok ok, $warn note(s), $fail failure(s). Hub: $HUB"
 say "Next: open the hub folder in VS Code, start Claude Code, sign in, and type:  /wiki init personal"
-say "Guide: $KIT/docs/QUICKSTART.md (English), $KIT/docs/QUICKSTART.ru.md (Russian)"
+say "Guide: $KIT/docs/QUICKSTART.md (English), $KIT/docs/QUICKSTART.ru.md (Russian), $KIT/docs/QUICKSTART.uk.md (Ukrainian)"
 [ "$fail" -eq 0 ]
