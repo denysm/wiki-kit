@@ -62,6 +62,8 @@ import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # guard's scanner must import under python3 -I
+
 ENV_FILE = Path("~/.config/llm-wiki/council.env").expanduser()
 PRICES_FILE = Path(__file__).with_name("council_prices.json")
 LEDGER = Path("~/.config/llm-wiki/council_ledger.tsv").expanduser()
@@ -472,7 +474,7 @@ class Blocked(RuntimeError):
 
 def guard(members: list[str], text: str, topic: str, kind: str, allow: bool = False) -> None:
     """Refuse outside vendors for private topics (work), secrets and employer hosts (raw_check patterns)."""
-    outside = [m for m in members if split_member(m)[0] not in LOCAL_VENDORS]
+    outside = [m for m in members if m != "none" and split_member(m)[0] not in LOCAL_VENDORS]
     if not outside or allow:
         return
     why = []
