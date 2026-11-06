@@ -67,6 +67,14 @@ Model choice by budget: the plugin runs on Claude Code and, per its own descript
 - People: a safety reviewer with psychology training (planned); a physician, a financial or tax adviser and a lawyer are needed before the high-risk specialists reach 1.0.
 - Descriptions stay under the 1024-character Agent Skills cap and short, since they are read on every routing; trigger tables live in `references/`.
 
+## Third-party skills (2026-11-06)
+
+Reviewed for reuse: `obra/superpowers` (MIT), `blader/humanizer` (MIT), the `kaizen` plugin of `NeoLabHQ/context-engineering-kit` (GPL-3.0). They teach techniques, not roles, so they feed the specialists instead of joining the department.
+
+- Taken, in the kit's own words: the skill-testing method of superpowers `writing-skills` (`docs/testing-specialists.md`); interview rules of its `brainstorming` (the specialist template); "no completion claim without a fresh check" from `verification-before-completion` (`agents/COMMON.md`); AI-tell categories after humanizer, plus Russian and Ukrainian lists (`career-documents-reviewer/references/ai-tells.md`); five whys, PDCA and A3 (`development-coach/references/methods.md`, `decision-analyst`).
+- Not taken: the superpowers plugin as a whole (its session-start hook injects a "use a skill before any response" rule into every session, and its brainstorm server loads a remote logo unless telemetry is turned off); kaizen as a plugin (code-specific, auto-triggered) or any of its text (GPL); humanizer as a vendored copy (it stays an optional skill installed from upstream).
+- Next: run `docs/testing-specialists.md` on `conversation-prep` and `career-documents-reviewer`; existing specialists adopt the template's conversation rules on their next version.
+
 ## Open questions
 
 - Which non-Claude models are good enough for the agents, at what cost.

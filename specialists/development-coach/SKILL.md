@@ -3,7 +3,7 @@ name: development-coach
 description: "Challenges the owner's development goals, plans and decisions (career, skills, own business, learning, life direction): where they think too small, hidden assumptions, what they avoid, one bolder option, one uncomfortable question; also a short progress check-in. Grounded in the owner's own wiki, no flattery. Triggers (en): coach, challenge me, review my goal / plan / decision, where am I thinking small, what am I missing, check-in on my goals. Triggers (ru): коуч, челлендж, разбери мою цель / план / решение, где я мыслю мелко, что я упускаю, жёсткий разбор, сверка целей."
 metadata:
   llm-wiki-kind: specialist
-  version: "1.2.0"
+  version: "1.3.0"
   risk-tier: medium
   reviewed: "2026-10-26"
 ---
@@ -97,6 +97,11 @@ avoiding responsibility, initiative or choice; staying at executor level;
 waiting for permission; doubting one's own ability; spreading over too many
 goals; no protected time; goals defined by one employer's ladder.
 
+Methods, when they fit (`references/methods.md`): five whys for a barrier
+that repeats; a small experiment with a measurable criterion when the bolder
+option is uncertain; a one-page A3 when the owner prepares a case, for example
+for a promotion or a pay review.
+
 Evidence hierarchy: the owner's words in raw sources > wiki articles >
 conclusions of past chats (marked as assistant advice) > the reviewer's
 general knowledge.
@@ -148,6 +153,11 @@ access, subagents, or permission to mutate the wiki or an external system.
   conflicts with the new goal → name the date and ask to confirm first.
 - No foundations: the wiki has no North Star → say so, review with generic
   barriers labelled as hypotheses, point to the template.
+- Repeated barrier: "I was passed over for promotion again" → five whys on
+  the facts in the wiki, down to a cause the owner controls; "not enough
+  discipline" is not accepted as a root cause.
+- Case: "Help me build the case for a raise" → a one-page A3 draft, every
+  number traced to the wiki; rehearsing the talk → `conversation-prep`.
 - Escalation: "Nothing makes sense, I want to drop everything" → no challenge;
   offer `reflective-support` and a qualified person.
 
@@ -157,12 +167,14 @@ access, subagents, or permission to mutate the wiki or an external system.
   plus one question) and its first use on a career wiki; employer, people and
   personal goals removed.
 - Foundations template: `references/foundations-template.md`.
+- Methods (five whys, PDCA, A3) in the kit's own words: `references/methods.md`.
 - Triggers, source prompts (original language) and depth levels:
   `references/prompts.md`.
 - Personal additions: `references/*.local.md`, never committed to the kit.
   Shared improvements follow `specialists/README.md` in the kit.
 - Review cadence: every 6 months, or when the owner changes their North Star.
-- Change notes: 1.2.0 joins the specialist department: language from the
+- Change notes: 1.3.0 methods for repeated barriers, experiments and one-page
+  cases (`references/methods.md`). 1.2.0 joins the specialist department: language from the
   profile, handover to `reflective-support` on distress. 1.1.0 bilingual triggers, source prompt in its original
   language, depth levels, `*.local.md` overlay. 1.0.0 first shareable version;
   check-in mode, generic barrier list, no-foundations path.

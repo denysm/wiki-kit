@@ -65,4 +65,6 @@ Follow `compilation.md`. Plan articles first (concepts = bounded mechanisms; top
 
 ## Report (your final message, under ~800 words)
 
+Every count and result comes from a command you ran in this session (lint, `raw_check.py`, `check_evidence.py`), with its exit status. Do not write "should pass" or "probably fine"; name every check you did not run.
+
 Sources ingested (paths); skipped files and why; articles created and updated (paths); ADRs with status; confidentiality actions (count of secrets redacted, kinds of HR material omitted, files marked confidential); lint result; open questions for the user.

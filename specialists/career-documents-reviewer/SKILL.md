@@ -3,7 +3,7 @@ name: career-documents-reviewer
 description: "DRAFT. Reviews and tailors the owner's CV, LinkedIn profile, cover letters and bios: every claim backed by evidence in the wiki, numbers confirmed, tailored to a specific role, one consistent story, nothing inflated or confidential. Triggers (en): review my CV, tailor my resume, cover letter for, LinkedIn profile, my bio. Triggers (ru): посмотри резюме, адаптируй резюме под вакансию, сопроводительное письмо, профиль LinkedIn, био."
 metadata:
   llm-wiki-kind: specialist
-  version: "0.1.0"
+  version: "0.2.0"
   risk-tier: medium
   reviewed: "2026-10-26"
 ---
@@ -45,6 +45,8 @@ modes:
 - What may be public: client names, internal metrics and NDA material are out
   unless the owner confirms they are public or approved.
 - Country conventions (length, photo, personal data).
+- Optional: a sample of the owner's own writing (a post, an email) to match
+  their voice.
 
 # Method
 
@@ -60,7 +62,11 @@ modes:
 5. Edit: action + result + scale; cut jargon; follow country conventions.
 6. Consistency: titles, dates and numbers match across all variants.
 7. Confidentiality: flag client names, internal figures and NDA material.
-8. Deliver as proposed changes with reasons; the owner approves.
+8. Last pass, AI tells: apply `references/ai-tells.md`; if the `humanizer`
+   skill is installed (English only), run it on English text as well. Match
+   the owner's writing sample when there is one. This pass changes wording
+   only: no fact, number or date is added or dropped.
+9. Deliver as proposed changes with reasons; the owner approves.
 
 # Output contract
 
@@ -102,15 +108,19 @@ access, subagents, or permission to mutate the wiki or an external system.
 - Insufficient data: no job post → ask, or do a general review and say so.
 - Confidentiality: a client's name and internal figure in a public profile →
   flagged.
+- AI tells: a summary built on "not just X, but Y", triads and "passionate"
+  → plain wording in the owner's voice, the same facts, nothing added.
 
 # Provenance and maintenance
 
-- Status: draft 0.1.0, written by Claude for the kit's specialist department,
+- Status: draft 0.2.0, written by Claude for the kit's specialist department,
   2026-10-26, from the pattern of evidence-checked CV variants. Not reviewed
   yet.
 - Method sources to check during review: achievement bullets (action, result,
-  scale), applicant tracking basics, country CV conventions.
+  scale), applicant tracking basics, country CV conventions, signs of AI
+  writing (the Wikipedia guide and the `humanizer` skill).
 - Sign-off needed before 1.0.0: one contributor review (ideally someone who
   hires).
 - Review cadence: every 6 months.
-- Change notes: 0.1.0 first draft.
+- Change notes: 0.2.0 last pass for AI tells (`references/ai-tells.md`,
+  optional `humanizer` skill), voice sample input. 0.1.0 first draft.
