@@ -17,8 +17,9 @@ package in the hub. Shared rules: the kit's `specialists/README.md`.
    wrote in and in English, which language they prefer, and offer to remember
    it. Save `{"language": "<ISO 639-1>"}` there only after they agree. Speak
    that language from then on; the user can change it any time.
-3. **Hub:** `hub_path` from `~/.config/llm-wiki/config.json` (expand a leading
-   `~`). Installed specialists and their topics: `HUB/.skills/registry.json`;
+3. **Hub:** the path in `~/.config/wiki-kit/specialists-hub` if that file
+   exists, else `hub_path` from `~/.config/llm-wiki/config.json` (expand a
+   leading `~`). Installed specialists and their topics: `HUB/.skills/registry.json`;
    their descriptions: `HUB/.skills/_index.md`.
 4. **Pick one specialist by meaning**, not by exact words. Close calls: read
    the triggers table in each candidate's `references/prompts.md`. A language
@@ -48,7 +49,7 @@ package in the hub. Shared rules: the kit's `specialists/README.md`.
    `python3 -I "$(cd ~/.claude/skills/department && pwd -P)/../../scripts/sync_specialists.py" --only <name>`
    (skip if the script is not there; on Windows use `python` or `py -3` when `python3`
    is missing, and `~/Projects/wiki-kit` when the path does not resolve). Then validate and stop on any finding:
-   `~/.claude/plugins/cache/llm-wiki/wiki/*/bin/llm-wiki specialist validate <name>`
+   `~/.claude/plugins/cache/llm-wiki/wiki/*/bin/llm-wiki specialist --hub HUB validate <name>`
    (newest plugin version; if the helper is missing, continue but say so).
    A version below 1.0.0 is a draft: say so in the first reply.
 6. **Read** `HUB/.skills/<name>/SKILL.md` in full and follow it, including its

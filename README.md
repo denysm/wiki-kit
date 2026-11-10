@@ -67,6 +67,7 @@ Lists that name your organisation, your family or your clients are themselves th
 | `~/.config/wiki-kit/private-names.txt` | the leak check before every push: one case-insensitive regex per line (`grep -iEf`) |
 | `~/.config/wiki-kit/inventory.json` | `inventory.py` and `deep_candidates.py`: your own topic rules (`career`, `buckets`, `prepared`, `waves`); without it, generic defaults apply |
 | `~/.config/llm-wiki/council.env` | API keys for `council.py` (KEY=value, chmod 600) |
+| `~/.config/wiki-kit/specialists-hub` | `sync_specialists.py`, the kit's hooks and the `department` skill: the hub that gets the specialists, when it is not the llm-wiki hub (one line, a path) |
 | `~/.config/wiki-kit/profile.json` | the `department` skill: your preferred language (`{"language": "ru"}`), saved with your consent on the first conversation |
 | `WIKI_KIT_AUTHOR` | your name for the `authors:` field written by `chat2md.py` |
 | `WIKI_KIT_SOURCES` | root of your originals for `stage.py` / `extra2md.py` (default `~/Projects/private-sources`) |

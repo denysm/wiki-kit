@@ -2,7 +2,7 @@
 # Refresh the hub's copy of the specialists (a cache of specialists/; the llm-wiki
 # validator refuses symlinks). Never blocks git; silent when no hub is configured.
 root=$(git rev-parse --show-toplevel)
-[ -f "$HOME/.config/llm-wiki/config.json" ] || exit 0
+[ -f "$HOME/.config/wiki-kit/specialists-hub" ] || [ -f "$HOME/.config/llm-wiki/config.json" ] || exit 0
 . "$root/hooks/lib.sh"
 [ -n "$py" ] || exit 0
 # shellcheck disable=SC2086

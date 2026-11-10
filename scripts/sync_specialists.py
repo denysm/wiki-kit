@@ -2,7 +2,10 @@
 
 Usage: sync_specialists.py [HUB] [--only NAME ...] [--dry-run | --check]
 
-HUB defaults to hub_path in ~/.config/llm-wiki/config.json. The llm-wiki
+HUB defaults to the path in ~/.config/wiki-kit/specialists-hub, else hub_path
+in ~/.config/llm-wiki/config.json. Set the first when the llm-wiki hub of this
+machine must not get your specialists (for example a work hub next to a
+personal one). The llm-wiki
 validator refuses symlinks in .skills/, so the hub holds a copy; treat it as a
 cache of the kit: this script keeps it identical, the department skill runs it
 before every specialist call, and the kit's hooks/ run it after commit, merge
@@ -21,6 +24,7 @@ from pathlib import Path
 
 KIT = Path(__file__).resolve().parent.parent / "specialists"
 CONFIG = Path("~/.config/llm-wiki/config.json").expanduser()
+SPEC_HUB = Path("~/.config/wiki-kit/specialists-hub").expanduser()
 
 
 def core_files(root: Path) -> set:
@@ -29,7 +33,7 @@ def core_files(root: Path) -> set:
 
 
 ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-ap.add_argument("hub", type=Path, nargs="?", help="hub root (default: hub_path from llm-wiki config)")
+ap.add_argument("hub", type=Path, nargs="?", help="hub root (default: specialists-hub, else hub_path)")
 ap.add_argument("--only", nargs="+", metavar="NAME", help="sync just these specialists")
 mode = ap.add_mutually_exclusive_group()
 mode.add_argument("--dry-run", action="store_true", help="print what would change")
@@ -37,6 +41,8 @@ mode.add_argument("--check", action="store_true", help="like --dry-run, exit 1 i
 args = ap.parse_args()
 args.dry_run = args.dry_run or args.check
 
+if args.hub is None and SPEC_HUB.is_file():
+    args.hub = Path(SPEC_HUB.read_text(encoding="utf-8").strip())
 if args.hub is None:
     if not CONFIG.is_file():
         raise SystemExit(f"no HUB given and no {CONFIG}")
