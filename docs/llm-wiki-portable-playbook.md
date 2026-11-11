@@ -108,6 +108,15 @@ Rules that matter more than the shape:
   extract — text per slide/page with its number, speaker notes, table contents, short
   prose descriptions of charts — and point `source:` at where the original actually lives.
   Never embed images or commit the binary.
+- **Every processed original goes to its archive.** Once its extract is in `raw/`, the
+  original file moves out of the staging folder (downloads, a to-sort folder) into the
+  archive store of its project, for example a synced work cloud drive. Log each move as
+  `action, from, to` so it can be undone, and update `source:` to the new path. A staging
+  folder that still holds processed files means the ingest is not finished. A file nobody
+  has read yet stays where it is until its project is known.
+- **Saved web pages.** A browser web archive (`.webarchive`) is a property list whose main
+  resource is the page HTML: extract that HTML and convert it as an HTML export, which
+  keeps headings and tables. Drop inline icons, avatars and base64 images.
 
 ## 3. The frontmatter contract
 
