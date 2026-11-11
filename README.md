@@ -16,6 +16,7 @@ Status: draft. Merged from two working copies (work and home). The installers ar
 | `CONTRIBUTING.md`, `.github/pull_request_template.md` | How to send a change by pull request, and the privacy checklist every pull request starts with |
 | `.github/workflows/` | CI: `checks` on every push (scripts compile on Python 3.9 and 3.13, leak check over the whole history without the private names list, shell syntax, no symlinks); `installers` runs both installers twice on clean Ubuntu and Windows and checks that the pre-push hook blocks a fake key |
 | `docs/PROJECT-CONTEXT.md` | Goals, key decisions and roadmap of this project (read first) |
+| `docs/ai-tooling-for-throwaway-pocs.md` | Choosing AI delivery tooling for throwaway PoCs: four layers, verdict template, when to run what |
 | `docs/testing-specialists.md` | How to test a specialist against the no-specialist baseline before 1.0 |
 | `docs/llm-wiki-portable-playbook.md` | The method in full: layout, frontmatter, ADRs, confidentiality, cost, quality gates, cold start |
 | `templates/hub-CLAUDE.md` | Starting rules for a new hub (fill in the `{...}` placeholders) |
