@@ -21,6 +21,7 @@ Status: draft. Merged from two working copies (work and home). The installers ar
 | `docs/llm-wiki-portable-playbook.md` | The method in full: layout, frontmatter, ADRs, confidentiality, cost, quality gates, cold start |
 | `templates/hub-CLAUDE.md` | Starting rules for a new hub (fill in the `{...}` placeholders) |
 | `templates/specialist/` | Skeleton for a new specialist with the department rules built in |
+| `templates/claude-hooks/` | Claude Code hook for a hub: audit log of every write and an immediate `raw_check.py` on `raw/`, `wiki/`, `output/` |
 | `agents/` | `wiki-reader` (read-only digests) and `wiki-compiler` (ingest + compile one topic), plus the shared `COMMON.md` |
 | `scripts/` | Standard-library Python helpers, listed below |
 | `specialists/` | The specialist department: 11 specialists in five divisions (growth, wellbeing, family, money and documents, thinking tools); staff, rules and vacancies in `specialists/README.md` |
