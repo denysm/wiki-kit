@@ -75,6 +75,16 @@ Reviewed for reuse: `obra/superpowers` (MIT), `blader/humanizer` (MIT), the `kai
 - Not taken: the superpowers plugin as a whole (its session-start hook injects a "use a skill before any response" rule into every session, and its brainstorm server loads a remote logo unless telemetry is turned off); kaizen as a plugin (code-specific, auto-triggered) or any of its text (GPL); humanizer as a vendored copy (it stays an optional skill installed from upstream).
 - Next: run `docs/testing-specialists.md` on `conversation-prep` and `career-documents-reviewer`; existing specialists adopt the template's conversation rules on their next version.
 
+## Memory and orchestration (2026-11-13)
+
+Three steps, one session each, in this order:
+
+1. **Recall: `scripts/search.py`.** Full-text search over `raw/`, `wiki/`, `output/` with SQLite FTS5 (BM25, stdlib only), chunked by heading, answers as `path:line` plus a snippet. The index is a cache in `~/.cache/wiki-kit/search/`, never in a repository (it holds text of `.local.md` files), one index per wiki root; several roots are searched together only when named explicitly. `search.py eval` measures recall on a local question set (`~/.config/wiki-kit/search-eval.tsv`; questions about real content never enter the kit). In the same session the write-audit hook moves from a per-hub `.claude/` (the llm-wiki hub lint does not allow it at a hub root) to user-level settings that call a kit script, which acts only on files inside a wiki root and logs to `~/.cache/wiki-kit/audit/`.
+2. **Foreman: `skills/foreman/`.** Takes a task, writes a work order (goal, done criteria, budget, deadline, where results go), proposes a team from a roster (an HR step: `scripts/roster.py` lists specialists, Claude Code agents, outside models from `council.py` and open vacancies) with a cost estimate, and hires only after the user's yes. Temporary hires are briefed subagents for one task; a role hired twice becomes a draft specialist from `templates/specialist/`. Then parallel work, quality control (`source-skeptic`, `check_evidence.py`), acceptance against the done criteria, and a closing step that files lessons. The department stays the front desk for one-specialist conversations and owns the safety rule. Human touch comes from the forms (work order, staffing table, acceptance, a short reference on each member's work), not from invented people: the "methods, not people" rule stands.
+3. **Orchestrator and local RAG.** Decide on embeddings by measurement: local model only (texts of clients never go to an outside embedding service), hybrid with the BM25 index from step 1, adopted only if `search.py eval` shows recall gains worth the dependency, especially for questions asked in one language about sources in another. The orchestrator joins step 2 with memory: search before the work, lessons and specialist tuning after it, so knowledge only grows.
+
+Knowledge is kept by the existing rules (immutable `raw/`, git, `sources:`, outdated claims marked rather than deleted); steps 1 and 3 are about finding it, step 2 about adding to it from every task.
+
 ## Open questions
 
 - Which non-Claude models are good enough for the agents, at what cost.
