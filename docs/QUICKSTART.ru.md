@@ -115,15 +115,13 @@ Done: 15 ok, 0 note(s), 0 failure(s). Hub: /Users/you/wiki
 Claude ищет в вашей вики по словам. Чтобы находилась и страница, написанная другими словами или на другом языке, запустите на своём компьютере небольшую модель поиска. Ей нужно около 300 МБ, и ничего не уходит с компьютера.
 
 1. Установите Ollama с [ollama.com/download](https://ollama.com/download) и запустите. На Mac берите приложение с сайта, а не Homebrew: формула Homebrew ставит ещё и новый Python и делает его вашим `python3` по умолчанию, а удаление формулы потом может удалить и этот Python. Перетащите Ollama в «Программы» и откройте. Она живёт в строке меню и при первом запуске добавляет команду `ollama` в Терминал (Mac может спросить пароль).
-2. В Терминале:
+2. Запустите установщик ещё раз:
 
    ```
-   ollama pull embeddinggemma-2:270m-q8_0-text
-   python3 -I ~/Projects/wiki-kit/scripts/search.py embed-setup
-   python3 -I ~/Projects/wiki-kit/scripts/search.py index ~/wiki
+   bash ~/Projects/wiki-kit/bootstrap.sh
    ```
 
-   Первый `index` идёт несколько минут; потом добавляются только новые страницы, за секунды. В Windows вместо `python3 -I` пишите `py -3`, а пути — `$HOME\Projects\wiki-kit\scripts\search.py` и `$HOME\wiki`.
+   Его последний шаг скачивает модель (около 300 МБ, один раз), включает поиск по смыслу и в фоне строит поисковый индекс вашей вики. Строка под `== 8/8` говорит `ok`, когда модель отвечает, или чего ещё не хватает. Первый индекс строится несколько минут; его журнал — `~/.cache/wiki-kit/bootstrap-index.log`. Потом добавляются только новые страницы, за секунды. В Windows установщик этот шаг пока не делает; в PowerShell выполните `ollama pull embeddinggemma-2:270m-q8_0-text`, затем `py -3 $HOME\Projects\wiki-kit\scripts\search.py embed-setup` и `py -3 $HOME\Projects\wiki-kit\scripts\search.py index $HOME\wiki`.
 
 Поиск с моделью идёт около 0,2 с вместо 0,1 с. После нескольких минут простоя Ollama выгружает модель, и следующий поиск занимает меньше секунды. Если Ollama не запущена, поиск просто вернётся к словам. Выключить модель: `search.py embed-setup --off`. Эта часть новая и проверена пока только на macOS, с приложением с ollama.com.
 

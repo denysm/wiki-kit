@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Install wiki-kit on macOS or Linux: the llm-wiki plugin, an empty hub, the
-# specialists, the front desk and the foreman, then a self-check. Safe to run again: it only
+# specialists, the front desk and the foreman, then a self-check. When Ollama is installed it
+# also sets up search by meaning (it never installs Ollama). Safe to run again: it only
 # adds what is missing and never overwrites your files.
-#
 # Usage: bash bootstrap.sh [--hub DIR] [--lang en|ru|uk] [--no-plugin]
 #   --hub DIR    where your wiki lives (default: hub_path from
 #                ~/.config/llm-wiki/config.json, else ~/wiki)
@@ -22,7 +22,7 @@ while [ $# -gt 0 ]; do
     --hub) HUB="$2"; shift 2 ;;
     --lang) LANG_CODE="$2"; shift 2 ;;
     --no-plugin) NO_PLUGIN=1; shift ;;
-    -h|--help) sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "unknown option: $1 (see --help)" >&2; exit 2 ;;
   esac
 done
@@ -33,7 +33,7 @@ good() { ok=$((ok + 1)); printf '  ok    %s\n' "$*"; }
 note() { warn=$((warn + 1)); printf '  note  %s\n' "$*"; }
 bad()  { fail=$((fail + 1)); printf '  FAIL  %s\n' "$*"; }
 
-say "== 1/7 Tools on this computer"
+say "== 1/8 Tools on this computer"
 command -v git >/dev/null || { bad "git is missing. macOS: run 'xcode-select --install'. Linux: install the 'git' package. Then run this again."; exit 1; }
 good "git $(git --version | awk '{print $3}')"
 command -v python3 >/dev/null || { bad "python3 is missing. macOS: run 'xcode-select --install'. Linux: install 'python3'. Then run this again."; exit 1; }
@@ -43,7 +43,7 @@ HAS_CLAUDE=0
 if command -v claude >/dev/null; then HAS_CLAUDE=1; good "Claude Code $(claude --version 2>/dev/null | awk '{print $1}')"
 else note "Claude Code command line not found: install it with 'curl -fsSL https://claude.ai/install.sh | bash' (the VS Code extension alone has no 'claude' command), then run this again for the plugin step."; fi
 
-say "== 2/7 The kit"
+say "== 2/8 The kit"
 here=$(cd "$(dirname "$0")" 2>/dev/null && pwd || true)
 if [ -n "$here" ] && [ -f "$here/scripts/leak_check.py" ]; then
   KIT="$here"; good "using the kit at $KIT"
@@ -57,7 +57,7 @@ else
 fi
 git -C "$KIT" config core.hooksPath hooks && good "kit hooks on (leak check before push, specialists re-sync)"
 
-say "== 3/7 The llm-wiki plugin ($PLUGIN_ID, pinned to v1.0.0)"
+say "== 3/8 The llm-wiki plugin ($PLUGIN_ID, pinned to v1.0.0)"
 if [ "$NO_PLUGIN" = 1 ] || [ "$HAS_CLAUDE" = 0 ]; then note "skipped"
 elif claude plugin list --json 2>/dev/null | grep -q "\"$PLUGIN_ID\""; then good "already installed"
 else
@@ -65,7 +65,7 @@ else
   claude plugin install "$PLUGIN_ID" >/dev/null && good "installed" || bad "plugin install failed: run 'claude plugin install $PLUGIN_ID' and read the message"
 fi
 
-say "== 4/7 Your hub (the folder with your wikis)"
+say "== 4/8 Your hub (the folder with your wikis)"
 CONFIG="$HOME/.config/llm-wiki/config.json"
 if [ -z "$HUB" ] && [ -f "$CONFIG" ]; then
   HUB=$(python3 -I -c 'import json,sys; print(json.load(open(sys.argv[1])).get("hub_path",""))' "$CONFIG")
@@ -131,14 +131,14 @@ if [ ! -d "$HUB/.git" ]; then
   git -C "$HUB" init -q && good "hub is a git repository (local only, no remote; the first commit comes with your first topic)"
 fi
 
-say "== 5/7 Private lists (outside every repository)"
+say "== 5/8 Private lists (outside every repository)"
 CFG="$HOME/.config/wiki-kit"
 mkdir -p "$CFG"; chmod 700 "$CFG"
 [ -f "$CFG/private-names.txt" ] || { printf '# Names that must never reach the kit: your family, employer, clients.\n# One case-insensitive regex per line, for example: Acme Corp\n' > "$CFG/private-names.txt"; chmod 600 "$CFG/private-names.txt"; }
 [ -f "$CFG/internal-domains.txt" ] || { printf '# Internal host suffixes of your employer or clients, one per line, for example: corp.example.com\n' > "$CFG/internal-domains.txt"; chmod 600 "$CFG/internal-domains.txt"; }
 good "$CFG (fill private-names.txt before your first push to the kit)"
 
-say "== 6/7 Specialists and the front desk"
+say "== 6/8 Specialists and the front desk"
 LLM_WIKI=$(ls -d "$HOME"/.claude/plugins/cache/llm-wiki/wiki/*/bin/llm-wiki 2>/dev/null | tail -1 || true)
 lw() { python3 -I "$LLM_WIKI" specialist --hub "$HUB" "$@" >/dev/null 2>&1; }
 if [ -n "$LLM_WIKI" ]; then
@@ -152,18 +152,69 @@ else ln -s "$KIT/skills/department" "$HOME/.claude/skills/department" && good "f
 if [ -e "$HOME/.claude/skills/foreman" ]; then good "foreman skill already present"
 else ln -s "$KIT/skills/foreman" "$HOME/.claude/skills/foreman" && good "foreman skill linked (say 'assemble a team' or 'work order' in any folder)"; fi
 
-say "== 7/7 Self-check"
+say "== 7/8 Self-check"
 broken=$(python3 -I -c 'import sys
 for f in sys.argv[1:]:
     try: compile(open(f, encoding="utf-8").read(), f, "exec")
     except SyntaxError: print(f.rsplit("/", 1)[-1], end=" ")' "$KIT"/scripts/*.py)
 [ -z "$broken" ] && good "all scripts compile on this python3" || bad "scripts that need a newer python3: $broken"
-deps=$(python3 -I "$KIT/scripts/search.py" install-deps 2>&1) && good "python packages: $(printf '%s' "$deps" | tr '\n' ' ')" || bad "numpy could not be installed: run 'python3 -I $KIT/scripts/search.py install-deps' and read its message"
+DEPS_OK=0
+deps=$(python3 -I "$KIT/scripts/search.py" install-deps 2>&1) && { DEPS_OK=1; good "python packages: $(printf '%s' "$deps" | tr '\n' ' ')"; } || bad "numpy could not be installed: run 'python3 -I $KIT/scripts/search.py install-deps' and read its message"
 if [ -d "$HUB/.skills" ]; then
   python3 -I "$KIT/scripts/sync_specialists.py" "$HUB" --check >/dev/null && good "hub specialists match the kit" || bad "hub specialists differ from the kit"
   lw validate && good "specialists pass the plugin validator" || bad "plugin validator: run 'python3 -I $LLM_WIKI specialist --hub $HUB validate'"
 fi
 python3 -I "$KIT/scripts/leak_check.py" --repo "$KIT" >/dev/null 2>&1 && good "kit passes the leak check" || bad "kit fails the leak check: run python3 -I $KIT/scripts/leak_check.py --repo $KIT"
+
+say "== 8/8 Search by meaning (a small local model; optional)"
+# Uses Ollama when it is already installed; never installs it. Every failure is one note
+# line, never a stop: search works on words without the model.
+EMBED_MODEL="embeddinggemma-2:270m-q8_0-text"
+OLLAMA_API="http://127.0.0.1:11434"
+SEARCH_CFG="${WIKI_KIT_SEARCH_CONFIG:-$CFG/search.json}"
+ollama_up() { python3 -I -c 'import sys, urllib.request; urllib.request.urlopen(sys.argv[1], timeout=2)' "$OLLAMA_API/api/version" >/dev/null 2>&1; }
+vectors() {
+  local ol="" app="" i log pid check
+  [ "$DEPS_OK" = 1 ] || { note "search by meaning skipped: numpy is missing (see step 7)"; return 0; }
+  for i in /Applications/Ollama.app "$HOME/Applications/Ollama.app"; do [ -d "$i" ] && { app="$i"; break; }; done
+  ol=$(command -v ollama 2>/dev/null || true)
+  [ -z "$ol" ] && [ -n "$app" ] && [ -x "$app/Contents/Resources/ollama" ] && ol="$app/Contents/Resources/ollama"
+  if [ -z "$ol" ]; then
+    if [ "$(uname -s)" = Darwin ]; then
+      note "search by meaning is off: install the Ollama app from https://ollama.com/download (the app, not Homebrew), open it once, then run bootstrap again"
+    else
+      note "search by meaning is off: install Ollama from https://ollama.com/download, then run bootstrap again"
+    fi
+    return 0
+  fi
+  if ! ollama_up; then
+    if [ -n "$app" ]; then open -a "$app" >/dev/null 2>&1 || true; fi
+    for i in $(seq 30); do ollama_up && break; sleep 1; done
+    ollama_up || { note "Ollama does not answer at $OLLAMA_API: start it (the Ollama app, or 'ollama serve'), then run bootstrap again"; return 0; }
+  fi
+  if ! "$ol" list 2>/dev/null | awk 'NR > 1 {print $1}' | grep -qxF "$EMBED_MODEL"; then
+    say "        downloading $EMBED_MODEL (about 300 MB, once)"
+    "$ol" pull "$EMBED_MODEL" >/dev/null || { note "could not download $EMBED_MODEL: run '$ol pull $EMBED_MODEL' and read the message, then run bootstrap again"; return 0; }
+  fi
+  if [ ! -f "$SEARCH_CFG" ]; then
+    python3 -I "$KIT/scripts/search.py" embed-setup >/dev/null 2>&1 || true
+  fi
+  if ! grep -q '"embeddings"' "$SEARCH_CFG" 2>/dev/null; then
+    note "search by meaning is switched off in $SEARCH_CFG; to switch it on: python3 -I $KIT/scripts/search.py embed-setup"; return 0
+  fi
+  check=$(python3 -I "$KIT/scripts/search.py" embed-check 2>&1) || { note "the model does not answer: $(printf '%s' "$check" | tail -1)"; return 0; }
+  log="$HOME/.cache/wiki-kit/bootstrap-index.log"
+  mkdir -p "$(dirname "$log")"
+  pid=$(cat "$log.pid" 2>/dev/null || true)
+  if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+    good "search by meaning on; the hub index is still being built (log: $log)"; return 0
+  fi
+  nohup python3 -I "$KIT/scripts/search.py" index "$HUB" >"$log" 2>&1 </dev/null &
+  echo $! > "$log.pid"
+  good "search by meaning on (the model answers); building the hub index in the background (log: $log)"
+}
+vectors || note "search by meaning step stopped early; search works on words"
+
 say ""
 say "Done: $ok ok, $warn note(s), $fail failure(s). Hub: $HUB"
 say "Next: open the hub folder in VS Code, start Claude Code, sign in, and type:  /wiki init personal"

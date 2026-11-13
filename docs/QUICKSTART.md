@@ -115,15 +115,13 @@ You can always just write what you want in plain words; Claude picks the right c
 Claude finds things in your wiki by words. To also find a page written in other words or in another language, run a small search model on your own computer. It needs about 300 MB, and nothing leaves the computer.
 
 1. Install Ollama from [ollama.com/download](https://ollama.com/download) and start it. On a Mac take the app from the site, not Homebrew: the Homebrew formula also installs a newer Python and makes it your default `python3`, and removing the formula later can remove that Python too. Drag Ollama into Applications and open it. It lives in the menu bar, and on first start it adds the `ollama` command to the Terminal (the Mac may ask for your password).
-2. In the Terminal:
+2. Run the installer again:
 
    ```
-   ollama pull embeddinggemma-2:270m-q8_0-text
-   python3 -I ~/Projects/wiki-kit/scripts/search.py embed-setup
-   python3 -I ~/Projects/wiki-kit/scripts/search.py index ~/wiki
+   bash ~/Projects/wiki-kit/bootstrap.sh
    ```
 
-   The first `index` takes a few minutes; after that only new pages are added, in seconds. On Windows type `py -3` instead of `python3 -I`, and `$HOME\Projects\wiki-kit\scripts\search.py` and `$HOME\wiki` for the paths.
+   Its last step downloads the model (about 300 MB, once), switches search by meaning on and builds the search index of your wiki in the background. The line under `== 8/8` says `ok` when the model answers, or what is still missing. The first index takes a few minutes; its log is `~/.cache/wiki-kit/bootstrap-index.log`. After that only new pages are added, in seconds. On Windows the installer does not do this step yet; in PowerShell run `ollama pull embeddinggemma-2:270m-q8_0-text`, then `py -3 $HOME\Projects\wiki-kit\scripts\search.py embed-setup` and `py -3 $HOME\Projects\wiki-kit\scripts\search.py index $HOME\wiki`.
 
 A search with the model takes about 0.2 s instead of 0.1 s. After a few idle minutes Ollama unloads the model, and the next search takes under a second. If Ollama is not running, search simply goes back to words. To switch the model off: `search.py embed-setup --off`. This part is new and tested on macOS only, with the app from ollama.com.
 

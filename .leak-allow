@@ -5,3 +5,4 @@ scripts/mail2md.py assignment 1     # the secret-matching regex itself
 scripts/vtt2md.py assignment 1      # the secret-matching regex itself
 scripts/search.py internal-url 2    # local embedding server (localhost): the docstring example and the Ollama default
 scripts/search.py private-ip 1      # the localhost check that keeps chunk text on this machine
+bootstrap.sh internal-url 1         # local Ollama endpoint (localhost) for search by meaning
