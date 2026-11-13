@@ -43,6 +43,7 @@ What costs money is context that every later call re-reads, not the model's answ
 - One task per session; restart when the context passes ~150k tokens, noting the state in `README.md` first.
 - A cheaper model reads and compiles (`wiki-reader`, `wiki-compiler`); the strongest model plans and reviews.
 - Search through `python3 -I <kit>/scripts/search.py query "words" --root <hub>` before `Grep`; it prints `path:line`. For sources in another language than the question, add `--also "<translation>"` per language that `search.py langs <hub>` lists.
+- After an ingest or compile that adds more than a few dozen files, rebuild the search index in the background: `nohup python3 -I <kit>/scripts/search.py index <hub> > ~/.cache/wiki-kit/index.log 2>&1 &`. Each `query` refreshes changed files itself but embeds at most 256 new chunks per call, so after a large import the rest would get vectors only over later searches. Small changes need nothing.
 - Keep tool output small: `head`, `grep`, ranged reads; never dump whole files.
 
 ## Git

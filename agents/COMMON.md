@@ -12,6 +12,8 @@ House style example: any existing finished article in the same topic (for exampl
 
 Look things up with `python3 -I ~/Projects/wiki-kit/scripts/search.py query "words" --root ROOT` before `Grep`: it ranks chunks by words (BM25) and, when a local embedding server is configured, by meaning, and prints `path:line`; then open the cited lines. When your question is in another language than the sources, add `--also "<the question in that language>"` for each language `search.py langs ROOT` lists. Search only ROOT, never another wiki.
 
+After an ingest or compile that adds more than a few dozen files, rebuild the search index in the background: `nohup python3 -I ~/Projects/wiki-kit/scripts/search.py index ROOT > ~/.cache/wiki-kit/index.log 2>&1 &`. Each `query` refreshes changed files itself but embeds at most 256 new chunks per call, so after a large import the rest would get vectors only over later searches. Small changes need nothing.
+
 ## Step 0 — Check routing
 
 Read the first ~60 lines of every file you are given before ingesting it. If it is about another client, another project or is HR material, do not ingest it: leave it in `inbox/` and report it. Routing by tag or folder name is unreliable: a name in a tag can belong to a different organisation than expected.
