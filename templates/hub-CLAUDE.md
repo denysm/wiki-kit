@@ -42,7 +42,7 @@ What costs money is context that every later call re-reads, not the model's answ
 - Scripts before models: deterministic work (conversion, checks, lint, usage report) runs as a script in `scripts/`; the session reads its summary only.
 - One task per session; restart when the context passes ~150k tokens, noting the state in `README.md` first.
 - A cheaper model reads and compiles (`wiki-reader`, `wiki-compiler`); the strongest model plans and reviews.
-- Search through `python3 -I <kit>/scripts/search.py query "words" --root <hub>` before `Grep`; it ranks by BM25 and prints `path:line`.
+- Search through `python3 -I <kit>/scripts/search.py query "words" --root <hub>` before `Grep`; it prints `path:line`. For sources in another language than the question, add `--also "<translation>"` per language that `search.py langs <hub>` lists.
 - Keep tool output small: `head`, `grep`, ranged reads; never dump whole files.
 
 ## Git

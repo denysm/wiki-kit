@@ -10,7 +10,7 @@ The orchestrating session passes each agent: ROOT (one wiki root, sometimes two)
 
 House style example: any existing finished article in the same topic (for example one concept and one ADR). Match its frontmatter, structure, tone and length.
 
-Look things up with `python3 -I ~/Projects/wiki-kit/scripts/search.py query "words" --root ROOT` before `Grep`: it ranks chunks by BM25 and prints `path:line`; then open the cited lines. Search only ROOT, never another wiki.
+Look things up with `python3 -I ~/Projects/wiki-kit/scripts/search.py query "words" --root ROOT` before `Grep`: it ranks chunks by words (BM25) and, when a local embedding server is configured, by meaning, and prints `path:line`; then open the cited lines. When your question is in another language than the sources, add `--also "<the question in that language>"` for each language `search.py langs ROOT` lists. Search only ROOT, never another wiki.
 
 ## Step 0 — Check routing
 
