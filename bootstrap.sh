@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 # Install wiki-kit on macOS or Linux: the llm-wiki plugin, an empty hub, the
-# specialists, the front desk and the foreman, then a self-check. When Ollama is installed it
-# also sets up search by meaning (it never installs Ollama). Safe to run again: it only
-# adds what is missing and never overwrites your files.
-# Usage: bash bootstrap.sh [--hub DIR] [--lang en|ru|uk] [--no-plugin]
-#   --hub DIR    where your wiki lives (default: hub_path from
-#                ~/.config/llm-wiki/config.json, else ~/wiki)
-#   --lang       language of the hub rules and of the chat (default: from $LANG)
-#   --no-plugin  skip the Claude Code plugin step (offline, or no Claude Code yet)
+# specialists, the front desk and the foreman, a self-check, then search by meaning:
+# Ollama (asks first) and a small local model. Safe to run again: it only adds what is
+# missing and never overwrites your files.
+# Usage: bash bootstrap.sh [--hub DIR] [--lang en|ru|uk] [--no-plugin] [--yes] [--no-vectors]
+#   --hub DIR     where your wiki lives (default: hub_path from
+#                 ~/.config/llm-wiki/config.json, else ~/wiki)
+#   --lang        language of the hub rules and of the chat (default: from $LANG)
+#   --no-plugin   skip the Claude Code plugin step (offline, or no Claude Code yet)
+#   --yes         install Ollama without asking (without a terminal and without --yes it is skipped)
+#   --no-vectors  skip search by meaning (no Ollama, no model download)
 # Environment: WIKI_KIT_DIR (where to clone the kit, default ~/Projects/wiki-kit),
 # WIKI_KIT_REPO (the kit's git address; needed only when this file runs outside a kit).
 set -eu
@@ -17,12 +19,16 @@ PLUGIN_ID="wiki@llm-wiki"
 HUB=""
 LANG_CODE=""
 NO_PLUGIN=0
+YES=0
+NO_VECTORS=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --hub) HUB="$2"; shift 2 ;;
     --lang) LANG_CODE="$2"; shift 2 ;;
     --no-plugin) NO_PLUGIN=1; shift ;;
-    -h|--help) sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    --yes|-y) YES=1; shift ;;
+    --no-vectors) NO_VECTORS=1; shift ;;
+    -h|--help) sed -n '2,14p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "unknown option: $1 (see --help)" >&2; exit 2 ;;
   esac
 done
@@ -166,35 +172,57 @@ if [ -d "$HUB/.skills" ]; then
 fi
 python3 -I "$KIT/scripts/leak_check.py" --repo "$KIT" >/dev/null 2>&1 && good "kit passes the leak check" || bad "kit fails the leak check: run python3 -I $KIT/scripts/leak_check.py --repo $KIT"
 
-say "== 8/8 Search by meaning (a small local model; optional)"
-# Uses Ollama when it is already installed; never installs it. Every failure is one note
-# line, never a stop: search works on words without the model.
+say "== 8/8 Search by meaning (Ollama and a small local model; optional)"
+# Every failure here is one note line, never a stop: search works on words without the model.
 EMBED_MODEL="embeddinggemma-2:270m-q8_0-text"
 OLLAMA_API="http://127.0.0.1:11434"
 SEARCH_CFG="${WIKI_KIT_SEARCH_CONFIG:-$CFG/search.json}"
 ollama_up() { python3 -I -c 'import sys, urllib.request; urllib.request.urlopen(sys.argv[1], timeout=2)' "$OLLAMA_API/api/version" >/dev/null 2>&1; }
+ollama_wait() { local i; for i in $(seq "$1"); do ollama_up && return 0; sleep 1; done; ollama_up; }
+find_ollama() {
+  local i
+  OLLAMA_APP=""; OLLAMA_BIN=""
+  for i in /Applications/Ollama.app "$HOME/Applications/Ollama.app"; do [ -d "$i" ] && { OLLAMA_APP="$i"; break; }; done
+  OLLAMA_BIN=$(command -v ollama 2>/dev/null || true)
+  if [ -z "$OLLAMA_BIN" ] && [ -n "$OLLAMA_APP" ] && [ -x "$OLLAMA_APP/Contents/Resources/ollama" ]; then OLLAMA_BIN="$OLLAMA_APP/Contents/Resources/ollama"; fi
+  [ -n "$OLLAMA_BIN" ]
+}
+install_ollama() {
+  # the official installer from ollama.com: on macOS the app into /Applications and the
+  # ollama command (the Mac may ask for your password); on Linux a service (asks for sudo)
+  local how tmp a
+  if [ "$(uname -s)" = Darwin ]; then how="the Ollama app into /Applications"; else how="Ollama into /usr/local (needs sudo)"; fi
+  if [ "$YES" != 1 ]; then
+    [ -t 0 ] || { note "search by meaning is off: Ollama is missing. Run bootstrap again in a terminal (it asks) or with --yes, or install it from https://ollama.com/download"; return 1; }
+    printf '        Ollama is missing. Install %s with the official installer from ollama.com? [Y/n] ' "$how"
+    read -r a || a=n
+    case "$a" in ""|[Yy]*) ;; *) note "search by meaning is off: Ollama not installed (install it from https://ollama.com/download, or run bootstrap again)"; return 1 ;; esac
+  fi
+  tmp=$(mktemp -d) || return 1
+  if ! curl -fsSL https://ollama.com/install.sh -o "$tmp/install.sh"; then
+    rm -rf "$tmp"; note "could not download the Ollama installer: install it from https://ollama.com/download, then run bootstrap again"; return 1
+  fi
+  sh "$tmp/install.sh" || { rm -rf "$tmp"; note "the Ollama installer failed (see above): install it from https://ollama.com/download, then run bootstrap again"; return 1; }
+  rm -rf "$tmp"
+  find_ollama || { note "Ollama was installed but its command is not found: open a new terminal and run bootstrap again"; return 1; }
+  good "Ollama installed ($("$OLLAMA_BIN" --version 2>/dev/null | awk '{print $NF}'))"
+}
 vectors() {
-  local ol="" app="" i log pid check
+  local log pid check
+  [ "$NO_VECTORS" = 1 ] && { note "search by meaning skipped (--no-vectors)"; return 0; }
   [ "$DEPS_OK" = 1 ] || { note "search by meaning skipped: numpy is missing (see step 7)"; return 0; }
-  for i in /Applications/Ollama.app "$HOME/Applications/Ollama.app"; do [ -d "$i" ] && { app="$i"; break; }; done
-  ol=$(command -v ollama 2>/dev/null || true)
-  [ -z "$ol" ] && [ -n "$app" ] && [ -x "$app/Contents/Resources/ollama" ] && ol="$app/Contents/Resources/ollama"
-  if [ -z "$ol" ]; then
-    if [ "$(uname -s)" = Darwin ]; then
-      note "search by meaning is off: install the Ollama app from https://ollama.com/download (the app, not Homebrew), open it once, then run bootstrap again"
-    else
-      note "search by meaning is off: install Ollama from https://ollama.com/download, then run bootstrap again"
-    fi
-    return 0
-  fi
+  find_ollama || install_ollama || return 0
   if ! ollama_up; then
-    if [ -n "$app" ]; then open -a "$app" >/dev/null 2>&1 || true; fi
-    for i in $(seq 30); do ollama_up && break; sleep 1; done
-    ollama_up || { note "Ollama does not answer at $OLLAMA_API: start it (the Ollama app, or 'ollama serve'), then run bootstrap again"; return 0; }
+    if [ -n "$OLLAMA_APP" ]; then open -a "$OLLAMA_APP" >/dev/null 2>&1 || true; ollama_wait 30 || true; fi
+    if ! ollama_up; then  # no app (Linux without a running service, or the command alone)
+      mkdir -p "$HOME/.cache/wiki-kit"
+      nohup "$OLLAMA_BIN" serve >"$HOME/.cache/wiki-kit/ollama-serve.log" 2>&1 </dev/null &
+      ollama_wait 30 || { note "Ollama does not answer at $OLLAMA_API: start it (the Ollama app, or 'ollama serve'), then run bootstrap again"; return 0; }
+    fi
   fi
-  if ! "$ol" list 2>/dev/null | awk 'NR > 1 {print $1}' | grep -qxF "$EMBED_MODEL"; then
+  if ! "$OLLAMA_BIN" list 2>/dev/null | awk 'NR > 1 {print $1}' | grep -qxF "$EMBED_MODEL"; then
     say "        downloading $EMBED_MODEL (about 300 MB, once)"
-    "$ol" pull "$EMBED_MODEL" >/dev/null || { note "could not download $EMBED_MODEL: run '$ol pull $EMBED_MODEL' and read the message, then run bootstrap again"; return 0; }
+    "$OLLAMA_BIN" pull "$EMBED_MODEL" >/dev/null || { note "could not download $EMBED_MODEL: run '$OLLAMA_BIN pull $EMBED_MODEL' and read the message, then run bootstrap again"; return 0; }
   fi
   if [ ! -f "$SEARCH_CFG" ]; then
     python3 -I "$KIT/scripts/search.py" embed-setup >/dev/null 2>&1 || true

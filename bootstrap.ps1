@@ -1,7 +1,8 @@
 # Install wiki-kit on Windows 10 or 11: Git, Python and Claude Code if missing
 # (asks first), the llm-wiki plugin, an empty hub, the specialists, the front
-# desk and the foreman, then a self-check. Safe to run again: it only adds what is missing and
-# never overwrites your files. Windows PowerShell 5.1 or PowerShell 7.
+# desk and the foreman, a self-check, then search by meaning: Ollama (asks first) and a small
+# local model. Safe to run again: it only adds what is missing and never overwrites your
+# files. Windows PowerShell 5.1 or PowerShell 7.
 #
 # Run (PowerShell blocks downloaded scripts by default, hence the bypass):
 #   powershell -ExecutionPolicy Bypass -File $HOME\Projects\wiki-kit\bootstrap.ps1
@@ -12,6 +13,7 @@
 #               the Windows display language)
 #   -NoPlugin   skip the Claude Code plugin step
 #   -Yes        install missing tools without asking
+#   -NoVectors  skip search by meaning (no Ollama, no model download)
 # Environment: WIKI_KIT_DIR (where to clone the kit, default ~\Projects\wiki-kit),
 # WIKI_KIT_REPO (the kit's git address; needed only when this file runs outside a kit).
 # A full log goes to %TEMP%\wiki-kit-bootstrap.log: send it if something fails.
@@ -19,7 +21,8 @@ param(
   [string]$Hub = "",
   [string]$Lang = "",
   [switch]$NoPlugin,
-  [switch]$Yes
+  [switch]$Yes,
+  [switch]$NoVectors
 )
 $ErrorActionPreference = "Continue"
 $PluginRepo = "https://github.com/nvk/llm-wiki.git#v1.0.0"
@@ -79,7 +82,7 @@ function Find-Python {
 # stderr into error records, which print as red errors (or stop a strict caller)
 function Invoke-Py { & $script:PyExe @script:PyArgs -I @args 2>&1 | ForEach-Object { "$_" } }
 
-Say "== 1/7 Tools on this computer"
+Say "== 1/8 Tools on this computer"
 if (-not (Has "git")) { [void](Install-Winget "Git.Git" "Git" @()) }
 if (-not (Has "git")) { Bad "Git is still not found: install it from https://git-scm.com/download/win, reopen PowerShell, run this again"; Finish 1 }
 Good ("git " + ((git --version) -replace "git version ", ""))
@@ -113,7 +116,7 @@ if (Test-Path (Join-Path $local "claude.exe")) {
 if ($HasClaude) { Good ("Claude Code " + ((claude --version 2>&1 | Out-String).Trim() -split " ")[0]) }
 else { Note "Claude Code not found: install it with  irm https://claude.ai/install.ps1 | iex  then reopen PowerShell and run this again for the plugin step" }
 
-Say "== 2/7 The kit"
+Say "== 2/8 The kit"
 if ($PSScriptRoot -and (Test-Path (Join-Path $PSScriptRoot "scripts\leak_check.py"))) {
   $Kit = $PSScriptRoot; Good "using the kit at $Kit"
 } else {
@@ -130,7 +133,7 @@ if ($PSScriptRoot -and (Test-Path (Join-Path $PSScriptRoot "scripts\leak_check.p
 git -C $Kit config core.hooksPath hooks
 if ($LASTEXITCODE -eq 0) { Good "kit hooks on (leak check before push, specialists re-sync)" }
 
-Say "== 3/7 The llm-wiki plugin ($PluginId, pinned to v1.0.0)"
+Say "== 3/8 The llm-wiki plugin ($PluginId, pinned to v1.0.0)"
 if ($NoPlugin -or -not $HasClaude) { Note "skipped" }
 elseif ((claude plugin list --json 2>&1 | Out-String) -match [regex]::Escape("`"$PluginId`"")) { Good "already installed" }
 else {
@@ -139,7 +142,7 @@ else {
   if ($LASTEXITCODE -eq 0) { Good "installed" } else { Bad "plugin install failed: run 'claude plugin install $PluginId' and read the message" }
 }
 
-Say "== 4/7 Your hub (the folder with your wikis)"
+Say "== 4/8 Your hub (the folder with your wikis)"
 $Config = Join-Path $HOME ".config\llm-wiki\config.json"
 if (-not $Hub -and (Test-Path $Config)) {
   try { $Hub = (Get-Content $Config -Raw | ConvertFrom-Json).hub_path } catch { $Hub = "" }
@@ -185,7 +188,7 @@ if (-not (Test-Path (Join-Path $Hub ".git"))) {
   if ($LASTEXITCODE -eq 0) { Good "hub is a git repository (local only, no remote; the first commit comes with your first topic)" }
 }
 
-Say "== 5/7 Private lists (outside every repository)"
+Say "== 5/8 Private lists (outside every repository)"
 $Cfg = Join-Path $HOME ".config\wiki-kit"
 New-Item -ItemType Directory -Force -Path $Cfg | Out-Null
 $f = Join-Path $Cfg "private-names.txt"
@@ -194,7 +197,7 @@ $f = Join-Path $Cfg "internal-domains.txt"
 if (-not (Test-Path $f)) { Write-Utf8 $f "# Internal host suffixes of your employer or clients, one per line, for example: corp.example.com`n" }
 Good "$Cfg (fill private-names.txt before your first push to the kit)"
 
-Say "== 6/7 Specialists and the front desk"
+Say "== 6/8 Specialists and the front desk"
 $LlmWiki = Get-ChildItem -Path (Join-Path $HOME ".claude\plugins\cache\llm-wiki\wiki\*\bin\llm-wiki") -ErrorAction SilentlyContinue |
   Sort-Object FullName | Select-Object -Last 1
 function Lw { Invoke-Py $LlmWiki.FullName specialist --hub $Hub @args 2>&1 | Out-Null; return ($LASTEXITCODE -eq 0) }
@@ -222,11 +225,12 @@ else {
   else { Bad "could not link $Foreman to the kit's skills\foreman" }
 }
 
-Say "== 7/7 Self-check"
+Say "== 7/8 Self-check"
 $broken = Invoke-Py -c "import sys`nfor f in sys.argv[1:]:`n    try: compile(open(f, encoding='utf-8').read(), f, 'exec')`n    except SyntaxError: print(f.replace(chr(92), '/').rsplit('/', 1)[-1], end=' ')" (Get-ChildItem (Join-Path $Kit "scripts\*.py") | ForEach-Object { $_.FullName })
 if (-not $broken) { Good "all scripts compile on this Python" } else { Bad "scripts that need a newer Python: $broken" }
 $deps = Invoke-Py (Join-Path $Kit "scripts\search.py") install-deps
-if ($LASTEXITCODE -eq 0) { Good ("python packages: " + ($deps -join " ")) } else { Bad "numpy could not be installed: run '$($script:PyExe) $($script:PyArgs -join ' ') -I $Kit\scripts\search.py install-deps' and read its message" }
+$script:DepsOk = ($LASTEXITCODE -eq 0)
+if ($script:DepsOk) { Good ("python packages: " + ($deps -join " ")) } else { Bad "numpy could not be installed: run '$($script:PyExe) $($script:PyArgs -join ' ') -I $Kit\scripts\search.py install-deps' and read its message" }
 $sh = Join-Path (Split-Path (Split-Path (Get-Command git).Source)) "bin\sh.exe"
 if (Test-Path $sh) {
   $found = & $sh -c ". '$($Kit -replace '\\', '/')/hooks/lib.sh'; echo `$py"
@@ -239,6 +243,67 @@ if (Test-Path (Join-Path $Hub ".skills")) {
 }
 Invoke-Py (Join-Path $Kit "scripts\leak_check.py") --repo $Kit 2>&1 | Out-Null
 if ($LASTEXITCODE -eq 0) { Good "kit passes the leak check" } else { Bad "kit fails the leak check: run  py -3 -I $Kit\scripts\leak_check.py --repo $Kit" }
+
+Say "== 8/8 Search by meaning (Ollama and a small local model; optional)"
+# Every failure here is one note line, never a stop: search works on words without the model.
+$EmbedModel = "embeddinggemma-2:270m-q8_0-text"
+$OllamaApi = "http://127.0.0.1:11434"
+$OllamaDir = Join-Path $env:LOCALAPPDATA "Programs\Ollama"
+function Ollama-Up { try { Invoke-WebRequest -UseBasicParsing -TimeoutSec 2 "$OllamaApi/api/version" | Out-Null; return $true } catch { return $false } }
+function Ollama-Wait($sec) { for ($i = 0; $i -lt $sec; $i++) { if (Ollama-Up) { return $true }; Start-Sleep -Seconds 1 }; return (Ollama-Up) }
+function Find-Ollama {
+  Refresh-Path
+  if (Has "ollama") { return (Get-Command ollama -CommandType Application | Select-Object -First 1).Source }
+  $exe = Join-Path $OllamaDir "ollama.exe"
+  if (Test-Path $exe) { return $exe }
+  return $null
+}
+function Vectors {
+  if ($NoVectors) { Note "search by meaning skipped (-NoVectors)"; return }
+  if (-not $script:DepsOk) { Note "search by meaning skipped: numpy is missing (see step 7)"; return }
+  $ol = Find-Ollama
+  if (-not $ol) {
+    if (-not (Has "winget")) { Note "search by meaning is off: Ollama is missing and winget is not available. Install it from https://ollama.com/download, then run this again"; return }
+    if (-not (Ask "  Ollama is missing (the local model server for search by meaning). Install it now with winget?")) { Note "search by meaning is off: Ollama not installed (install it from https://ollama.com/download, or run this again)"; return }
+    & winget install --id Ollama.Ollama -e --source winget --accept-package-agreements --accept-source-agreements
+    $ol = Find-Ollama
+    if (-not $ol) { Note "Ollama did not install (see above): install it from https://ollama.com/download, then run this again"; return }
+    Good "Ollama installed"
+  }
+  if (-not (Ollama-Up)) {
+    $app = Join-Path $OllamaDir "ollama app.exe"
+    if (Test-Path $app) { Start-Process -FilePath $app | Out-Null; Ollama-Wait 30 | Out-Null }
+    if (-not (Ollama-Up)) { Start-Process -FilePath $ol -ArgumentList "serve" -WindowStyle Hidden | Out-Null }
+    if (-not (Ollama-Wait 30)) { Note "Ollama does not answer at ${OllamaApi}: start the Ollama app, then run this again"; return }
+  }
+  $have = @(& $ol list 2>&1 | ForEach-Object { ("$_" -split "\s+")[0] }) -contains $EmbedModel
+  if (-not $have) {
+    Say "        downloading $EmbedModel (about 300 MB, once)"
+    & $ol pull $EmbedModel 2>&1 | Out-Null
+    if ($LASTEXITCODE -ne 0) { Note "could not download ${EmbedModel}: run 'ollama pull $EmbedModel' and read the message, then run this again"; return }
+  }
+  $searchPy = Join-Path $Kit "scripts\search.py"
+  $searchCfg = $env:WIKI_KIT_SEARCH_CONFIG; if (-not $searchCfg) { $searchCfg = Join-Path $Cfg "search.json" }
+  if (-not (Test-Path $searchCfg)) { Invoke-Py $searchPy embed-setup | Out-Null }
+  if (-not ((Test-Path $searchCfg) -and ((Get-Content $searchCfg -Raw) -match '"embeddings"'))) {
+    Note "search by meaning is switched off in ${searchCfg}; to switch it on: $($script:PyExe) $($script:PyArgs -join ' ') -I $searchPy embed-setup"; return
+  }
+  $check = Invoke-Py $searchPy embed-check
+  if ($LASTEXITCODE -ne 0) { Note ("the model does not answer: " + (@($check)[-1])); return }
+  $cache = Join-Path $HOME ".cache\wiki-kit"
+  New-Item -ItemType Directory -Force -Path $cache | Out-Null
+  $log = Join-Path $cache "bootstrap-index.log"
+  $pidFile = "$log.pid"
+  if (Test-Path $pidFile) {
+    $old = Get-Content $pidFile -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($old -and (Get-Process -Id $old -ErrorAction SilentlyContinue)) { Good "search by meaning on; the hub index is still being built (log: $log)"; return }
+  }
+  $pargs = @($script:PyArgs) + @("-I", "`"$searchPy`"", "index", "`"$Hub`"")
+  $proc = Start-Process -FilePath $script:PyExe -ArgumentList $pargs -WindowStyle Hidden -RedirectStandardOutput $log -RedirectStandardError "$log.err" -PassThru
+  Set-Content -Path $pidFile -Value $proc.Id
+  Good "search by meaning on (the model answers); building the hub index in the background (log: $log)"
+}
+try { Vectors } catch { Note "search by meaning step stopped early ($($_.Exception.Message)); search works on words" }
 
 Say ""
 Say "Done: $($script:ok) ok, $($script:warn) note(s), $($script:fail) failure(s). Hub: $Hub"
