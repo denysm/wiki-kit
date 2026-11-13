@@ -11,7 +11,7 @@ Status: draft. Merged from two working copies (work and home). The installers ar
 | Folder | What it is |
 |---|---|
 | `bootstrap.ps1` | The same for Windows 10/11; also installs Git, Python and Claude Code if missing (asks first); log in `%TEMP%\wiki-kit-bootstrap.log`. Tested in CI on a clean Windows machine (Windows PowerShell 5.1) |
-| `bootstrap.sh` | Installer for macOS and Linux: plugin pinned to v0.25.1, empty hub, private lists, specialists, front desk, self-check; safe to re-run |
+| `bootstrap.sh` | Installer for macOS and Linux: plugin pinned to v1.0.0, empty hub, private lists, specialists, front desk, self-check; safe to re-run |
 | `docs/QUICKSTART.md`, `docs/QUICKSTART.ru.md`, `docs/QUICKSTART.uk.md` | Plain-language install, first steps and how to send improvements, in English, Russian and Ukrainian |
 | `CONTRIBUTING.md`, `.github/pull_request_template.md` | How to send a change by pull request, and the privacy checklist every pull request starts with |
 | `.github/workflows/` | CI: `checks` on every push (scripts compile on Python 3.9 and 3.13, leak check over the whole history without the private names list, shell syntax, no symlinks); `installers` runs both installers twice on clean Ubuntu and Windows and checks that the pre-push hook blocks a fake key |

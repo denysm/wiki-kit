@@ -43,7 +43,7 @@ The owner runs several independent wikis (personal, work, client projects). They
 
 ## Beginner installation (target)
 
-1. Install VS Code. 2. Install the Claude Code extension (the extension is free; model access is paid). 3. Paste one line in the terminal: it installs dependencies, the `wiki@llm-wiki` plugin pinned to v0.25.1, agents and scripts, creates a hub, and runs a self-check. 4. Sign in once, or paste an API key.
+1. Install VS Code. 2. Install the Claude Code extension (the extension is free; model access is paid). 3. Paste one line in the terminal: it installs dependencies, the `wiki@llm-wiki` plugin pinned to v1.0.0, agents and scripts, creates a hub, and runs a self-check. 4. Sign in once, or paste an API key.
 
 Cannot be automated: installing the editor, signing in, paying. Windows needs its own script and its own test.
 

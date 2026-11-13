@@ -12,7 +12,7 @@
 # WIKI_KIT_REPO (the kit's git address; needed only when this file runs outside a kit).
 set -eu
 
-PLUGIN_REPO="https://github.com/nvk/llm-wiki.git#v0.25.1"
+PLUGIN_REPO="https://github.com/nvk/llm-wiki.git#v1.0.0"
 PLUGIN_ID="wiki@llm-wiki"
 HUB=""
 LANG_CODE=""
@@ -57,7 +57,7 @@ else
 fi
 git -C "$KIT" config core.hooksPath hooks && good "kit hooks on (leak check before push, specialists re-sync)"
 
-say "== 3/7 The llm-wiki plugin ($PLUGIN_ID, pinned to v0.25.1)"
+say "== 3/7 The llm-wiki plugin ($PLUGIN_ID, pinned to v1.0.0)"
 if [ "$NO_PLUGIN" = 1 ] || [ "$HAS_CLAUDE" = 0 ]; then note "skipped"
 elif claude plugin list --json 2>/dev/null | grep -q "\"$PLUGIN_ID\""; then good "already installed"
 else

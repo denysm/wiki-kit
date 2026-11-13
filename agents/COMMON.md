@@ -5,7 +5,7 @@ The orchestrating session passes each agent: ROOT (one wiki root, sometimes two)
 ## Read first
 
 1. `~/wiki/CLAUDE.md` — the rules: confidentiality, sources, binary files, language, ADR format. They apply in full. For a separate wiki repository also read its own `CLAUDE.md`; a private wiki of the owner's own data may override the HR rule for that data.
-2. Plugin protocols in `~/.claude/plugins/cache/llm-wiki/wiki/0.25.1/skills/wiki-manager/references/`: `compilation.md`, `indexing.md`, and in `wiki-structure.md` the sections "Source File Format", "Wiki Article Format", "Source Reference Resolution", "Volatility Classification", "Dual-Link Convention".
+2. Plugin protocols in `~/.claude/plugins/cache/llm-wiki/wiki/1.0.0/skills/wiki-manager/references/`: `compilation.md`, `indexing.md`, and in `wiki-structure.md` the sections "Source File Format", "Wiki Article Format", "Source Reference Resolution", "Volatility Classification", "Dual-Link Convention".
 3. ROOT's `config.md`, `schema.md`, `_index.md`, `wiki/_index.md` and every existing article (if any) before planning.
 
 House style example: any existing finished article in the same topic (for example one concept and one ADR). Match its frontmatter, structure, tone and length.
@@ -41,7 +41,7 @@ Append one line per ingested source to `ROOT/log.md`: `## [TODAY] ingest | <titl
 ## Step 2 — Compile
 
 Follow `compilation.md`. Plan articles first (concepts = bounded mechanisms; topics = broad themes; references = maps, timelines, people/roles, ADRs). Then write them in `ROOT/wiki/{concepts,topics,references}/`:
-- Full frontmatter: `title`, `category`, `sources` (exact raw paths, block list), `created`/`updated`/`verified` = TODAY, `tags`, `aliases`, `confidence`, `volatility`, `summary`, plus `sensitivity` where required.
+- Full frontmatter: `title`, `category`, `sources` (exact raw paths, block list), `created`/`updated` = TODAY (set `verified` only when the user explicitly confirmed the conclusions; compilation never sets or bumps it), `tags`, `aliases`, `confidence`, `volatility`, `summary`, plus `sensitivity` where required.
 - Abstract blockquote, synthesized sections (explain, do not paste), `## See Also` with bidirectional dual links (`[[slug|Name]] ([Name](../category/slug.md))`), `## Sources` listing raw files with what each contributed.
 - Decisions become ADRs in `wiki/references/adr-NNNN-<slug>.md` (numbered per wiki, continuing existing numbering), MADR sections as CLAUDE.md specifies, `status`, `decided`, `compiled-from: mixed` when made in a chat. A decision that was only proposed stays `proposed`.
 - Existing articles: integrate new facts with Edit, do not rewrite; bump `updated`.
@@ -53,8 +53,8 @@ Follow `compilation.md`. Plan articles first (concepts = bounded mechanisms; top
 
 ## Step 3 — Lint and indexes
 
-- Hub topic: `cd ~/wiki && ~/.claude/plugins/cache/llm-wiki/wiki/0.25.1/bin/llm-wiki lint --wiki <name> --fix`, then again without `--fix`. Never lint the hub root with `--fix`.
-- Repository or private wiki: `~/.claude/plugins/cache/llm-wiki/wiki/0.25.1/bin/llm-wiki lint <ROOT> --fix`, then again without `--fix`.
+- Hub topic: `cd ~/wiki && ~/.claude/plugins/cache/llm-wiki/wiki/1.0.0/bin/llm-wiki lint --wiki <name> --fix`, then again without `--fix`. Never lint the hub root with `--fix`.
+- Repository or private wiki: `~/.claude/plugins/cache/llm-wiki/wiki/1.0.0/bin/llm-wiki lint <ROOT> --fix`, then again without `--fix`.
 - Fix findings until PASS.
 - Then run `python3 -I ~/Projects/wiki-kit/scripts/check_evidence.py ROOT`. Fix every error (missing source, broken link). For each warning (`number-not-in-sources`, `quote-not-in-sources`, `date-not-in-sources`) open the cited raw file, then correct the article or mark the value as derived; do not leave a warning unexamined. Report the final counts.
 - Update `ROOT/_index.md` statistics (sources, articles, Last compiled, Last lint, Recent Changes) and the totals in `ROOT/raw/_index.md`. Append `## [TODAY] compile | N sources → X new articles, Y updated (slugs)` to `ROOT/log.md`.

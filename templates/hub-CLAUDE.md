@@ -1,6 +1,6 @@
 # {HUB_NAME} — rules for AI agents
 
-Knowledge hub run on the nvk/llm-wiki plugin (`wiki@llm-wiki`, pinned to v0.25.1). One topic per area under `topics/<name>/`. Read `README.md` at the start of a session.
+Knowledge hub run on the nvk/llm-wiki plugin (`wiki@llm-wiki`, pinned to v1.0.0). One topic per area under `topics/<name>/`. Read `README.md` at the start of a session.
 
 ## Layout
 

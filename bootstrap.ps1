@@ -22,7 +22,7 @@ param(
   [switch]$Yes
 )
 $ErrorActionPreference = "Continue"
-$PluginRepo = "https://github.com/nvk/llm-wiki.git#v0.25.1"
+$PluginRepo = "https://github.com/nvk/llm-wiki.git#v1.0.0"
 $PluginId = "wiki@llm-wiki"
 $Log = Join-Path $env:TEMP "wiki-kit-bootstrap.log"
 try { Start-Transcript -Path $Log -Append | Out-Null } catch {}
@@ -130,7 +130,7 @@ if ($PSScriptRoot -and (Test-Path (Join-Path $PSScriptRoot "scripts\leak_check.p
 git -C $Kit config core.hooksPath hooks
 if ($LASTEXITCODE -eq 0) { Good "kit hooks on (leak check before push, specialists re-sync)" }
 
-Say "== 3/7 The llm-wiki plugin ($PluginId, pinned to v0.25.1)"
+Say "== 3/7 The llm-wiki plugin ($PluginId, pinned to v1.0.0)"
 if ($NoPlugin -or -not $HasClaude) { Note "skipped" }
 elseif ((claude plugin list --json 2>&1 | Out-String) -match [regex]::Escape("`"$PluginId`"")) { Good "already installed" }
 else {
