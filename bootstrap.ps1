@@ -1,6 +1,6 @@
 # Install wiki-kit on Windows 10 or 11: Git, Python and Claude Code if missing
-# (asks first), the llm-wiki plugin, an empty hub, the specialists and the front
-# desk, then a self-check. Safe to run again: it only adds what is missing and
+# (asks first), the llm-wiki plugin, an empty hub, the specialists, the front
+# desk and the foreman, then a self-check. Safe to run again: it only adds what is missing and
 # never overwrites your files. Windows PowerShell 5.1 or PowerShell 7.
 #
 # Run (PowerShell blocks downloaded scripts by default, hence the bypass):
@@ -213,6 +213,13 @@ else {
   New-Item -ItemType Junction -Path $Desk -Target (Join-Path $Kit "skills\department") | Out-Null
   if (Test-Path (Join-Path $Desk "SKILL.md")) { Good "front desk skill linked (say 'coach' or 'help me decide' in any folder)" }
   else { Bad "could not link $Desk to the kit's skills\department" }
+}
+$Foreman = Join-Path $Skills "foreman"
+if (Test-Path $Foreman) { Good "foreman skill already present" }
+else {
+  New-Item -ItemType Junction -Path $Foreman -Target (Join-Path $Kit "skills\foreman") | Out-Null
+  if (Test-Path (Join-Path $Foreman "SKILL.md")) { Good "foreman skill linked (say 'assemble a team' or 'work order' in any folder)" }
+  else { Bad "could not link $Foreman to the kit's skills\foreman" }
 }
 
 Say "== 7/7 Self-check"

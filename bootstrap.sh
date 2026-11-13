@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Install wiki-kit on macOS or Linux: the llm-wiki plugin, an empty hub, the
-# specialists and the front desk, then a self-check. Safe to run again: it only
+# specialists, the front desk and the foreman, then a self-check. Safe to run again: it only
 # adds what is missing and never overwrites your files.
 #
 # Usage: bash bootstrap.sh [--hub DIR] [--lang en|ru|uk] [--no-plugin]
@@ -149,6 +149,8 @@ else note "specialists wait for the plugin: run this again after step 3 succeeds
 mkdir -p "$HOME/.claude/skills"
 if [ -e "$HOME/.claude/skills/department" ]; then good "front desk skill already present"
 else ln -s "$KIT/skills/department" "$HOME/.claude/skills/department" && good "front desk skill linked (say 'coach' or 'help me decide' in any folder)"; fi
+if [ -e "$HOME/.claude/skills/foreman" ]; then good "foreman skill already present"
+else ln -s "$KIT/skills/foreman" "$HOME/.claude/skills/foreman" && good "foreman skill linked (say 'assemble a team' or 'work order' in any folder)"; fi
 
 say "== 7/7 Self-check"
 broken=$(python3 -I -c 'import sys
