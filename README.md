@@ -25,6 +25,7 @@ Status: draft. Merged from two working copies (work and home). The installers ar
 | `scripts/` | Standard-library Python helpers, listed below |
 | `specialists/` | The specialist department: 11 specialists in five divisions (growth, wellbeing, family, money and documents, thinking tools); staff, rules and vacancies in `specialists/README.md` |
 | `skills/department/` | Claude Code skill: the front desk that asks your language, picks a specialist by a plain phrase ("coach", "мне тяжело") and hands over between them |
+| `skills/foreman/` | Claude Code skill: the foreman for work that needs a team ("assemble a team", "наряд"): work order, staffing table with measured cost estimates (`scripts/roster.py`), hires only after your yes, quality control, acceptance, lessons |
 
 ## Specialist department
 
@@ -56,7 +57,7 @@ Every script prints its usage with `--help` (or in its docstring). Run them with
 | Second opinion from other models | `council.py` (several models, blind judge, verify, cost ledger, learned routing), `verify_articles.py` (claim-by-claim check of articles by a model from another family), `model_bench.py`, `bench_weighted.py`, `council_prices.json` |
 | Find | `search.py` (SQLite FTS5 full-text search over `raw/`, `wiki/`, `output/` of a wiki root: `index`, `query`, `eval`; the index is a local cache) |
 | Guard | `wiki_write_audit.py` (Claude Code hook for `Write\|Edit`, installed once in `~/.claude/settings.json`: logs writes inside wiki roots, runs the `raw_check.py` rules at once and returns exit 2 on a secret; does nothing outside a wiki; usage in its docstring) |
-| Cost | `claude_usage.py` (Claude Code spend from local logs; `brief` for a per-answer line) |
+| Cost and staffing | `claude_usage.py` (Claude Code spend from local logs; `brief` for a per-answer line; `agents` for cost per subagent run by type and model), `roster.py` (who the foreman can hire: specialists, agents, built-ins, outside vendors, vacancies, hire log, measured cost per run; `--json`) |
 
 `council.py` and `verify_articles.py` call outside model vendors. They refuse to send data from private topics (default: `work`) or text with secret hits, unless told otherwise.
 
@@ -74,6 +75,7 @@ Lists that name your organisation, your family or your clients are themselves th
 | `~/.config/wiki-kit/inventory.json` | `inventory.py` and `deep_candidates.py`: your own topic rules (`career`, `buckets`, `prepared`, `waves`); without it, generic defaults apply |
 | `~/.config/llm-wiki/council.env` | API keys for `council.py` (KEY=value, chmod 600) |
 | `~/.config/wiki-kit/specialists-hub` | `sync_specialists.py`, the kit's hooks and the `department` skill: the hub that gets the specialists, when it is not the llm-wiki hub (one line, a path) |
+| `~/.config/wiki-kit/foreman/hires.tsv` | `roster.py --log-hire`: the foreman's hire log (date, generic role, kind, model, outcome, cost); a temporary role hired twice becomes a vacancy candidate |
 | `~/.config/wiki-kit/profile.json` | the `department` skill: your preferred language (`{"language": "ru"}`), saved with your consent on the first conversation |
 | `WIKI_KIT_AUTHOR` | your name for the `authors:` field written by `chat2md.py` |
 | `WIKI_KIT_SOURCES` | root of your originals for `stage.py` / `extra2md.py` (default `~/Projects/private-sources`) |

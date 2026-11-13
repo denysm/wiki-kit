@@ -27,6 +27,22 @@ user's language, picks a specialist, and handles handoffs between them. Every
 specialist names its neighbours under "Do not use when", so a request that
 belongs elsewhere is handed over rather than half-answered.
 
+## The foreman and the department
+
+The department serves one person with one specialist at a time: the front
+desk picks the specialist, and the conversation stays between the two. The
+foreman (`skills/foreman/`) is for work that needs several hands, such as
+reading a batch of sources, checking claims and compiling the result. It
+writes a work order, proposes a staffing table from `scripts/roster.py`
+(these specialists, Claude Code agents, built-in agents, outside models,
+open vacancies) with cost estimates measured from past runs, and hires only
+after the user's yes. A specialist on a team works as a briefed subagent
+that follows its own `SKILL.md`. The safety rule belongs to the department:
+crisis signs and personal one-to-one conversations go there, and
+`reflective-support` never joins a team. A temporary role the foreman hires
+twice is proposed as a vacancy below or as a draft from
+`templates/specialist/`.
+
 ## Vacancies
 
 Not built yet; pick one up by copying `templates/specialist/`.
