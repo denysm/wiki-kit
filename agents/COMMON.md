@@ -10,6 +10,8 @@ The orchestrating session passes each agent: ROOT (one wiki root, sometimes two)
 
 House style example: any existing finished article in the same topic (for example one concept and one ADR). Match its frontmatter, structure, tone and length.
 
+Look things up with `python3 -I ~/Projects/wiki-kit/scripts/search.py query "words" --root ROOT` before `Grep`: it ranks chunks by BM25 and prints `path:line`; then open the cited lines. Search only ROOT, never another wiki.
+
 ## Step 0 — Check routing
 
 Read the first ~60 lines of every file you are given before ingesting it. If it is about another client, another project or is HR material, do not ingest it: leave it in `inbox/` and report it. Routing by tag or folder name is unreliable: a name in a tag can belong to a different organisation than expected.

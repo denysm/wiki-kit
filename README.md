@@ -21,7 +21,6 @@ Status: draft. Merged from two working copies (work and home). The installers ar
 | `docs/llm-wiki-portable-playbook.md` | The method in full: layout, frontmatter, ADRs, confidentiality, cost, quality gates, cold start |
 | `templates/hub-CLAUDE.md` | Starting rules for a new hub (fill in the `{...}` placeholders) |
 | `templates/specialist/` | Skeleton for a new specialist with the department rules built in |
-| `templates/claude-hooks/` | Claude Code hook for a hub: audit log of every write and an immediate `raw_check.py` on `raw/`, `wiki/`, `output/` |
 | `agents/` | `wiki-reader` (read-only digests) and `wiki-compiler` (ingest + compile one topic), plus the shared `COMMON.md` |
 | `scripts/` | Standard-library Python helpers, listed below |
 | `specialists/` | The specialist department: 11 specialists in five divisions (growth, wellbeing, family, money and documents, thinking tools); staff, rules and vacancies in `specialists/README.md` |
@@ -55,6 +54,8 @@ Every script prints its usage with `--help` (or in its docstring). Run them with
 | Stage and ingest | `stage.py`, `extra2md.py`, `ingest.py`, `move_tree.py`, `scaffold_wiki.py`, `sync_specialists.py` (kit specialists into a hub's `.skills/`) |
 | Check | `leak_check.py` (the pre-push leak check, below), `raw_check.py` (secrets, internal hosts, infrastructure ids; `--fix` redacts; `--wiki` adds raw frontmatter and `*.local.md` rules), `check_evidence.py` (numbers, dates and quotes appear in cited sources; links; coverage), `wikicheck.py` (article frontmatter, See Also back-links, staleness; `--suggest N` lists See Also candidates from shared links), `reindex.py`, `decisions_scan.py`, `extract_code.py` |
 | Second opinion from other models | `council.py` (several models, blind judge, verify, cost ledger, learned routing), `verify_articles.py` (claim-by-claim check of articles by a model from another family), `model_bench.py`, `bench_weighted.py`, `council_prices.json` |
+| Find | `search.py` (SQLite FTS5 full-text search over `raw/`, `wiki/`, `output/` of a wiki root: `index`, `query`, `eval`; the index is a local cache) |
+| Guard | `wiki_write_audit.py` (Claude Code hook for `Write\|Edit`, installed once in `~/.claude/settings.json`: logs writes inside wiki roots, runs the `raw_check.py` rules at once and returns exit 2 on a secret; does nothing outside a wiki; usage in its docstring) |
 | Cost | `claude_usage.py` (Claude Code spend from local logs; `brief` for a per-answer line) |
 
 `council.py` and `verify_articles.py` call outside model vendors. They refuse to send data from private topics (default: `work`) or text with secret hits, unless told otherwise.
@@ -67,6 +68,9 @@ Lists that name your organisation, your family or your clients are themselves th
 |---|---|
 | `~/.config/wiki-kit/internal-domains.txt` | `raw_check.py`: one host suffix per line (or `re:<regex>`); flagged and redacted as internal |
 | `~/.config/wiki-kit/private-names.txt` | the leak check before every push: one case-insensitive regex per line (`grep -iEf`) |
+| `~/.cache/wiki-kit/search/` | `search.py`: one SQLite index per wiki root, rebuilt on demand (it holds the text of `*.local.md` files, so it never goes into a repository) |
+| `~/.cache/wiki-kit/audit/writes.jsonl` | `wiki_write_audit.py`: one line per write inside a wiki root |
+| `~/.config/wiki-kit/search-eval.tsv` | `search.py eval`: your question set (`question`, `root`, `expected file`; questions about real content stay out of the kit) |
 | `~/.config/wiki-kit/inventory.json` | `inventory.py` and `deep_candidates.py`: your own topic rules (`career`, `buckets`, `prepared`, `waves`); without it, generic defaults apply |
 | `~/.config/llm-wiki/council.env` | API keys for `council.py` (KEY=value, chmod 600) |
 | `~/.config/wiki-kit/specialists-hub` | `sync_specialists.py`, the kit's hooks and the `department` skill: the hub that gets the specialists, when it is not the llm-wiki hub (one line, a path) |
