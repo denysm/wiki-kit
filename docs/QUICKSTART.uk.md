@@ -175,6 +175,7 @@ Claude шукає у вашій вікі за словами. Щоб знахо�
 | Що бачите | Що робити |
 |---|---|
 | `git is missing` або `python3 is missing` | Mac: виконайте `xcode-select --install`, дочекайтеся, запустіть інсталятор знову. Linux: встановіть пакети `git` і `python3`. |
+| `search.py needs numpy` | Виконайте команду з цього рядка (`... search.py install-deps`). Вона знадобиться знову, якщо зміниться версія Python. |
 | `Claude Code command line not found` | Зробіть крок 3, закрийте й знову відкрийте Термінал, запустіть інсталятор знову. |
 | `git clone` просить пароль або пише «not found» | В адресі помилка: скопіюйте її знову із зеленої кнопки **Code** (крок 4). |
 | `plugin install failed` | Виконайте `claude plugin install wiki@llm-wiki` і прочитайте повідомлення. Зазвичай справа в інтернеті. |

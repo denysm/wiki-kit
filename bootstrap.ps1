@@ -225,6 +225,8 @@ else {
 Say "== 7/7 Self-check"
 $broken = Invoke-Py -c "import sys`nfor f in sys.argv[1:]:`n    try: compile(open(f, encoding='utf-8').read(), f, 'exec')`n    except SyntaxError: print(f.replace(chr(92), '/').rsplit('/', 1)[-1], end=' ')" (Get-ChildItem (Join-Path $Kit "scripts\*.py") | ForEach-Object { $_.FullName })
 if (-not $broken) { Good "all scripts compile on this Python" } else { Bad "scripts that need a newer Python: $broken" }
+$deps = Invoke-Py (Join-Path $Kit "scripts\search.py") install-deps
+if ($LASTEXITCODE -eq 0) { Good ("python packages: " + ($deps -join " ")) } else { Bad "numpy could not be installed: run '$($script:PyExe) $($script:PyArgs -join ' ') -I $Kit\scripts\search.py install-deps' and read its message" }
 $sh = Join-Path (Split-Path (Split-Path (Get-Command git).Source)) "bin\sh.exe"
 if (Test-Path $sh) {
   $found = & $sh -c ". '$($Kit -replace '\\', '/')/hooks/lib.sh'; echo `$py"

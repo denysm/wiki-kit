@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Search over a wiki root: SQLite FTS5 (BM25, standard library only), optionally fused with
-vectors from a local embedding server.
+"""Search over a wiki root: SQLite FTS5 (BM25), optionally fused with vectors from a local
+embedding server. Needs numpy (vector scoring): `search.py install-deps` puts it into
+~/.local/share/wiki-kit/python<X.Y> (Windows: %LOCALAPPDATA%\\wiki-kit\\python<X.Y>) unless
+this Python already has it; the installers run it.
 
 Usage:
+  search.py install-deps                        # numpy for this Python (once per Python version)
   search.py index ROOT...                       # (re)build or refresh the index, incrementally
   search.py query "text" [--also "translation" ...] [--root ROOT ...] [--kind raw|wiki|output ...]
                          [--topic NAME ...] [--path TEXT] [-n 10] [--json] [--long] [--mode MODE]
@@ -75,7 +78,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import heapq
 import json
 import math
 import operator
@@ -83,6 +85,7 @@ import os
 import re
 import sqlite3
 import struct
+import subprocess
 import sys
 import time
 import urllib.error
@@ -90,6 +93,42 @@ import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+
+# Packages the kit needs, kept per Python version in a folder of its own: `python3 -I` ignores
+# `pip install --user`, and Homebrew's Python refuses plain `pip install`.
+REQUIRES = ("numpy",)
+DEPS = ((Path(os.environ["LOCALAPPDATA"]) if os.name == "nt" and os.environ.get("LOCALAPPDATA")
+         else Path.home() / ".local" / "share") / "wiki-kit" / ("python%d.%d" % sys.version_info[:2]))
+
+
+def install_deps() -> int:
+    """Put REQUIRES into DEPS unless this Python already has them; 0 when they import."""
+    probe = "import " + ", ".join(REQUIRES)
+    env_ok = subprocess.call([sys.executable, "-I", "-c", f"import sys; sys.path.append({str(DEPS)!r}); {probe}"],
+                             stderr=subprocess.DEVNULL) == 0
+    if not env_ok:
+        rc = subprocess.call([sys.executable, "-m", "pip", "install", "-q", "--disable-pip-version-check",
+                              "--target", str(DEPS), *REQUIRES])
+        if rc:
+            return rc
+    import importlib
+    sys.path.append(str(DEPS))
+    for name in REQUIRES:
+        m = importlib.import_module(name)
+        print(f"{name} {m.__version__} ({Path(m.__file__).parent.parent})")
+    return 0
+
+
+if sys.argv[1:2] == ["install-deps"]:
+    sys.exit(install_deps())
+try:
+    import numpy as np
+except ImportError:
+    sys.path.append(str(DEPS))
+    try:
+        import numpy as np
+    except ImportError:  # one clear line instead of a traceback
+        sys.exit(f"search.py needs numpy; install it once: {Path(sys.executable).name} -I {__file__} install-deps")
 
 VERSION = 4
 CACHE = Path(os.environ.get("WIKI_KIT_SEARCH_CACHE") or Path.home() / ".cache" / "wiki-kit" / "search")
@@ -509,10 +548,23 @@ def vector_hits(root: Path, cfg: dict, text: str, kinds, topics, limit: int, pat
     where, args = filters(kinds, topics, path)
     db = sqlite3.connect(db_path(root))
     try:
-        rows = db.execute("SELECT c.id, v.v FROM vec v JOIN chunks c ON c.id = v.id"
-                          + (" WHERE " + " AND ".join(where) if where else ""), args)
-        mul = operator.mul
-        top = heapq.nlargest(limit, ((sum(map(mul, q, unpack(b))), cid) for cid, b in rows))
+        cur = db.execute("SELECT c.id, v.v FROM vec v JOIN chunks c ON c.id = v.id"
+                         + (" WHERE " + " AND ".join(where) if where else ""), args)
+        qv = np.asarray(q, dtype=np.float32)
+        best_s, best_id = np.empty(0, np.float32), np.empty(0, np.int64)
+        while True:  # blocks keep memory flat on a large root
+            rows = cur.fetchmany(65536)
+            if not rows:
+                break
+            ids = np.fromiter((r[0] for r in rows), np.int64, len(rows))
+            mat = np.frombuffer(b"".join(r[1] for r in rows), dtype="<f2").reshape(len(rows), -1)
+            best_s = np.concatenate([best_s, mat.astype(np.float32) @ qv])
+            best_id = np.concatenate([best_id, ids])
+            if len(best_s) > limit:
+                keep = np.argpartition(-best_s, limit - 1)[:limit]
+                best_s, best_id = best_s[keep], best_id[keep]
+        order = np.argsort(-best_s, kind="stable")
+        top = [(float(best_s[i]), int(best_id[i])) for i in order]
         if not top:
             return []
         meta = {r[0]: r[1:] for r in db.execute(

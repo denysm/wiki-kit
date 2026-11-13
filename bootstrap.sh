@@ -158,6 +158,7 @@ for f in sys.argv[1:]:
     try: compile(open(f, encoding="utf-8").read(), f, "exec")
     except SyntaxError: print(f.rsplit("/", 1)[-1], end=" ")' "$KIT"/scripts/*.py)
 [ -z "$broken" ] && good "all scripts compile on this python3" || bad "scripts that need a newer python3: $broken"
+deps=$(python3 -I "$KIT/scripts/search.py" install-deps 2>&1) && good "python packages: $(printf '%s' "$deps" | tr '\n' ' ')" || bad "numpy could not be installed: run 'python3 -I $KIT/scripts/search.py install-deps' and read its message"
 if [ -d "$HUB/.skills" ]; then
   python3 -I "$KIT/scripts/sync_specialists.py" "$HUB" --check >/dev/null && good "hub specialists match the kit" || bad "hub specialists differ from the kit"
   lw validate && good "specialists pass the plugin validator" || bad "plugin validator: run 'python3 -I $LLM_WIKI specialist --hub $HUB validate'"

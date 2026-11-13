@@ -22,7 +22,7 @@ Status: draft. Merged from two working copies (work and home). The installers ar
 | `templates/hub-CLAUDE.md` | Starting rules for a new hub (fill in the `{...}` placeholders) |
 | `templates/specialist/` | Skeleton for a new specialist with the department rules built in |
 | `agents/` | `wiki-reader` (read-only digests) and `wiki-compiler` (ingest + compile one topic), plus the shared `COMMON.md` |
-| `scripts/` | Standard-library Python helpers, listed below |
+| `scripts/` | Python helpers, listed below; standard library only, except numpy for `search.py` (`search.py install-deps`, run by the installers) |
 | `specialists/` | The specialist department: 11 specialists in five divisions (growth, wellbeing, family, money and documents, thinking tools); staff, rules and vacancies in `specialists/README.md` |
 | `skills/department/` | Claude Code skill: the front desk that asks your language, picks a specialist by a plain phrase ("coach", "мне тяжело") and hands over between them |
 | `skills/foreman/` | Claude Code skill: the foreman for work that needs a team ("assemble a team", "наряд"): recalls past work orders and lessons first (`search.py recall`), work order, staffing table with measured cost estimates (`scripts/roster.py`), hires only after your yes, quality control, acceptance, lessons, and an order record in the topic's `output/work-orders/` for the next recall |
@@ -69,6 +69,7 @@ Lists that name your organisation, your family or your clients are themselves th
 |---|---|
 | `~/.config/wiki-kit/internal-domains.txt` | `raw_check.py`: one host suffix per line (or `re:<regex>`); flagged and redacted as internal |
 | `~/.config/wiki-kit/private-names.txt` | the leak check before every push: one case-insensitive regex per line (`grep -iEf`) |
+| `~/.local/share/wiki-kit/python<X.Y>/` | Packages the kit needs (numpy), one folder per Python version, put there by `search.py install-deps` when that Python lacks them (Windows: `%LOCALAPPDATA%\wiki-kit\`). Scripts run with `python3 -I`, which ignores `pip install --user` |
 | `~/.cache/wiki-kit/search/` | `search.py`: one SQLite index per wiki root, rebuilt on demand (it holds the text of `*.local.md` files and their vectors, so it never goes into a repository) |
 | `~/.config/wiki-kit/search.json` | `search.py`: optional local embedding server (`url`, `model`, `query` and `document` prompts, `dims`); without it search uses words only. The server must run on your machine: chunk text is sent to it |
 | `~/.cache/wiki-kit/audit/writes.jsonl` | `wiki_write_audit.py`: one line per write inside a wiki root |

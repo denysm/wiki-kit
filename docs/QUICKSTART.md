@@ -175,6 +175,7 @@ Write in any language: English, Ukrainian or Russian. Lessons for specialists ha
 | What you see | What to do |
 |---|---|
 | `git is missing` or `python3 is missing` | Mac: run `xcode-select --install`, wait, run the installer again. Linux: install the `git` and `python3` packages. |
+| `search.py needs numpy` | Run the command printed in that line (`... search.py install-deps`). It is needed again after your Python version changes. |
 | `Claude Code command line not found` | Do step 3, close and reopen the Terminal, run the installer again. |
 | `git clone` asks for a password or says "not found" | The address has a typo: copy it again from the green **Code** button (step 4). |
 | `plugin install failed` | Run `claude plugin install wiki@llm-wiki` and read the message. Usually it is the internet connection. |
