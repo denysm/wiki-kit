@@ -1,11 +1,16 @@
 """Estimate Claude Code token spend from local session logs.
 
 Usage: claude_usage.py [--project SUBSTR] [--since YYYY-MM-DD] [--top N] <report> [...]
-Reports: summary, sessions, days, tools, events, all (default: all), brief.
+Reports: summary, sessions, days, tools, events, agents, all (default: all), brief.
 
 `brief --session last` is the short per-answer report (see CLAUDE.md): cost of the last
 answer, of the session, of today and of the month, plus rule-based savings tips. It keeps
 the previous total in ~/.cache/wiki-kit/usage_last.json to compute the per-answer delta.
+
+`agents` prices each subagent run (type and description from its .meta.json) and gives
+median, p90 and max per run by agent type and model: the measured basis for the cost
+estimates of the foreman skill (`roster.py`). With `--session ID|last` it lists the runs
+of that session one by one instead.
 
 Reads ~/.claude/projects/**/*.jsonl (main sessions and subagents/), deduplicates
 streamed messages by message id and prices them at Claude API list prices.
@@ -77,6 +82,13 @@ def load(root, project, since):
         sub = "/subagents/" in f
         sess = (f.split("/subagents/")[0] if sub else f[:-6]).rsplit("/", 1)[-1][:8]
         agent = os.path.basename(f)[:-6] if sub else "main"
+        meta = {}
+        if sub:
+            try:
+                meta = json.load(open(f[:-6] + ".meta.json", encoding="utf-8"))
+            except (OSError, ValueError):
+                pass
+        atype, adesc = meta.get("agentType") or "?", meta.get("description") or ""
         seen, tools, file_calls, file_results = set(), {}, [], []
         for line in open(f, encoding="utf-8"):
             try:
@@ -103,6 +115,7 @@ def load(root, project, since):
                     split = u.get("cache_creation")
                     cw1h = (split.get("ephemeral_1h_input_tokens", 0) or 0) if split else cw
                     file_calls.append(dict(sess=sess, agent=agent, sub=sub, ts=ts, model=m.get("model"),
+                                           atype=atype, adesc=adesc,
                                            inp=u.get("input_tokens", 0), out=u.get("output_tokens", 0),
                                            cw=cw, cw1h=cw1h,
                                            cr=u.get("cache_read_input_tokens", 0)))
@@ -143,9 +156,50 @@ def group(calls, key):
     return g
 
 
+def family(model):
+    """claude-sonnet-5-5 -> sonnet; unknown ids pass through."""
+    for f in ("haiku", "sonnet", "opus", "fable"):
+        if model and f in model:
+            return f
+    return model or "?"
+
+
+def agent_runs(calls):
+    """One dict per subagent run: session, type, description, model family, start time, calls, cost."""
+    runs = {}
+    for c in sorted((c for c in calls if c["sub"]), key=lambda c: c["ts"]):
+        r = runs.setdefault((c["sess"], c["agent"]), dict(
+            sess=c["sess"], type=c["atype"], desc=c["adesc"], ts=c["ts"], calls=0, cost=0.0,
+            by_model=collections.Counter()))
+        r["calls"] += 1
+        r["cost"] += c["cost"]
+        r["by_model"][family(c["model"])] += c["cost"]
+    for r in runs.values():
+        r["model"] = r.pop("by_model").most_common(1)[0][0]
+    return list(runs.values())
+
+
+def agent_stats(calls):
+    """Cost per subagent run grouped by (type, model family), plus 'any' rows per family."""
+    groups = collections.defaultdict(list)
+    for r in agent_runs(calls):
+        groups[(r["type"], r["model"])].append(r["cost"])
+        groups[("any", r["model"])].append(r["cost"])
+    out = []
+    for (t, m), xs in groups.items():
+        xs.sort()
+        out.append(dict(type=t, model=m, runs=len(xs), median=round(xs[len(xs) // 2], 2),
+                        p90=round(xs[min(len(xs) - 1, int(0.9 * len(xs)))], 2), max=round(xs[-1], 2)))
+    return sorted(out, key=lambda r: (r["type"] == "any", r["type"], r["model"]))
+
+
+def last_session(calls):
+    return max(calls, key=lambda c: c["ts"])["sess"]
+
+
 def brief(calls, results, events, project, session):
     import datetime
-    sess = max((c for c in calls), key=lambda c: c["ts"])["sess"] if session == "last" else session
+    sess = last_session(calls) if session == "last" else session
     mine = [c for c in calls if c["sess"].startswith(sess)]
     if not mine:
         sys.exit("no calls for that session")
@@ -267,6 +321,17 @@ def main():
             print(f"{'':70s} {'n':>5s} {'tokens':>8s} {'carried':>9s} {'$':>8s}")
             for k, x in sorted(g.items(), key=lambda kv: -kv[1]["cost"])[:a.top]:
                 print(f"{str(k)[:70]:70s} {x['n']:5d} {x['tok']/1e3:7.0f}k {x['carried']/1e6:8.1f}M {x['cost']:8.2f}")
+
+    if (every or "agents" in want) and a.session:
+        sess = last_session(calls) if a.session == "last" else a.session
+        print(f"\n== subagent runs of session {sess}")
+        for r in sorted((r for r in agent_runs(calls) if r["sess"].startswith(sess)), key=lambda r: r["ts"]):
+            print(f"{r['ts'][:16]} {r['type'][:18]:18s} {r['model']:7s} {r['calls']:4d} calls ${r['cost']:6.2f}  {r['desc'][:50]}")
+    elif every or "agents" in want:
+        print("\n== cost per subagent run by type and model (median / p90 / max; list prices)")
+        print(f"{'type':24s} {'model':8s} {'runs':>5s} {'median':>8s} {'p90':>8s} {'max':>8s}")
+        for s in agent_stats(calls):
+            print(f"{s['type'][:24]:24s} {s['model']:8s} {s['runs']:5d} {s['median']:8.2f} {s['p90']:8.2f} {s['max']:8.2f}")
 
     if every or "events" in want:
         print("\n== safeguard refusals / model fallbacks")
