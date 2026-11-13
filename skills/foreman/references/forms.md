@@ -17,9 +17,15 @@ checklist, not an essay.
 - Write scope: <exact paths, or "none (read-only)">
 - Budget: <USD at list prices>, at most <N> members
 - Deadline: <this session | date>
+- Prior work: <from `search.py recall`: past orders (outcome, estimate → measured), lessons
+  that apply, material to read, each `path:line`; or "none found (searched: <query>)">
 - Lessons go to: <wiki topic for /wiki:ll | none>
+- Record goes to: <root>/output/work-orders/<YYYY-MM-DD>-<slug>.md | the chat only: <reason>
 - Out of scope: <what the team must not do>
 ```
+
+A lesson from "Prior work" that applies becomes a done criterion or a brief
+line; a past measured cost corrects the estimate.
 
 ## 2. Staffing table
 
@@ -81,7 +87,8 @@ re-run), result>.
 **Deviations from the order:** <list, or "none">
 **Cost:** estimate $<x> → measured $<y> (members $<a>, foreman $<b>)
 **Experience:** lessons <filed to topic | none: reason>; tuning notes <proposed | none>;
-hire log updated (<n> lines); vacancy proposal <yes: role | no>
+hire log updated (<n> lines); vacancy proposal <yes: role | no>;
+order record <filed: path | chat only: reason>
 <references, below>
 ```
 
@@ -95,4 +102,42 @@ One block per member. It describes the method's output, never a personality.
 - Quality: <QC findings: n claims checked, n defects, returned yes/no>.
 - Cost: estimate $<x>, measured $<y>.
 - Next time: hire again as is / hire with this brief change: <...> / do not hire for this.
+```
+
+## 8. Order record (the archive file)
+
+One file per order, written after acceptance, so the next `search.py recall`
+finds it. It follows the wiki's confidentiality rules: no secrets, no HR data,
+no judgement of a person; members are roles and methods.
+
+```markdown
+---
+title: "Work order: <goal in a few words>"
+type: report
+created: <YYYY-MM-DD>
+tags: [work-order, <topic tags>]
+status: <accepted | partly | not accepted>
+estimate_usd: <total estimate>
+measured_usd: <total measured, or unknown>
+sources: [<paths the team read, relative to the wiki>]
+---
+
+# Work order: <goal>
+
+## Order
+<form 1 as approved>
+
+## Staffing
+<form 2 as approved, with the yes and its date>
+
+## Acceptance
+<form 5>
+
+## Cost and lessons
+- Cost: estimate $<x> → measured $<y>; members $<a>, foreman $<b>.
+- Lessons: <path of the /wiki:ll note | none>. Tuning: <proposed for <specialist> | none>.
+- What to do differently next time: <one or two lines, or "nothing">
+
+## References on members' work
+<form 7, one block per member>
 ```

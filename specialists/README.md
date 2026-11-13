@@ -33,7 +33,9 @@ The department serves one person with one specialist at a time: the front
 desk picks the specialist, and the conversation stays between the two. The
 foreman (`skills/foreman/`) is for work that needs several hands, such as
 reading a batch of sources, checking claims and compiling the result. It
-writes a work order, proposes a staffing table from `scripts/roster.py`
+first recalls what the wiki already holds about the task (`search.py
+recall`: past work orders, lessons, material), writes a work order,
+proposes a staffing table from `scripts/roster.py`
 (these specialists, Claude Code agents, built-in agents, outside models,
 open vacancies) with cost estimates measured from past runs, and hires only
 after the user's yes. A specialist on a team works as a briefed subagent
@@ -41,7 +43,8 @@ that follows its own `SKILL.md`. The safety rule belongs to the department:
 crisis signs and personal one-to-one conversations go there, and
 `reflective-support` never joins a team. A temporary role the foreman hires
 twice is proposed as a vacancy below or as a draft from
-`templates/specialist/`.
+`templates/specialist/`. Each accepted order leaves a record in the topic's
+`output/work-orders/`, so the next recall starts from it.
 
 ## Vacancies
 
