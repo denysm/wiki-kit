@@ -110,6 +110,23 @@ The Windows installer is new: if any line says `FAIL`, send the log file it name
 
 You can always just write what you want in plain words; Claude picks the right command.
 
+## Optional: search by meaning
+
+Claude finds things in your wiki by words. To also find a page written in other words or in another language, run a small search model on your own computer. It needs about 300 MB, and nothing leaves the computer.
+
+1. Install Ollama from [ollama.com/download](https://ollama.com/download) and start it. On a Mac take the app from the site, not Homebrew: the Homebrew formula also installs a newer Python and makes it your default `python3`.
+2. In the Terminal:
+
+   ```
+   ollama pull embeddinggemma-2:270m-q8_0-text
+   python3 -I ~/Projects/wiki-kit/scripts/search.py embed-setup
+   python3 -I ~/Projects/wiki-kit/scripts/search.py index ~/wiki
+   ```
+
+   The first `index` takes a few minutes; after that only new pages are added, in seconds. On Windows type `py -3` instead of `python3 -I`, and `$HOME\Projects\wiki-kit\scripts\search.py` and `$HOME\wiki` for the paths.
+
+If Ollama is not running, search simply goes back to words. To switch the model off: `search.py embed-setup --off`. This part is new and tested on macOS only.
+
 ## Good habits
 
 - **One task per conversation.** Long conversations cost more. When a task is done, start a new one (the `+` button in the Claude panel).

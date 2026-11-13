@@ -43,12 +43,11 @@ Quickest setup: install Ollama, `ollama pull embeddinggemma-2:270m-q8_0-text`, t
   {"embeddings": {"url": "http://127.0.0.1:11434/v1/embeddings",
                   "model": "embeddinggemma-2:270m-q8_0-text",
                   "query": "task: search result | query: {text}",
-                  "document": "title: {title} | text: {text}",
-                  "dims": 256}}
+                  "document": "title: {title} | text: {text}"}}
 
 `query` and `document` are the model's prompts ({title} is the file title or "none").
-`dims` keeps the first N numbers of each vector, only for models trained for it (such as
-EmbeddingGemma); leave it out otherwise. Vectors are rebuilt when the model, prompts or
+Optional `dims` keeps the first N numbers of each vector, only for models trained for it
+(such as EmbeddingGemma): a smaller index and faster queries, at some loss of recall. Vectors are rebuilt when the model, prompts or
 dims change, and when a probe sentence embeds differently (checked daily and on `index`:
 the model file was replaced under the same name). `index` embeds everything; `query`
 embeds at most 256 new chunks and otherwise uses the vectors it has (run `index` after a
@@ -731,7 +730,7 @@ OLLAMA_URL = "http://127.0.0.1:11434/v1/embeddings"
 PRESETS = {  # measured on the owner's question set (docs/PROJECT-CONTEXT.md); model names as in Ollama
     "embeddinggemma-2": {"model": "embeddinggemma-2:270m-q8_0-text",
                          "query": "task: search result | query: {text}",
-                         "document": "title: {title} | text: {text}", "dims": 256},
+                         "document": "title: {title} | text: {text}"},
     "bge-m3": {"model": "bge-m3:567m", "query": "{text}", "document": "{text}"},
 }
 
