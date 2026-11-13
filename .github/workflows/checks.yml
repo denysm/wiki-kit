@@ -8,7 +8,9 @@ on:
   workflow_dispatch:
 jobs:
   checks:
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest (26.04) has no Python 3.9 build, and 3.9 is the stock
+    # python3 of macOS Command Line Tools, so the kit must keep compiling on it.
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         python: ["3.9", "3.13"]
