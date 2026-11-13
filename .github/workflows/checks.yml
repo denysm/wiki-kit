@@ -27,6 +27,29 @@ jobs:
         run: python -I scripts/leak_check.py --history --names /dev/null
       - name: Shell syntax
         run: for f in bootstrap.sh hooks/*; do sh -n "$f" || exit 1; done
+      - name: One llm-wiki plugin version (bootstrap.sh, bootstrap.ps1, README.md and every other pin)
+        run: |
+          python -I - <<'EOF'
+          import re, subprocess, sys
+          pat = re.compile(r"llm-wiki\.git#v(\d+\.\d+\.\d+)|pinned to v(\d+\.\d+\.\d+)|llm-wiki/wiki/(\d+\.\d+\.\d+)/")
+          required = ("bootstrap.sh", "bootstrap.ps1", "README.md")
+          found = {}
+          for f in subprocess.run(["git", "ls-files"], capture_output=True, text=True, check=True).stdout.splitlines():
+              try:
+                  text = open(f, encoding="utf-8").read()
+              except (UnicodeDecodeError, IsADirectoryError):
+                  continue
+              vs = {v for m in pat.findall(text) for v in m if v}
+              if vs:
+                  found[f] = vs
+          missing = [f for f in required if f not in found]
+          if missing:
+              sys.exit("no plugin version found in: " + ", ".join(missing))
+          versions = set().union(*found.values())
+          if len(versions) != 1:
+              sys.exit("plugin versions differ:\n" + "\n".join(f"  {f}: {', '.join(sorted(v))}" for f, v in sorted(found.items())))
+          print(f"llm-wiki plugin v{versions.pop()} in {len(found)} files: {', '.join(sorted(found))}")
+          EOF
       - name: No symlinks (Git for Windows checks them out as text files)
         run: |
           if git ls-files -s | grep '^120000'; then echo "replace these symlinks with regular files"; exit 1; fi
