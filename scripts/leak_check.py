@@ -73,6 +73,15 @@ def tree(repo: Path, rev: str) -> dict[str, str]:
 def history(repo: Path, rev: str, bases: list[str]) -> dict[str, list[tuple[str, int, str]]]:
     """Commit -> [(path or '(message)', line in that commit's diff, text)] for added lines and messages."""
     args = ["log", "-p", "--no-color", "--no-ext-diff", "--format=%x00%h%n%B%x00", rev]
+    known = []
+    for base in bases:  # a base not fetched here would make git log fail: check more instead
+        if subprocess.run(["git", "-C", str(repo), "cat-file", "-e", f"{base}^{{commit}}"],
+                          capture_output=True).returncode == 0:
+            known.append(base)
+        else:
+            print(f"warning: base {base} is not in this repository (fetch first?); "
+                  "checking without it", file=sys.stderr)
+    bases = known
     if bases:
         args += ["--not", *bases]
     out = git(repo, *args).decode("utf-8", errors="replace")

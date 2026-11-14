@@ -11,14 +11,15 @@ if [ -z "$py" ]; then
 fi
 zero=0000000000000000000000000000000000000000
 status=0
-while read -r local_ref local_sha remote_ref remote_sha; do
+while read -r _ local_sha _ remote_sha; do
   [ "$local_sha" = "$zero" ] && continue          # deleting a branch carries nothing
-  if [ "$remote_sha" = "$zero" ]; then              # new branch: everything not on this remote
+  if [ "$remote_sha" = "$zero" ] || ! git cat-file -e "$remote_sha^{commit}" 2>/dev/null; then
+    # a new branch, or the remote has commits not fetched here: check everything not on
+    # this remote as last fetched (git itself then refuses a push that is not a fast-forward)
     bases=$(git for-each-ref --format='--base=%(objectname)' "refs/remotes/$remote")
   else
     bases="--base=$remote_sha"
   fi
-  # shellcheck disable=SC2086
   # shellcheck disable=SC2086
   $py -I "$root/scripts/leak_check.py" --repo "$root" --rev "$local_sha" --history $bases || status=1
 done
