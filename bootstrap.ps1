@@ -7,8 +7,9 @@
 # Run (PowerShell blocks downloaded scripts by default, hence the bypass):
 #   powershell -ExecutionPolicy Bypass -File $HOME\Projects\wiki-kit\bootstrap.ps1
 # Options:
-#   -Hub DIR    where your wiki lives (default: hub_path from
-#               ~\.config\llm-wiki\config.json, else ~\wiki)
+#   -Hub DIR    where your wiki lives and the specialists go (default: hub_path from
+#               ~\.config\llm-wiki\config.json, else ~\wiki; the specialists go to
+#               ~\.config\wiki-kit\specialists-hub instead when that file exists)
 #   -Lang ru    language of the hub rules and of the chat (en, ru or uk; default:
 #               the Windows display language)
 #   -NoPlugin   skip the Claude Code plugin step
@@ -25,7 +26,8 @@ param(
   [switch]$NoVectors
 )
 $ErrorActionPreference = "Continue"
-$PluginRepo = "https://github.com/nvk/llm-wiki.git#v1.0.0"
+$HubGiven = [bool]$Hub
+$PluginRepo ="https://github.com/nvk/llm-wiki.git#v1.0.0"
 $PluginId = "wiki@llm-wiki"
 $Log = Join-Path $env:TEMP "wiki-kit-bootstrap.log"
 try { Start-Transcript -Path $Log -Append | Out-Null } catch {}
@@ -198,15 +200,32 @@ if (-not (Test-Path $f)) { Write-Utf8 $f "# Internal host suffixes of your emplo
 Good "$Cfg (fill private-names.txt before your first push to the kit)"
 
 Say "== 6/8 Specialists and the front desk"
+# The specialists go where the kit's hooks and the front desk send them: -Hub when
+# given, else the hub named in specialists-hub, else the hub above.
+$SpecFile = Join-Path $Cfg "specialists-hub"
+$SpecHub = $Hub
+if (Test-Path $SpecFile) {
+  $spec = "$(Get-Content $SpecFile -Raw -ErrorAction SilentlyContinue)".Trim()
+  if ($spec) {
+    if ($spec.StartsWith("~")) { $spec = Join-Path $HOME $spec.Substring(1).TrimStart("/", "\") }
+    $spec = [System.IO.Path]::GetFullPath($spec)
+    if ($spec.TrimEnd("\", "/") -ne $Hub.TrimEnd("\", "/")) {
+      if ($HubGiven) { Note "specialists go to $Hub (-Hub), but the kit's hooks and the front desk send them to $spec (from $SpecFile): change or remove that file" }
+      else { $SpecHub = $spec; Good "specialists hub: $spec (from $SpecFile; $Hub gets none)" }
+    }
+  }
+}
 $LlmWiki = Get-ChildItem -Path (Join-Path $HOME ".claude\plugins\cache\llm-wiki\wiki\*\bin\llm-wiki") -ErrorAction SilentlyContinue |
   Sort-Object FullName | Select-Object -Last 1
-function Lw { Invoke-Py $LlmWiki.FullName specialist --hub $Hub @args 2>&1 | Out-Null; return ($LASTEXITCODE -eq 0) }
-if ($LlmWiki) {
-  if (-not (Test-Path (Join-Path $Hub ".skills"))) { [void](Lw init) }
-  $out = Invoke-Py (Join-Path $Kit "scripts\sync_specialists.py") $Hub 2>&1 | Select-Object -Last 1
+function Lw { Invoke-Py $LlmWiki.FullName specialist --hub $SpecHub @args 2>&1 | Out-Null; return ($LASTEXITCODE -eq 0) }
+if (-not $LlmWiki) { Note "specialists wait for the plugin: run this again after step 3 succeeds" }
+elseif (-not (Test-Path $SpecHub)) { Note "no folder $SpecHub for the specialists: fix $SpecFile or pass -Hub, then run this again" }
+else {
+  if (-not (Test-Path (Join-Path $SpecHub ".skills"))) { [void](Lw init) }
+  # --index: rebuild .skills\_index.md when it is stale; a no-op leaves the hub untouched
+  $out = Invoke-Py (Join-Path $Kit "scripts\sync_specialists.py") $SpecHub --index 2>&1 | Select-Object -Last 1
   if ($LASTEXITCODE -eq 0) { Good "specialists: $out" } else { Bad "specialists: $out" }
-  [void](Lw refresh)
-} else { Note "specialists wait for the plugin: run this again after step 3 succeeds" }
+}
 $Skills = Join-Path $HOME ".claude\skills"
 New-Item -ItemType Directory -Force -Path $Skills | Out-Null
 $Desk = Join-Path $Skills "department"
@@ -236,10 +255,10 @@ if (Test-Path $sh) {
   $found = & $sh -c ". '$($Kit -replace '\\', '/')/hooks/lib.sh'; echo `$py"
   if ($found) { Good "git hooks find Python ('$found')" } else { Bad "git hooks cannot find Python: reinstall Python with 'Add python.exe to PATH' ticked" }
 } else { Note "Git's sh.exe not found next to git: hooks not checked" }
-if (Test-Path (Join-Path $Hub ".skills")) {
-  Invoke-Py (Join-Path $Kit "scripts\sync_specialists.py") $Hub --check 2>&1 | Out-Null
+if (Test-Path (Join-Path $SpecHub ".skills")) {
+  Invoke-Py (Join-Path $Kit "scripts\sync_specialists.py") $SpecHub --check 2>&1 | Out-Null
   if ($LASTEXITCODE -eq 0) { Good "hub specialists match the kit" } else { Bad "hub specialists differ from the kit" }
-  if (Lw validate) { Good "specialists pass the plugin validator" } else { Bad "plugin validator failed: run  $($script:PyExe) $($script:PyArgs -join ' ') -I `"$($LlmWiki.FullName)`" specialist --hub `"$Hub`" validate" }
+  if (Lw validate) { Good "specialists pass the plugin validator" } else { Bad "plugin validator failed: run  $($script:PyExe) $($script:PyArgs -join ' ') -I `"$($LlmWiki.FullName)`" specialist --hub `"$SpecHub`" validate" }
 }
 Invoke-Py (Join-Path $Kit "scripts\leak_check.py") --repo $Kit 2>&1 | Out-Null
 if ($LASTEXITCODE -eq 0) { Good "kit passes the leak check" } else { Bad "kit fails the leak check: run  py -3 -I $Kit\scripts\leak_check.py --repo $Kit" }

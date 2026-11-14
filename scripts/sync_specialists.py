@@ -1,6 +1,6 @@
 """Copy the kit's specialists into a hub's .skills/, keeping the hub's own tuning.
 
-Usage: sync_specialists.py [HUB] [--only NAME ...] [--dry-run | --check]
+Usage: sync_specialists.py [HUB] [--only NAME ...] [--index] [--dry-run | --check]
 
 HUB defaults to the path in ~/.config/wiki-kit/specialists-hub, else hub_path
 in ~/.config/llm-wiki/config.json. Set the first when the llm-wiki hub of this
@@ -15,11 +15,18 @@ of the kit: new or changed core files are copied, core files no longer in the
 kit are removed, and the hub's references/*.local.md files are never touched.
 Hub specialists that are not in the kit (your personal ones) are left alone.
 Enabling a specialist for a topic stays a separate step (`llm-wiki specialist enable`).
+After copying or removing anything it rebuilds the hub's .skills/_index.md (it
+lists versions) with the llm-wiki plugin; --index rebuilds it even when nothing
+was copied (the installers use it). When only the index date would change, the
+index and log.md are put back as they were, so a run that changes nothing leaves
+the hub's git tree clean.
 """
 import argparse
 import filecmp
 import json
 import shutil
+import subprocess
+import sys
 from pathlib import Path
 
 KIT = Path(__file__).resolve().parent.parent / "specialists"
@@ -32,9 +39,46 @@ def core_files(root: Path) -> set:
             if p.is_file() and p.name != ".DS_Store" and not p.name.endswith(".local.md")}
 
 
+def plugin_cli():
+    """The llm-wiki command of the newest plugin version in the Claude Code cache, or None."""
+    def version(p):
+        return tuple(int(x) if x.isdigit() else -1 for x in p.parent.parent.name.split("."))
+    found = sorted(Path.home().glob(".claude/plugins/cache/llm-wiki/wiki/*/bin/llm-wiki"), key=version)
+    return found[-1] if found else None
+
+
+def refresh_index(hub: Path) -> str:
+    """Rebuild .skills/_index.md; put it and log.md back when only the date would change."""
+    cli = plugin_cli()
+    if cli is None:
+        return "not rebuilt (no llm-wiki plugin)"
+    index, log = hub / ".skills" / "_index.md", hub / "log.md"
+    old_index = index.read_bytes() if index.is_file() else None
+    old_log = log.read_bytes() if log.is_file() else None
+    run = subprocess.run([sys.executable, "-I", str(cli), "specialist", "--hub", str(hub), "refresh"],
+                         capture_output=True, encoding="utf-8", errors="replace")
+    if run.returncode:
+        why = (run.stderr or run.stdout).strip().splitlines() or ["failed"]
+        return f"not rebuilt (llm-wiki: {why[-1]})"
+
+    def body(data: bytes) -> list:
+        return [line for line in data.splitlines() if not line.startswith(b"Last updated:")]
+
+    if old_index is not None and index.is_file() and body(old_index) == body(index.read_bytes()):
+        index.write_bytes(old_index)
+        if old_log is None:
+            log.unlink(missing_ok=True)
+        else:
+            log.write_bytes(old_log)
+        return "up to date"
+    return "rebuilt"
+
+
 ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
 ap.add_argument("hub", type=Path, nargs="?", help="hub root (default: specialists-hub, else hub_path)")
 ap.add_argument("--only", nargs="+", metavar="NAME", help="sync just these specialists")
+ap.add_argument("--index", action="store_true",
+                help="rebuild .skills/_index.md even when nothing was copied (it is rebuilt after any change)")
 mode = ap.add_mutually_exclusive_group()
 mode.add_argument("--dry-run", action="store_true", help="print what would change")
 mode.add_argument("--check", action="store_true", help="like --dry-run, exit 1 if anything differs")
@@ -74,6 +118,10 @@ for name in names:
         print(f"removed\t{name}/{rel}")
         if not args.dry_run:
             (dst / rel).unlink()
-print(("dry run: " if args.dry_run else "") + ", ".join(f"{k} {v}" for k, v in counts.items()))
-if args.check and counts["added"] + counts["updated"] + counts["removed"]:
+changed = counts["added"] + counts["updated"] + counts["removed"]
+summary = ("dry run: " if args.dry_run else "") + ", ".join(f"{k} {v}" for k, v in counts.items())
+if not args.dry_run and (changed or args.index):
+    summary += "; index " + refresh_index(args.hub.expanduser())
+print(summary)
+if args.check and changed:
     raise SystemExit(1)

@@ -4,8 +4,9 @@
 # Ollama (asks first) and a small local model. Safe to run again: it only adds what is
 # missing and never overwrites your files.
 # Usage: bash bootstrap.sh [--hub DIR] [--lang en|ru|uk] [--no-plugin] [--yes] [--no-vectors]
-#   --hub DIR     where your wiki lives (default: hub_path from
-#                 ~/.config/llm-wiki/config.json, else ~/wiki)
+#   --hub DIR     where your wiki lives and the specialists go (default: hub_path from
+#                 ~/.config/llm-wiki/config.json, else ~/wiki; the specialists go to
+#                 ~/.config/wiki-kit/specialists-hub instead when that file exists)
 #   --lang        language of the hub rules and of the chat (default: from $LANG)
 #   --no-plugin   skip the Claude Code plugin step (offline, or no Claude Code yet)
 #   --yes         install Ollama without asking (without a terminal and without --yes it is skipped)
@@ -17,18 +18,19 @@ set -eu
 PLUGIN_REPO="https://github.com/nvk/llm-wiki.git#v1.0.0"
 PLUGIN_ID="wiki@llm-wiki"
 HUB=""
+HUB_GIVEN=0
 LANG_CODE=""
 NO_PLUGIN=0
 YES=0
 NO_VECTORS=0
 while [ $# -gt 0 ]; do
   case "$1" in
-    --hub) HUB="$2"; shift 2 ;;
+    --hub) HUB="$2"; HUB_GIVEN=1; shift 2 ;;
     --lang) LANG_CODE="$2"; shift 2 ;;
     --no-plugin) NO_PLUGIN=1; shift ;;
     --yes|-y) YES=1; shift ;;
     --no-vectors) NO_VECTORS=1; shift ;;
-    -h|--help) sed -n '2,14p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "unknown option: $1 (see --help)" >&2; exit 2 ;;
   esac
 done
@@ -145,13 +147,31 @@ mkdir -p "$CFG"; chmod 700 "$CFG"
 good "$CFG (fill private-names.txt before your first push to the kit)"
 
 say "== 6/8 Specialists and the front desk"
+# The specialists go where the kit's hooks and the front desk send them: --hub when
+# given, else the hub named in specialists-hub, else the hub above.
+SPEC_FILE="$CFG/specialists-hub"
+SPEC_HUB="$HUB"
+if [ -f "$SPEC_FILE" ]; then
+  spec=$(python3 -I -c 'import os, sys
+p = open(sys.argv[1], encoding="utf-8").read().strip()
+print(os.path.realpath(os.path.expanduser(p)) if p else "")' "$SPEC_FILE")
+  here_hub=$(python3 -I -c 'import os, sys; print(os.path.realpath(sys.argv[1]))' "$HUB")
+  if [ -n "$spec" ] && [ "$spec" != "$here_hub" ]; then
+    if [ "$HUB_GIVEN" = 1 ]; then
+      note "specialists go to $HUB (--hub), but the kit's hooks and the front desk send them to $spec (from $SPEC_FILE): change or remove that file"
+    else SPEC_HUB="$spec"; good "specialists hub: $spec (from $SPEC_FILE; $HUB gets none)"; fi
+  fi
+fi
 LLM_WIKI=$(ls -d "$HOME"/.claude/plugins/cache/llm-wiki/wiki/*/bin/llm-wiki 2>/dev/null | tail -1 || true)
-lw() { python3 -I "$LLM_WIKI" specialist --hub "$HUB" "$@" >/dev/null 2>&1; }
-if [ -n "$LLM_WIKI" ]; then
-  [ -d "$HUB/.skills" ] || lw init
-  python3 -I "$KIT/scripts/sync_specialists.py" "$HUB" | tail -1 | sed 's/^/  ok    specialists: /'
-  lw refresh || true
-else note "specialists wait for the plugin: run this again after step 3 succeeds"; fi
+lw() { python3 -I "$LLM_WIKI" specialist --hub "$SPEC_HUB" "$@" >/dev/null 2>&1; }
+if [ -z "$LLM_WIKI" ]; then note "specialists wait for the plugin: run this again after step 3 succeeds"
+elif [ ! -d "$SPEC_HUB" ]; then note "no folder $SPEC_HUB for the specialists: fix $SPEC_FILE or pass --hub, then run this again"
+else
+  [ -d "$SPEC_HUB/.skills" ] || lw init
+  # --index: rebuild .skills/_index.md when it is stale; a no-op leaves the hub untouched
+  if out=$(python3 -I "$KIT/scripts/sync_specialists.py" "$SPEC_HUB" --index 2>&1); then good "specialists: $(printf '%s\n' "$out" | tail -1)"
+  else bad "specialists: $(printf '%s\n' "$out" | tail -1)"; fi
+fi
 mkdir -p "$HOME/.claude/skills"
 if [ -e "$HOME/.claude/skills/department" ]; then good "front desk skill already present"
 else ln -s "$KIT/skills/department" "$HOME/.claude/skills/department" && good "front desk skill linked (say 'coach' or 'help me decide' in any folder)"; fi
@@ -166,9 +186,9 @@ for f in sys.argv[1:]:
 [ -z "$broken" ] && good "all scripts compile on this python3" || bad "scripts that need a newer python3: $broken"
 DEPS_OK=0
 deps=$(python3 -I "$KIT/scripts/search.py" install-deps 2>&1) && { DEPS_OK=1; good "python packages: $(printf '%s' "$deps" | tr '\n' ' ')"; } || bad "numpy could not be installed: run 'python3 -I $KIT/scripts/search.py install-deps' and read its message"
-if [ -d "$HUB/.skills" ]; then
-  python3 -I "$KIT/scripts/sync_specialists.py" "$HUB" --check >/dev/null && good "hub specialists match the kit" || bad "hub specialists differ from the kit"
-  lw validate && good "specialists pass the plugin validator" || bad "plugin validator: run 'python3 -I $LLM_WIKI specialist --hub $HUB validate'"
+if [ -d "$SPEC_HUB/.skills" ]; then
+  python3 -I "$KIT/scripts/sync_specialists.py" "$SPEC_HUB" --check >/dev/null && good "hub specialists match the kit" || bad "hub specialists differ from the kit"
+  lw validate && good "specialists pass the plugin validator" || bad "plugin validator: run 'python3 -I $LLM_WIKI specialist --hub $SPEC_HUB validate'"
 fi
 python3 -I "$KIT/scripts/leak_check.py" --repo "$KIT" >/dev/null 2>&1 && good "kit passes the leak check" || bad "kit fails the leak check: run python3 -I $KIT/scripts/leak_check.py --repo $KIT"
 
@@ -208,7 +228,7 @@ install_ollama() {
   good "Ollama installed ($("$OLLAMA_BIN" --version 2>/dev/null | awk '{print $NF}'))"
 }
 vectors() {
-  local log pid check
+  local log pid check pull_log
   [ "$NO_VECTORS" = 1 ] && { note "search by meaning skipped (--no-vectors)"; return 0; }
   [ "$DEPS_OK" = 1 ] || { note "search by meaning skipped: numpy is missing (see step 7)"; return 0; }
   find_ollama || install_ollama || return 0
@@ -222,7 +242,14 @@ vectors() {
   fi
   if ! "$OLLAMA_BIN" list 2>/dev/null | awk 'NR > 1 {print $1}' | grep -qxF "$EMBED_MODEL"; then
     say "        downloading $EMBED_MODEL (about 300 MB, once)"
-    "$OLLAMA_BIN" pull "$EMBED_MODEL" >/dev/null || { note "could not download $EMBED_MODEL: run '$OLLAMA_BIN pull $EMBED_MODEL' and read the message, then run bootstrap again"; return 0; }
+    if [ -t 2 ]; then  # a terminal: the progress bar redraws in place
+      "$OLLAMA_BIN" pull "$EMBED_MODEL" >/dev/null || { note "could not download $EMBED_MODEL: run '$OLLAMA_BIN pull $EMBED_MODEL' and read the message, then run bootstrap again"; return 0; }
+    else  # captured output: the progress bar would be thousands of lines, so it goes to a log kept only on failure
+      pull_log="$HOME/.cache/wiki-kit/ollama-pull.log"
+      mkdir -p "$(dirname "$pull_log")"
+      "$OLLAMA_BIN" pull "$EMBED_MODEL" >"$pull_log" 2>&1 || { note "could not download $EMBED_MODEL (log: $pull_log): run '$OLLAMA_BIN pull $EMBED_MODEL' and read the message, then run bootstrap again"; return 0; }
+      rm -f "$pull_log"
+    fi
   fi
   if [ ! -f "$SEARCH_CFG" ]; then
     python3 -I "$KIT/scripts/search.py" embed-setup >/dev/null 2>&1 || true

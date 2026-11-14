@@ -76,7 +76,7 @@ Lists that name your organisation, your family or your clients are themselves th
 | `~/.config/wiki-kit/search-eval.tsv` | `search.py eval`: your question set (`question`, `root`, `expected file`, alternatives joined by `\|`; questions about real content stay out of the kit); `--variants FILE` adds other phrasings of each question |
 | `~/.config/wiki-kit/inventory.json` | `inventory.py` and `deep_candidates.py`: your own topic rules (`career`, `buckets`, `prepared`, `waves`); without it, generic defaults apply |
 | `~/.config/llm-wiki/council.env` | API keys for `council.py` (KEY=value, chmod 600) |
-| `~/.config/wiki-kit/specialists-hub` | `sync_specialists.py`, the kit's hooks and the `department` skill: the hub that gets the specialists, when it is not the llm-wiki hub (one line, a path) |
+| `~/.config/wiki-kit/specialists-hub` | `sync_specialists.py`, the kit's hooks, the `department` skill and the installers (unless given `--hub`): the hub that gets the specialists, when it is not the llm-wiki hub (one line, a path) |
 | `~/.config/wiki-kit/foreman/hires.tsv` | `roster.py --log-hire`: the foreman's hire log (date, generic role, kind, model, outcome, cost); a temporary role hired twice becomes a vacancy candidate |
 | `~/.config/wiki-kit/profile.json` | the `department` skill: your preferred language (`{"language": "ru"}`), saved with your consent on the first conversation |
 | `WIKI_KIT_AUTHOR` | your name for the `authors:` field written by `chat2md.py` |
