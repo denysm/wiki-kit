@@ -39,6 +39,43 @@ jobs:
           echo "key AKIA""ABCDEFGHIJKLMNOP" > leak.md; git add leak.md; git commit -qm leak
           if git push "$RUNNER_TEMP/remote.git" HEAD:refs/heads/main; then echo "the hook let a leak through"; exit 1; fi
 
+  # The real Ollama install on Linux (install.sh from ollama.com, a systemd service),
+  # without the model download: the model registry is blocked, so the pull fails and
+  # bootstrap must end with a note, not a failure. The model itself is checked on Windows.
+  linux-ollama:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash   # -eo pipefail: a failed bootstrap is not hidden by tee
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Install Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Block the model registry (no model download)
+        run: echo "127.0.0.1 registry.ollama.ai" | sudo tee -a /etc/hosts
+      - name: bootstrap.sh --yes installs Ollama
+        run: |
+          bash bootstrap.sh --yes 2>&1 | tee "$RUNNER_TEMP/run1.log"
+          grep -q "ok    Ollama installed" "$RUNNER_TEMP/run1.log" || { echo "Ollama was not installed"; exit 1; }
+          grep -q "could not download embeddinggemma" "$RUNNER_TEMP/run1.log" || { echo "no note about the blocked model download"; exit 1; }
+      - name: Ollama runs as a service
+        run: |
+          ollama --version
+          systemctl is-active ollama
+          curl -fsS http://127.0.0.1:11434/api/version
+      - name: Run it again (no second install)
+        run: |
+          bash bootstrap.sh --yes 2>&1 | tee "$RUNNER_TEMP/run2.log"
+          if grep -q "Ollama installed" "$RUNNER_TEMP/run2.log"; then echo "Ollama was installed twice"; exit 1; fi
+      - name: Show the pull log
+        if: failure()
+        run: cat "$HOME/.cache/wiki-kit/ollama-pull.log" 2>/dev/null || true
+
   windows:
     runs-on: windows-latest
     steps:
