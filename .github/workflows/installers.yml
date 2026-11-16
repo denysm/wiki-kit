@@ -61,7 +61,7 @@ jobs:
       - name: bootstrap.sh --yes installs Ollama
         run: |
           bash bootstrap.sh --yes 2>&1 | tee "$RUNNER_TEMP/run1.log"
-          grep -q "ok    Ollama installed" "$RUNNER_TEMP/run1.log" || { echo "Ollama was not installed"; exit 1; }
+          grep -q "ok    Ollama installed ([0-9]" "$RUNNER_TEMP/run1.log" || { echo "Ollama was not installed"; exit 1; }
           grep -q "could not download embeddinggemma" "$RUNNER_TEMP/run1.log" || { echo "no note about the blocked model download"; exit 1; }
       - name: Ollama runs as a service
         run: |

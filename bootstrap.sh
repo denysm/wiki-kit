@@ -223,7 +223,7 @@ install_ollama() {
   sh "$tmp/install.sh" || { rm -rf "$tmp"; note "the Ollama installer failed (see above): install it from https://ollama.com/download, then run bootstrap again"; return 1; }
   rm -rf "$tmp"
   find_ollama || { note "Ollama was installed but its command is not found: open a new terminal and run bootstrap again"; return 1; }
-  good "Ollama installed ($("$OLLAMA_BIN" --version 2>/dev/null | awk '{print $NF}'))"
+  good "Ollama installed ($("$OLLAMA_BIN" --version 2>/dev/null | awk '/version is/ {v = $NF} END {print v}'))"
 }
 vectors() {
   local log pid check pull_log
