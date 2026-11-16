@@ -4,9 +4,9 @@
 # Ollama (asks first) and a small local model. Safe to run again: it only adds what is
 # missing and never overwrites your files.
 # Usage: bash bootstrap.sh [--hub DIR] [--lang en|ru|uk] [--no-plugin] [--yes] [--no-vectors]
-#   --hub DIR     where your wiki lives and the specialists go (default: hub_path from
-#                 ~/.config/llm-wiki/config.json, else ~/wiki; the specialists go to
-#                 ~/.config/wiki-kit/specialists-hub instead when that file exists)
+#   --hub DIR     where your wiki lives (default: hub_path from
+#                 ~/.config/llm-wiki/config.json, else ~/wiki); the specialists go there
+#                 too, unless ~/.config/wiki-kit/specialists-hub names another hub
 #   --lang        language of the hub rules and of the chat (default: from $LANG)
 #   --no-plugin   skip the Claude Code plugin step (offline, or no Claude Code yet)
 #   --yes         install Ollama without asking (without a terminal and without --yes it is skipped)
@@ -18,14 +18,13 @@ set -eu
 PLUGIN_REPO="https://github.com/nvk/llm-wiki.git#v1.0.0"
 PLUGIN_ID="wiki@llm-wiki"
 HUB=""
-HUB_GIVEN=0
 LANG_CODE=""
 NO_PLUGIN=0
 YES=0
 NO_VECTORS=0
 while [ $# -gt 0 ]; do
   case "$1" in
-    --hub) HUB="$2"; HUB_GIVEN=1; shift 2 ;;
+    --hub) HUB="$2"; shift 2 ;;
     --lang) LANG_CODE="$2"; shift 2 ;;
     --no-plugin) NO_PLUGIN=1; shift ;;
     --yes|-y) YES=1; shift ;;
@@ -147,8 +146,9 @@ mkdir -p "$CFG"; chmod 700 "$CFG"
 good "$CFG (fill private-names.txt before your first push to the kit)"
 
 say "== 6/8 Specialists and the front desk"
-# The specialists go where the kit's hooks and the front desk send them: --hub when
-# given, else the hub named in specialists-hub, else the hub above.
+# The specialists go where the kit's hooks and the front desk send them: the hub named
+# in specialists-hub, else the hub above. --hub does not override that file, so a work
+# hub never gets the personal specialists.
 SPEC_FILE="$CFG/specialists-hub"
 SPEC_HUB="$HUB"
 if [ -f "$SPEC_FILE" ]; then
@@ -157,20 +157,18 @@ p = open(sys.argv[1], encoding="utf-8").read().strip()
 print(os.path.realpath(os.path.expanduser(p)) if p else "")' "$SPEC_FILE")
   here_hub=$(python3 -I -c 'import os, sys; print(os.path.realpath(sys.argv[1]))' "$HUB")
   if [ -n "$spec" ] && [ "$spec" != "$here_hub" ]; then
-    if [ "$HUB_GIVEN" = 1 ]; then
-      note "specialists go to $HUB (--hub), but the kit's hooks and the front desk send them to $spec (from $SPEC_FILE): change or remove that file"
-    else SPEC_HUB="$spec"; good "specialists hub: $spec (from $SPEC_FILE; $HUB gets none)"; fi
+    SPEC_HUB="$spec"; good "specialists hub: $spec (from $SPEC_FILE; $HUB gets none)"
   fi
 fi
 LLM_WIKI=$(ls -d "$HOME"/.claude/plugins/cache/llm-wiki/wiki/*/bin/llm-wiki 2>/dev/null | tail -1 || true)
 lw() { python3 -I "$LLM_WIKI" specialist --hub "$SPEC_HUB" "$@" >/dev/null 2>&1; }
 if [ -z "$LLM_WIKI" ]; then note "specialists wait for the plugin: run this again after step 3 succeeds"
-elif [ ! -d "$SPEC_HUB" ]; then note "no folder $SPEC_HUB for the specialists: fix $SPEC_FILE or pass --hub, then run this again"
+elif [ ! -d "$SPEC_HUB" ]; then note "no folder $SPEC_HUB for the specialists: fix or remove $SPEC_FILE, then run this again"
+elif [ ! -d "$SPEC_HUB/.skills" ] && ! lw init; then note "specialists skipped: $SPEC_HUB is not a wiki hub (run /wiki init there, or fix $SPEC_FILE)"
 else
-  [ -d "$SPEC_HUB/.skills" ] || lw init
   # --index: rebuild .skills/_index.md when it is stale; a no-op leaves the hub untouched
-  if out=$(python3 -I "$KIT/scripts/sync_specialists.py" "$SPEC_HUB" --index 2>&1); then good "specialists: $(printf '%s\n' "$out" | tail -1)"
-  else bad "specialists: $(printf '%s\n' "$out" | tail -1)"; fi
+  if out=$(python3 -I "$KIT/scripts/sync_specialists.py" "$SPEC_HUB" --index 2>&1); then good "specialists in $SPEC_HUB: $(printf '%s\n' "$out" | tail -1)"
+  else bad "specialists in $SPEC_HUB: $(printf '%s\n' "$out" | tail -1)"; fi
 fi
 mkdir -p "$HOME/.claude/skills"
 if [ -e "$HOME/.claude/skills/department" ]; then good "front desk skill already present"

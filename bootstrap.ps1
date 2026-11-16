@@ -7,9 +7,9 @@
 # Run (PowerShell blocks downloaded scripts by default, hence the bypass):
 #   powershell -ExecutionPolicy Bypass -File $HOME\Projects\wiki-kit\bootstrap.ps1
 # Options:
-#   -Hub DIR    where your wiki lives and the specialists go (default: hub_path from
-#               ~\.config\llm-wiki\config.json, else ~\wiki; the specialists go to
-#               ~\.config\wiki-kit\specialists-hub instead when that file exists)
+#   -Hub DIR    where your wiki lives (default: hub_path from
+#               ~\.config\llm-wiki\config.json, else ~\wiki); the specialists go there
+#               too, unless ~\.config\wiki-kit\specialists-hub names another hub
 #   -Lang ru    language of the hub rules and of the chat (en, ru or uk; default:
 #               the Windows display language)
 #   -NoPlugin   skip the Claude Code plugin step
@@ -26,7 +26,6 @@ param(
   [switch]$NoVectors
 )
 $ErrorActionPreference = "Continue"
-$HubGiven = [bool]$Hub
 $PluginRepo ="https://github.com/nvk/llm-wiki.git#v1.0.0"
 $PluginId = "wiki@llm-wiki"
 $Log = Join-Path $env:TEMP "wiki-kit-bootstrap.log"
@@ -200,8 +199,9 @@ if (-not (Test-Path $f)) { Write-Utf8 $f "# Internal host suffixes of your emplo
 Good "$Cfg (fill private-names.txt before your first push to the kit)"
 
 Say "== 6/8 Specialists and the front desk"
-# The specialists go where the kit's hooks and the front desk send them: -Hub when
-# given, else the hub named in specialists-hub, else the hub above.
+# The specialists go where the kit's hooks and the front desk send them: the hub named
+# in specialists-hub, else the hub above. -Hub does not override that file, so a work
+# hub never gets the personal specialists.
 $SpecFile = Join-Path $Cfg "specialists-hub"
 $SpecHub = $Hub
 if (Test-Path $SpecFile) {
@@ -210,8 +210,7 @@ if (Test-Path $SpecFile) {
     if ($spec.StartsWith("~")) { $spec = Join-Path $HOME $spec.Substring(1).TrimStart("/", "\") }
     $spec = [System.IO.Path]::GetFullPath($spec)
     if ($spec.TrimEnd("\", "/") -ne $Hub.TrimEnd("\", "/")) {
-      if ($HubGiven) { Note "specialists go to $Hub (-Hub), but the kit's hooks and the front desk send them to $spec (from $SpecFile): change or remove that file" }
-      else { $SpecHub = $spec; Good "specialists hub: $spec (from $SpecFile; $Hub gets none)" }
+      $SpecHub = $spec; Good "specialists hub: $spec (from $SpecFile; $Hub gets none)"
     }
   }
 }
@@ -219,12 +218,14 @@ $LlmWiki = Get-ChildItem -Path (Join-Path $HOME ".claude\plugins\cache\llm-wiki\
   Sort-Object FullName | Select-Object -Last 1
 function Lw { Invoke-Py $LlmWiki.FullName specialist --hub $SpecHub @args 2>&1 | Out-Null; return ($LASTEXITCODE -eq 0) }
 if (-not $LlmWiki) { Note "specialists wait for the plugin: run this again after step 3 succeeds" }
-elseif (-not (Test-Path $SpecHub)) { Note "no folder $SpecHub for the specialists: fix $SpecFile or pass -Hub, then run this again" }
+elseif (-not (Test-Path $SpecHub)) { Note "no folder $SpecHub for the specialists: fix or remove $SpecFile, then run this again" }
+elseif (-not (Test-Path (Join-Path $SpecHub ".skills")) -and -not (Lw init)) {
+  Note "specialists skipped: $SpecHub is not a wiki hub (run /wiki init there, or fix $SpecFile)"
+}
 else {
-  if (-not (Test-Path (Join-Path $SpecHub ".skills"))) { [void](Lw init) }
   # --index: rebuild .skills\_index.md when it is stale; a no-op leaves the hub untouched
   $out = Invoke-Py (Join-Path $Kit "scripts\sync_specialists.py") $SpecHub --index 2>&1 | Select-Object -Last 1
-  if ($LASTEXITCODE -eq 0) { Good "specialists: $out" } else { Bad "specialists: $out" }
+  if ($LASTEXITCODE -eq 0) { Good "specialists in ${SpecHub}: $out" } else { Bad "specialists in ${SpecHub}: $out" }
 }
 $Skills = Join-Path $HOME ".claude\skills"
 New-Item -ItemType Directory -Force -Path $Skills | Out-Null
