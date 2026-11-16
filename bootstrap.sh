@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Install wiki-kit on macOS or Linux: the llm-wiki plugin, an empty hub, the
-# specialists, the front desk and the foreman, a self-check, then search by meaning:
+# specialists, the front desk, the foreman and wrap, a self-check, then search by meaning:
 # Ollama (asks first) and a small local model. Safe to run again: it only adds what is
 # missing and never overwrites your files.
 # Usage: bash bootstrap.sh [--hub DIR] [--lang en|ru|uk] [--no-plugin] [--yes] [--no-vectors]
@@ -175,6 +175,8 @@ if [ -e "$HOME/.claude/skills/department" ]; then good "front desk skill already
 else ln -s "$KIT/skills/department" "$HOME/.claude/skills/department" && good "front desk skill linked (say 'coach' or 'help me decide' in any folder)"; fi
 if [ -e "$HOME/.claude/skills/foreman" ]; then good "foreman skill already present"
 else ln -s "$KIT/skills/foreman" "$HOME/.claude/skills/foreman" && good "foreman skill linked (say 'assemble a team' or 'work order' in any folder)"; fi
+if [ -e "$HOME/.claude/skills/wrap" ]; then good "wrap skill already present"
+else ln -s "$KIT/skills/wrap" "$HOME/.claude/skills/wrap" && good "wrap skill linked (say 'wrap up' to close a session)"; fi
 
 say "== 7/8 Self-check"
 broken=$(python3 -I -c 'import sys

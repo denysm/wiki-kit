@@ -1,6 +1,6 @@
 # Install wiki-kit on Windows 10 or 11: Git, Python and Claude Code if missing
 # (asks first), the llm-wiki plugin, an empty hub, the specialists, the front
-# desk and the foreman, a self-check, then search by meaning: Ollama (asks first) and a small
+# desk, the foreman and wrap, a self-check, then search by meaning: Ollama (asks first) and a small
 # local model. Safe to run again: it only adds what is missing and never overwrites your
 # files. Windows PowerShell 5.1 or PowerShell 7.
 #
@@ -243,6 +243,13 @@ else {
   New-Item -ItemType Junction -Path $Foreman -Target (Join-Path $Kit "skills\foreman") | Out-Null
   if (Test-Path (Join-Path $Foreman "SKILL.md")) { Good "foreman skill linked (say 'assemble a team' or 'work order' in any folder)" }
   else { Bad "could not link $Foreman to the kit's skills\foreman" }
+}
+$Wrap = Join-Path $Skills "wrap"
+if (Test-Path $Wrap) { Good "wrap skill already present" }
+else {
+  New-Item -ItemType Junction -Path $Wrap -Target (Join-Path $Kit "skills\wrap") | Out-Null
+  if (Test-Path (Join-Path $Wrap "SKILL.md")) { Good "wrap skill linked (say 'wrap up' to close a session)" }
+  else { Bad "could not link $Wrap to the kit's skills\wrap" }
 }
 
 Say "== 7/8 Self-check"

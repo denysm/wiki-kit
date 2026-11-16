@@ -25,6 +25,7 @@ Status: draft. Merged from two working copies (work and home). The installers ar
 | `scripts/` | Python helpers, listed below; standard library only, except numpy for `search.py` (`search.py install-deps`, run by the installers) |
 | `specialists/` | The specialist department: 11 specialists in five divisions (growth, wellbeing, family, money and documents, thinking tools); staff, rules and vacancies in `specialists/README.md` |
 | `skills/department/` | Claude Code skill: the front desk that asks your language, picks a specialist by a plain phrase ("coach", "мне тяжело") and hands over between them |
+| `skills/wrap/` | Claude Code skill: closes a session in one word ("wrap up", "итог", "сворачиваемся"; asks when unsure): lessons via `/wiki:ll`, the project's state note, commits and pushes by the project's rules, the search index only after a large import, a pasteable prompt for the next chat and the budget report |
 | `skills/foreman/` | Claude Code skill: the foreman for work that needs a team ("assemble a team", "наряд"): recalls past work orders and lessons first (`search.py recall`), work order, staffing table with measured cost estimates (`scripts/roster.py`), hires only after your yes, quality control, acceptance, lessons, and an order record in the topic's `output/work-orders/` for the next recall |
 
 ## Specialist department
