@@ -56,6 +56,12 @@ jobs:
         run: |
           curl -fsSL https://claude.ai/install.sh | bash
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      # Ollama's install.sh starts the service only when systemd says running or degraded;
+      # a fresh runner can still be "starting" (run 43940645506: service written, not started).
+      - name: Wait for systemd to finish booting
+        run: |
+          timeout 180 systemctl is-system-running --wait || true
+          systemctl is-system-running || true
       - name: Block the model registry (no model download)
         run: echo "127.0.0.1 registry.ollama.ai" | sudo tee -a /etc/hosts
       - name: bootstrap.sh --yes installs Ollama
