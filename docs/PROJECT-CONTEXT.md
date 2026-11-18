@@ -75,6 +75,20 @@ Reviewed for reuse: `obra/superpowers` (MIT), `blader/humanizer` (MIT), the `kai
 - Not taken: the superpowers plugin as a whole (its session-start hook injects a "use a skill before any response" rule into every session, and its brainstorm server loads a remote logo unless telemetry is turned off); kaizen as a plugin (code-specific, auto-triggered) or any of its text (GPL); humanizer as a vendored copy (it stays an optional skill installed from upstream).
 - Next: run `docs/testing-specialists.md` on `conversation-prep` and `career-documents-reviewer`; existing specialists adopt the template's conversation rules on their next version.
 
+## Third-party skills: K-Dense scientific-agent-skills (2026-11-18)
+
+Reviewed for structure only (no skill bodies): `K-Dense-AI/scientific-agent-skills` (MIT, v2.72.0, 177 skills in the open Agent Skills format, installs for Claude Code, Codex, Cursor, Gemini CLI and others). What it does that the kit does not yet, as candidates, none adopted:
+
+1. **Validate every `SKILL.md` in CI**, not only specialists: `skills/` too. Checks: `name` equals the folder name, `metadata.version` present and quoted, the description says what the skill does *and* when to use it, a warning past 500 lines. Theirs: `skill-spec-validation.yml` running `skills-ref validate`.
+2. **Name the neighbours in the description**: end it with which sibling skill covers the adjacent case (theirs: "complementary skills cover ..."). Helps routing between `department`, `foreman` and `wrap`, and between specialists, inside the 1024-character cap.
+3. **`compatibility` frontmatter field**: one line on runtime needs (Python version, network, credentials), especially for skills that call `scripts/`.
+4. **`metadata.last-reviewed`** next to `version`, plus a lint warning when a skill has not been reviewed for a set time.
+5. **Contract tests for scripts** in `tests/<script>/`, outside the skills: `--help` works, output format holds, no heavy dependencies; today CI only compiles `scripts/*.py`.
+6. **Cross-agent install**: an Agent Plugins `plugin.json` at the root and the `.agents/skills/` path let Codex and Cursor load the kit's skills without a separate bootstrap; tagged releases make `gh skill install --pin <tag>` and `gh skill update --all` work. Prompted by a team that splits between Claude Code and Codex and finds skills kept in the Claude folder do not carry over.
+7. **`AGENTS.md` beside `CLAUDE.md`** with the rules for skill authors (frontmatter fields, trigger wording in third person, tests outside skills) and a narrow-scope policy: generic coding or orchestration skills are declined.
+
+Not taken: their skills themselves (scientific content, Python dependencies and network access per skill; their own README says "Do not install everything at once"); the LLM-based security scanner in PR CI (the kit's `leak_check.py` and `raw_check.py` cover what the kit ships).
+
 ## Memory and orchestration (2026-11-13)
 
 Three steps, one session each, in this order:
