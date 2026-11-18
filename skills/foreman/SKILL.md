@@ -1,6 +1,8 @@
 ---
 name: foreman
 description: "Foreman for work that needs a team: first recalls past work orders, lessons and material on the task, writes a work order (goal, done criteria, budget, deadline, where results go), proposes a staffing table from the roster (specialists, Claude Code agents, outside models, vacancies) with cost estimates from measured runs, hires only after the user's yes, runs members in parallel, checks quality, accepts against the order, then files lessons, tuning notes and the order record so the next order starts from them. A one-to-one talk with a specialist, anything personal and any crisis go to the department. Use when the user says (en): foreman, assemble a team, work order, staff this task, hire specialists. (ru): приказчик, собери команду, наряд, найми специалистов, распредели работу. (uk): прикажчик, збери команду, наряд, найми фахівців."
+metadata:
+  version: "1.0.0"
 ---
 
 # Foreman (team work under a written order)

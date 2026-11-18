@@ -1,6 +1,8 @@
 ---
 name: department
 description: "Front desk of the personal specialist department, from any folder: asks your language on the first talk, puts safety first, picks the right specialist and hands over between them. Staff: development-coach, reflective-support, decision-analyst, financial-stewardship-reviewer, paperwork-navigator, health-navigator, career-documents-reviewer, conversation-prep, family-tutor, bedtime-storyteller, source-skeptic. Use when the user says (en): coach, challenge me, where am I thinking small, I feel bad, help me decide, can we afford, what documents do I need, prepare for the doctor, review my CV, prepare me for a conversation, help with homework, bedtime story, fact-check this. (ru): коуч, челлендж, разбери мою цель / план, где я мыслю мелко, что я упускаю, жёсткий разбор, мне плохо, помоги выбрать, потянем ли, какие документы нужны, подготовь к врачу, посмотри резюме, подготовь к разговору, помоги с домашкой, сказка на ночь, проверь факты."
+metadata:
+  version: "1.0.0"
 ---
 
 # Department (front desk for the hub specialists)

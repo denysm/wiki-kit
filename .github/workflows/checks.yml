@@ -23,6 +23,8 @@ jobs:
           python-version: ${{ matrix.python }}
       - name: Scripts compile
         run: python -I -c 'import sys; [compile(open(f, encoding="utf-8").read(), f, "exec") for f in sys.argv[1:]]' scripts/*.py
+      - name: SKILL.md frontmatter (skills/ and specialists/)
+        run: python -I scripts/skill_check.py
       - name: Leak check (tree and whole history, without the private names list)
         run: python -I scripts/leak_check.py --history --names /dev/null
       - name: Shell syntax

@@ -77,9 +77,9 @@ Reviewed for reuse: `obra/superpowers` (MIT), `blader/humanizer` (MIT), the `kai
 
 ## Third-party skills: K-Dense scientific-agent-skills (2026-11-18)
 
-Reviewed for structure only (no skill bodies): `K-Dense-AI/scientific-agent-skills` (MIT, v2.72.0, 177 skills in the open Agent Skills format, installs for Claude Code, Codex, Cursor, Gemini CLI and others). What it does that the kit does not yet, as candidates, none adopted:
+Reviewed for structure only (no skill bodies): `K-Dense-AI/scientific-agent-skills` (MIT, v2.72.0, 177 skills in the open Agent Skills format, installs for Claude Code, Codex, Cursor, Gemini CLI and others). What it does that the kit did not, as candidates; idea 1 is done, the rest are not adopted:
 
-1. **Validate every `SKILL.md` in CI**, not only specialists: `skills/` too. Checks: `name` equals the folder name, `metadata.version` present and quoted, the description says what the skill does *and* when to use it, a warning past 500 lines. Theirs: `skill-spec-validation.yml` running `skills-ref validate`.
+1. **Validate every `SKILL.md` in CI**, not only specialists: `skills/` too. Checks: `name` equals the folder name, `metadata.version` present and quoted, the description says what the skill does *and* when to use it, a warning past 500 lines. Theirs: `skill-spec-validation.yml` running `skills-ref validate`. **Done 2026-11-18:** `scripts/skill_check.py` (stdlib only) runs in `checks.yml` on all 14 `SKILL.md`: `name` format and folder match, quoted `metadata.version`, `description` at most 1024 characters with "Use when" or "Triggers", a warning past 500 lines. First run: `department`, `foreman` and `wrap` had no version and got `"1.0.0"`; no other findings.
 2. **Name the neighbours in the description**: end it with which sibling skill covers the adjacent case (theirs: "complementary skills cover ..."). Helps routing between `department`, `foreman` and `wrap`, and between specialists, inside the 1024-character cap.
 3. **`compatibility` frontmatter field**: one line on runtime needs (Python version, network, credentials), especially for skills that call `scripts/`.
 4. **`metadata.last-reviewed`** next to `version`, plus a lint warning when a skill has not been reviewed for a set time.
