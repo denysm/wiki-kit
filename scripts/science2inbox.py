@@ -28,7 +28,11 @@ Text artifacts (Markdown, plain text) are copied as they are. Data files stay
 in Science unless --data is given: then CSV, TSV and JSON files up to 1 MB are
 copied verbatim inside a fenced block. Other files (figures, archives, Office
 documents) always stay in Science; the report names them so the raw note can
-point to them. The layout of ~/.claude-science is the app's own and may change
+point to them. Each copied file ends with a "Claude Science reviewer checks"
+section: the warn and fail verdicts Science's reviewer recorded for exactly
+that version (table verification_checks: claim, verdict, severity, status,
+evidence), so the ingest sees what Science itself doubted. Pass and
+inconclusive verdicts are only counted. The layout of ~/.claude-science is the app's own and may change
 between versions; the script stops with a message if it does.
 """
 import argparse, datetime, glob, os, re, sqlite3, sys
@@ -78,7 +82,7 @@ def project(con, q):
 
 
 def artifacts(con, pid, everything=False):
-    sql = """select a.id, a.filename, a.is_user_upload, a.is_ephemeral, v.version_number, v.content_type,
+    sql = """select a.id, a.filename, a.is_user_upload, a.is_ephemeral, v.id version_id, v.version_number, v.content_type,
                     v.size_bytes, v.storage_path, v.is_intermediate, v.created_at, v.agent_name
              from artifacts a join artifact_versions v on v.id = a.latest_version_id
              where a.project_id = ? order by v.created_at"""
@@ -119,6 +123,36 @@ def slug(s):
 def title_of(text, fallback):
     m = re.search(r"^#\s+(.+)$", text, re.M)
     return (m.group(1).strip() if m else fallback).replace('"', "'")
+
+
+def cell(s):
+    return " ".join((s or "").split()).replace("|", "\\|") or "-"
+
+
+def review_section(con, version_id, version_number):
+    """Markdown section with Science's warn/fail reviewer checks for one artifact version."""
+    try:
+        rows = con.execute("""select verdict, severity, status, claim, evidence from verification_checks
+                              where artifact_version_id = ? order by created_at""", (version_id,)).fetchall()
+    except sqlite3.Error as e:
+        return f"\n\n## Claude Science reviewer checks (v{version_number})\n\nNot read: {e}.\n"
+    flagged = [r for r in rows if r["verdict"] in ("warn", "fail")]
+    flagged.sort(key=lambda r: (r["verdict"] != "fail", {"high": 0, "medium": 1, "low": 2}.get(r["severity"], 3)))
+    out = [f"\n\n## Claude Science reviewer checks (v{version_number})\n"]
+    if not rows:
+        out.append("No reviewer checks recorded for this version.")
+        return "\n".join(out) + "\n"
+    rest = len(rows) - len(flagged)
+    out.append(f"Science's reviewer recorded {len(rows)} check(s) for this version: "
+               f"{sum(r['verdict'] == 'fail' for r in rows)} fail, {sum(r['verdict'] == 'warn' for r in rows)} warn, "
+               f"{rest} pass or inconclusive (not listed).")
+    if flagged:
+        out[-1] += (" Status is Science's own: resolved means the issue was addressed in the session, "
+                    "not necessarily in this text.")
+        out += ["", "| Verdict | Severity | Status | Claim | Evidence |", "|---|---|---|---|---|"]
+        out += [f"| {r['verdict']} | {cell(r['severity'])} | {cell(r['status'])} | {cell(r['claim'])} | {cell(r['evidence'])} |"
+                for r in flagged]
+    return "\n".join(out) + "\n"
 
 
 def cmd_projects(con, org, args):
@@ -178,6 +212,7 @@ def cmd_copy(con, org, args):
             text = f.read()
         if kind:
             text = f"# {r['filename']}\n\nData file from Claude Science, copied verbatim.\n\n```{kind}\n{text.rstrip()}\n```\n"
+        text = text.rstrip() + "\n" + review_section(con, r["version_id"], r["version_number"])
         made = when(r["created_at"])
         dst = os.path.join(args.to, f"{made.date()}-claude-science-{slug(r['filename'])}.md")
         if os.path.exists(dst) and not args.force:
