@@ -17,6 +17,7 @@ Status: draft. Merged from two working copies (work and home). The installers ar
 | `.github/workflows/` | CI: `checks` on every push (scripts compile on Python 3.9 and 3.13, leak check over the whole history without the private names list, shell syntax, no symlinks); `installers` runs both installers twice on clean Ubuntu and Windows and checks that the pre-push hook blocks a fake key |
 | `docs/PROJECT-CONTEXT.md` | Goals, key decisions and roadmap of this project (read first) |
 | `docs/ai-tooling-for-throwaway-pocs.md` | Choosing AI delivery tooling for throwaway PoCs: four layers, verdict template, when to run what |
+| `docs/meeting-recordings-to-markdown.md` | Meeting recordings to Markdown with no tokens: local Whisper for wording, Teams turns for speakers, scene-change frames |
 | `docs/testing-specialists.md` | How to test a specialist against the no-specialist baseline before 1.0 |
 | `docs/llm-wiki-portable-playbook.md` | The method in full: layout, frontmatter, ADRs, confidentiality, cost, quality gates, cold start |
 | `templates/hub-CLAUDE.md` | Starting rules for a new hub (fill in the `{...}` placeholders) |
@@ -52,7 +53,7 @@ Every script prints its usage with `--help` (or in its docstring). Run them with
 | Stage | Scripts |
 |---|---|
 | Find and sort sources | `inventory.py` (one row per candidate, topic guess, duplicates, secret count), `review_report.py`, `deep_candidates.py`, `digest.py`, `chat_tasks.py` |
-| Convert to Markdown raw sources | `chat2md.py` (Claude and ChatGPT exports), `cowork2md.py`, `doc2md.py`, `xlsx2md.py`, `mail2md.py`, `vtt2md.py`, `drawiopng2md.py`, `plotlyhtml2md.py`, `pdf2txt.swift` (macOS PDFKit); `science2inbox.py` (Claude Science results into a wiki `inbox/`: `projects`, `list PROJECT --wiki ROOT` marks what already arrived, by `science_artifact` id or by the file name in a raw file's frontmatter (copies that came through OneDrive), `copy` writes the latest version of text artifacts with `science_artifact` frontmatter, `--data` adds CSV, TSV and JSON verbatim; reads the app's database read-only, never moves) |
+| Convert to Markdown raw sources | `chat2md.py` (Claude and ChatGPT exports), `cowork2md.py`, `doc2md.py`, `xlsx2md.py`, `mail2md.py`, `vtt2md.py`, `meeting2md.py` (local whisper.cpp transcript of a recording, speakers from Teams turn lines, scene-change frames; see `docs/meeting-recordings-to-markdown.md`), `drawiopng2md.py`, `plotlyhtml2md.py`, `pdf2txt.swift` (macOS PDFKit); `science2inbox.py` (Claude Science results into a wiki `inbox/`: `projects`, `list PROJECT --wiki ROOT` marks what already arrived, by `science_artifact` id or by the file name in a raw file's frontmatter (copies that came through OneDrive), `copy` writes the latest version of text artifacts with `science_artifact` frontmatter, `--data` adds CSV, TSV and JSON verbatim; reads the app's database read-only, never moves) |
 | Stage and ingest | `stage.py`, `extra2md.py`, `ingest.py`, `move_tree.py`, `scaffold_wiki.py`, `sync_specialists.py` (kit specialists into a hub's `.skills/`) |
 | Check | `leak_check.py` (the pre-push leak check, below), `raw_check.py` (secrets, internal hosts, infrastructure ids; `--fix` redacts; `--wiki` adds raw frontmatter and `*.local.md` rules), `check_evidence.py` (numbers, dates and quotes appear in cited sources; links; coverage), `wikicheck.py` (article frontmatter, See Also back-links, staleness; `--suggest N` lists See Also candidates from shared links), `reindex.py`, `decisions_scan.py`, `extract_code.py` |
 | Second opinion from other models | `council.py` (several models, blind judge, verify, cost ledger, learned routing), `verify_articles.py` (claim-by-claim check of articles by a model from another family), `model_bench.py`, `bench_weighted.py`, `council_prices.json` |
@@ -97,7 +98,7 @@ It checks the committed tree and every line added by the commits the remote does
 
 ## Not included yet
 
-A run by a real new user (the first one uses Windows), the winget install of Git and Python in `bootstrap.ps1` (CI machines already have both), screenshots in the quickstart, a test on a clean user account or VM, and a verified list of models other than Claude that can run the agents. `drawiopng2md.py` needs `atlassian_export.py`, which is not in the kit; `xlsx2md.py` and `drawiopng2md.py` need extra packages (`uv run --with ...`, see their docstrings).
+A run by a real new user (the first one uses Windows), the winget install of Git and Python in `bootstrap.ps1` (CI machines already have both), screenshots in the quickstart, a test on a clean user account or VM, and a verified list of models other than Claude that can run the agents. `drawiopng2md.py` needs `atlassian_export.py`, which is not in the kit; `meeting2md.py` needs ffmpeg and whisper.cpp; `xlsx2md.py` and `drawiopng2md.py` need extra packages (`uv run --with ...`, see their docstrings).
 
 ## Licence
 
