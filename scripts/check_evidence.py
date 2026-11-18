@@ -1,6 +1,7 @@
 """Deterministic grounding and link check for llm-wiki roots.
 
-Usage: check_evidence.py [--strict] [--json] [--no-coverage] <wiki_root> [...]
+Usage: check_evidence.py [--strict] [--json] [--no-coverage] [--output] [--generalised-names]
+                         <wiki_root> [...]
 
 Runs the mechanical half of the CLAUDE.md "Sources" rule so a model reads only
 the flagged lines. For every article in <root>/wiki/ (index files skipped):
@@ -14,6 +15,16 @@ the flagged lines. For every article in <root>/wiki/ (index files skipped):
   `## See Also`, links or code spans) appears word for word in the raw files
   the article cites. A number the article derived itself (a sum, a ratio) is
   reported too: that is a judgement for the reader, so it is a warning.
+- generalised-name (only with --generalised-names): generic wording that stands
+  where a customer name was ("another client", "a European pharma company"), by
+  the pattern in blur_patterns.py. For wikis that keep customer names as
+  written; off by default, because a wiki that must not name customers wants
+  exactly that wording. Quoted text is ignored; a line that must keep the
+  wording (the source does not name the company) carries `<!-- blur-ok -->`.
+  Always a warning.
+- dates in the labels of dated notes, `> **Note (YYYY-MM-DD):**` and
+  `> **Status: ... (YYYY-MM-DD):**`, are the date of the edit, not a fact, and
+  are not checked.
 - coverage: every raw file is cited by an article or named in
   wiki/references/uncompiled-source-coverage.md (skip with --no-coverage).
 Findings print as path:line: severity rule: excerpt. Errors (missing source,
@@ -28,6 +39,21 @@ QUOTE = re.compile(r"“([^“”\n]{20,}?)”|(?<![\w*])\"([^\"\n]{20,}?)\"(?![
 MDLINK = re.compile(r"\[[^\]]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 WIKILINK = re.compile(r"\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|[^\]]*)?\]\]")
 CODE = re.compile(r"`[^`\n]*`")
+# Label of a dated note or status line in a blockquote; its date is the edit date.
+LABEL = re.compile(r"^\*\*(?:Note \(20\d\d-\d\d-\d\d\)|Status:[^*\n]*):?\*\*:?")
+
+
+def load_blur():
+    """Load blur_patterns.py from this script's directory (works under python3 -I)."""
+    import importlib.util
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "blur_patterns.py")
+    spec = importlib.util.spec_from_file_location("blur_patterns", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+_BLUR = None  # loaded by --generalised-names
 
 
 def split_frontmatter(text):
@@ -75,7 +101,10 @@ def num_in(raw_numbers_text, token):
     variants = {t, t.replace(".", ","), t.replace(",", ".")}
     if t.isdigit() and len(t) > 3:
         variants |= {f"{int(t) // 1000}k" if int(t) % 1000 == 0 else t, f"{int(t):,}".replace(",", " ")}
-    return any(re.search(r"(?<![\d.,])" + re.escape(v) + r"(?![\d]|[.,]\d)", raw_numbers_text) for v in variants)
+    if any(re.search(r"(?<![\d.,])" + re.escape(v) + r"(?![\d]|[.,]\d)", raw_numbers_text) for v in variants):
+        return True
+    # CSV rows (",24709818,"): before a long number a comma separates fields; it is not a decimal or thousands mark
+    return t.isdigit() and len(t) >= 5 and re.search(r"(?<=,)" + re.escape(t) + r"(?![\d]|[.,]\d)", raw_numbers_text) is not None
 
 
 def sections(body):
@@ -110,7 +139,8 @@ def check_article(root, path, findings, slugs, strict):
             add(1, "warn", "source-missing-local", s)
         else:
             add(1, "error", "source-missing", s)
-    if not srcs:
+    # an empty coverage backlog (every raw file compiled) is the goal, not a missing source
+    if not srcs and os.path.basename(path) != "uncompiled-source-coverage.md":
         add(1, "error", "no-sources", "frontmatter has no sources")
 
     # ## Sources section vs frontmatter
@@ -146,10 +176,18 @@ def check_article(root, path, findings, slugs, strict):
             if m.group(1).strip().rstrip("\\") not in slugs:
                 add(fl, "error", "broken-wikilink", m.group(1))
 
-        if name in SKIP_SECTIONS or not can_ground:
+        if name in SKIP_SECTIONS:
+            continue
+        if _BLUR and "<!-- blur-ok -->" not in line and not line.lstrip().startswith("#"):
+            m = _BLUR.BLUR.search(_BLUR.strip_quotes(CODE.sub(" ", line)))
+            if m:
+                add(fl, "warn", "generalised-name", m.group(0))
+        if not can_ground:
             continue
         plain = MDLINK.sub(" ", WIKILINK.sub(" ", line))
         plain = re.sub(r"^\s*(\d+[.)]|[-*]|>)\s+", "", plain)
+        if line.lstrip().startswith(">"):
+            plain = LABEL.sub(" ", plain)
         quotes = [a or b for a, b in QUOTE.findall(plain.replace("**", ""))]
         for q in quotes:
             if norm_text(q) not in raw_all:
@@ -178,7 +216,13 @@ def main():
     ap.add_argument("--strict", action="store_true")
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--no-coverage", action="store_true")
+    ap.add_argument("--output", action="store_true", help="also check output/*.md artifacts")
+    ap.add_argument("--generalised-names", action="store_true",
+                    help="warn on generic wording that replaced a customer name (blur_patterns.py)")
     a = ap.parse_args()
+    if a.generalised_names:
+        global _BLUR
+        _BLUR = load_blur()
 
     findings, n_articles = [], 0
     for root in a.roots:
@@ -207,6 +251,13 @@ def main():
             fm, _, _ = split_frontmatter(open(p, encoding="utf-8", errors="replace").read())
             for s in fm.get("sources") or []:
                 cited.add(os.path.normpath(os.path.join(root, s)))
+        if a.output:
+            # output/ artifacts get the same evidence checks; they do not count for raw coverage
+            for dp, _, fns in os.walk(os.path.join(root, "output")):
+                for fn in sorted(fns):
+                    if fn.endswith(".md") and not fn.startswith("_"):
+                        n_articles += 1
+                        check_article(root, os.path.join(dp, fn), findings, slugs, a.strict)
         if not a.no_coverage:
             cov = os.path.join(wiki, "references", "uncompiled-source-coverage.md")
             cov_text = open(cov, encoding="utf-8", errors="replace").read() if os.path.isfile(cov) else ""
