@@ -4,8 +4,18 @@ Usage: claude_usage.py [--project SUBSTR] [--since YYYY-MM-DD] [--top N] <report
 Reports: summary, sessions, days, tools, events, agents, all (default: all), brief.
 
 `brief --session last` is the short per-answer report (see CLAUDE.md): cost of the last
-answer, of the session, of today and of the month, plus rule-based savings tips. It keeps
+answer, of the session, of today and of the month, the share of the monthly budget spent
+and left across all projects (when a budget is set), plus rule-based savings tips. It keeps
 the previous total in ~/.cache/wiki-kit/usage_last.json to compute the per-answer delta.
+
+The monthly budget in USD comes from --budget, else the WIKI_KIT_MONTHLY_BUDGET
+environment variable, else `monthly_budget` in ~/.config/wiki-kit/usage.json
+(`{"monthly_budget": 500}`); with none of them, or 0, the budget line is hidden.
+
+The brief report also counts Claude Science, which shares the budget: it reads
+~/.claude-science/orgs/*/operon-cli.db read-only (table frames; cost = total_cost +
+aux_cost, the auxiliary calls are not inside total_cost) and dates each step by its last
+update (updated_at, UTC). A step that spans midnight counts on the day it last changed.
 
 `agents` prices each subagent run (type and description from its .meta.json) and gives
 median, p90 and max per run by agent type and model: the measured basis for the cost
@@ -20,7 +30,7 @@ The `tools` report attributes context growth to tool results. A tool result
 stays in context for every later call of the same session, so its real cost is
 its size times the number of calls that re-read it ("carried" tokens).
 """
-import argparse, collections, glob, json, os, sys
+import argparse, calendar, collections, datetime, glob, json, os, sqlite3, sys
 
 # $/MTok (input, output, cache read). Cache writes cost 2x input with the 1-hour TTL
 # and 1.25x with the 5-minute one; logs without the split are counted as 1-hour (Claude
@@ -54,6 +64,48 @@ def write_cost(c, i):
     return c["cw1h"] * i * 2 + (c["cw"] - c["cw1h"]) * i * 1.25
 
 
+USAGE_CONFIG = os.path.expanduser("~/.config/wiki-kit/usage.json")
+SCIENCE_DBS = os.path.expanduser("~/.claude-science/orgs/*/operon-cli.db")
+
+
+def default_budget():
+    """Monthly budget in USD: WIKI_KIT_MONTHLY_BUDGET, else usage.json, else 0 (hidden)."""
+    env = os.environ.get("WIKI_KIT_MONTHLY_BUDGET")
+    if env:
+        try:
+            return float(env)
+        except ValueError:
+            print(f"warning: WIKI_KIT_MONTHLY_BUDGET is not a number: {env!r}", file=sys.stderr)
+    try:
+        with open(USAGE_CONFIG, encoding="utf-8") as fh:
+            return float(json.load(fh).get("monthly_budget") or 0)
+    except FileNotFoundError:
+        return 0.0
+    except (OSError, ValueError, TypeError, AttributeError) as e:
+        print(f"warning: {USAGE_CONFIG} not read ({e})", file=sys.stderr)
+        return 0.0
+
+
+def science_steps(pattern=SCIENCE_DBS):
+    """Claude Science steps as (UTC date ISO, model, cost); the database is opened read-only."""
+    steps = []
+    for path in glob.glob(pattern):
+        try:
+            con = sqlite3.connect(f"file:{path}?mode=ro", uri=True, timeout=2)
+            try:
+                rows = con.execute("SELECT updated_at, model, coalesce(total_cost,0)+coalesce(aux_cost,0) "
+                                   "FROM frames WHERE coalesce(total_cost,0)+coalesce(aux_cost,0) > 0").fetchall()
+            finally:
+                con.close()
+        except sqlite3.Error as e:
+            print(f"warning: Claude Science database not read ({e}): {path}", file=sys.stderr)
+            continue
+        for ts, model, cost in rows:
+            day = datetime.datetime.fromtimestamp(ts / 1000, datetime.timezone.utc).date().isoformat()
+            steps.append((day, model or "unknown", cost))
+    return steps
+
+
 def text_len(content):
     if isinstance(content, str):
         return len(content)
@@ -79,6 +131,9 @@ def load(root, project, since):
     for f in glob.glob(os.path.join(root, "**", "*.jsonl"), recursive=True):
         if project and project not in f:
             continue
+        if since and datetime.datetime.fromtimestamp(
+                os.path.getmtime(f), datetime.timezone.utc).date().isoformat() < since:
+            continue  # untouched since before `since`, so no line in it can be newer
         sub = "/subagents/" in f
         sess = (f.split("/subagents/")[0] if sub else f[:-6]).rsplit("/", 1)[-1][:8]
         agent = os.path.basename(f)[:-6] if sub else "main"
@@ -197,8 +252,7 @@ def last_session(calls):
     return max(calls, key=lambda c: c["ts"])["sess"]
 
 
-def brief(calls, results, events, project, session):
-    import datetime
+def brief(calls, results, events, project, session, root, budget):
     sess = last_session(calls) if session == "last" else session
     mine = [c for c in calls if c["sess"].startswith(sess)]
     if not mine:
@@ -221,15 +275,42 @@ def brief(calls, results, events, project, session):
     today = datetime.datetime.now(datetime.timezone.utc).date().isoformat()
     day = sum(c["cost"] for c in calls if c["ts"][:10] == today)
     month = sum(c["cost"] for c in calls if c["ts"][:7] == today[:7])
+    # The budget is per person, not per project: count this month in every project.
+    everywhere = load(root, None, today[:7] + "-01")[0] if project else calls
+    month_cc = sum(c["cost"] for c in everywhere if c["ts"][:7] == today[:7])
+    sci = [x for x in science_steps() if x[0][:7] == today[:7]]
+    sci_month = sum(x[2] for x in sci)
+    sci_day = sum(x[2] for x in sci if x[0] == today)
+    month_all = month_cc + sci_month
     by_model = collections.Counter()
     for c in mine:
         by_model[c["model"]] += c["cost"]
     print(f"Session {sid}: ${total:.2f} ({len(mine)} calls, subagents ${sub:.2f}); "
           + (f"last answer ≈ ${delta:.2f}; " if delta is not None else "first measurement; ")
           + f"today ${day:.2f}; month ${month:.2f} (project {project or 'all'}, list prices)")
+    if sci:
+        sci_models = collections.Counter()
+        for _, m, cost in sci:
+            sci_models[m] += cost
+        print(f"Claude Science: today ${sci_day:.2f}; month ${sci_month:.2f} ({len(sci)} steps; "
+              + ", ".join(f"{k} ${v:.2f}" for k, v in sci_models.most_common(3)) + "; its own cost records)")
+    if budget:
+        left = budget - month_all
+        print(f"Budget ${budget:.0f}/month: spent ${month_all:.2f} ({100*month_all/budget:.1f}%) in {today[:7]} "
+              f"(Claude Code ${month_cc:.2f} all projects + Claude Science ${sci_month:.2f}), "
+              f"left ${left:.2f} ({100*left/budget:.1f}%); this machine, list prices")
     print("Models: " + ", ".join(f"{k} ${v:.2f}" for k, v in by_model.most_common(3))
           + f"; context now {ctx[-1]//1000 if ctx else 0}k tokens")
     tips = []
+    if budget and month_all >= 0.8 * budget:
+        tips.append(f"Monthly budget {100*month_all/budget:.0f}% spent: only essential work, via scripts and Sonnet/Haiku agents.")
+    elif budget and month_all:
+        dom = int(today[8:10])
+        rate = month_all / dom  # today counts as a full day, so early in the day this runs high
+        days = calendar.monthrange(int(today[:4]), int(today[5:7]))[1]
+        if rate * days > budget:
+            runout = min(days, dom + int((budget - month_all) / rate))
+            tips.append(f"At this month's pace (${rate:.0f}/day) the ${budget:.0f} budget runs out around {today[:8]}{runout:02d}.")
     if ctx and ctx[-1] > 150_000:
         tips.append(f"Context is {ctx[-1]//1000}k (>150k): note the state in README.md and start a new session.")
     elif ctx and ctx[-1] > 100_000:
@@ -259,13 +340,17 @@ def main():
     ap.add_argument("--since", help="YYYY-MM-DD (UTC)")
     ap.add_argument("--top", type=int, default=25)
     ap.add_argument("--session", help="session id prefix or 'last' (for the brief report)")
+    ap.add_argument("--budget", type=float, default=None,
+                    help="monthly budget in USD for the brief report (default: WIKI_KIT_MONTHLY_BUDGET or "
+                         "monthly_budget in ~/.config/wiki-kit/usage.json; 0 hides the line)")
     ap.add_argument("reports", nargs="*", default=["all"])
     a = ap.parse_args()
     calls, results, events = load(a.root, a.project, a.since)
     if not calls:
         sys.exit("no calls found")
     if "brief" in a.reports:
-        brief(calls, results, events, a.project, a.session or "last")
+        budget = a.budget if a.budget is not None else default_budget()
+        brief(calls, results, events, a.project, a.session or "last", a.root, budget)
         return
     total = sum(c["cost"] for c in calls)
     want = set(a.reports)
