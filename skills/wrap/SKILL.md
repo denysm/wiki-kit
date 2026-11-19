@@ -1,8 +1,8 @@
 ---
 name: wrap
-description: "Close the session in one word: writes the lessons note in the /wiki:ll format and files it with one script call (notes index, log, the project's state note, commit), pushes where the project's rules say, rebuilds the search index only after a large import, then gives a pasteable prompt for the next chat and the budget report. Use when the user ends the work, in any wording (en): wrap up, wrap, that's it, we're done, end of session, close the session, digest this chat. (ru): итог, подведи итог, конец, закрываем, сворачиваемся, закругляемся, ну всё, на сегодня всё, переварить чат, переварить в вики. (uk): підсумок, кінець, закриваємо, згортаємось, на сьогодні все. Not for ending a single step inside ongoing work."
+description: "Close the session in one word: writes the lessons note in the /wiki:ll format and files it with one script call (notes index, log, the project's state note, commit), pushes where the project's rules say, rebuilds the search index only after a large import, then gives a pasteable prompt for the next chat and the budget report. Use when the user ends the work, in any wording (en): wrap up, wrap, that's it, we're done, end of session, close the session, digest this chat, finish. (ru): итог, финиш, подведи итог, конец, закрываем, сворачиваемся, закругляемся, ну всё, на сегодня всё, переварить чат, переварить в вики. (uk): підсумок, кінець, закриваємо, згортаємось, на сьогодні все. Not for ending a single step inside ongoing work."
 metadata:
-  version: "1.1.0"
+  version: "1.1.1"
 ---
 
 # Wrap (close the session)
