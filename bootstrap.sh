@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Install wiki-kit on macOS or Linux: the llm-wiki plugin, an empty hub, the
-# specialists, the front desk, the foreman and wrap, a self-check, then search by meaning:
+# specialists, the front desk, the foreman and wrap, the personal rules for all projects
+# (~/.claude/CLAUDE.md: created, or missing sections appended), a self-check, then search by meaning:
 # Ollama (asks first) and a small local model. Safe to run again: it only adds what is
 # missing and never overwrites your files.
 # Usage: bash bootstrap.sh [--hub DIR] [--lang en|ru|uk] [--no-plugin] [--yes] [--no-vectors]
@@ -29,7 +30,7 @@ while [ $# -gt 0 ]; do
     --no-plugin) NO_PLUGIN=1; shift ;;
     --yes|-y) YES=1; shift ;;
     --no-vectors) NO_VECTORS=1; shift ;;
-    -h|--help) sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,16p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "unknown option: $1 (see --help)" >&2; exit 2 ;;
   esac
 done
@@ -177,6 +178,9 @@ if [ -e "$HOME/.claude/skills/foreman" ]; then good "foreman skill already prese
 else ln -s "$KIT/skills/foreman" "$HOME/.claude/skills/foreman" && good "foreman skill linked (say 'assemble a team' or 'work order' in any folder)"; fi
 if [ -e "$HOME/.claude/skills/wrap" ]; then good "wrap skill already present"
 else ln -s "$KIT/skills/wrap" "$HOME/.claude/skills/wrap" && good "wrap skill linked (say 'wrap up' to close a session)"; fi
+# personal rules for all projects: creates ~/.claude/CLAUDE.md or appends the sections it lacks
+if out=$(python3 -I "$KIT/scripts/global_rules.py" --apply 2>&1); then good "$out"
+else bad "$out"; fi
 
 say "== 7/8 Self-check"
 broken=$(python3 -I -c 'import sys

@@ -1,6 +1,7 @@
 # Install wiki-kit on Windows 10 or 11: Git, Python and Claude Code if missing
 # (asks first), the llm-wiki plugin, an empty hub, the specialists, the front
-# desk, the foreman and wrap, a self-check, then search by meaning: Ollama (asks first) and a small
+# desk, the foreman and wrap, the personal rules for all projects (~\.claude\CLAUDE.md:
+# created, or missing sections appended), a self-check, then search by meaning: Ollama (asks first) and a small
 # local model. Safe to run again: it only adds what is missing and never overwrites your
 # files. Windows PowerShell 5.1 or PowerShell 7.
 #
@@ -251,6 +252,9 @@ else {
   if (Test-Path (Join-Path $Wrap "SKILL.md")) { Good "wrap skill linked (say 'wrap up' to close a session)" }
   else { Bad "could not link $Wrap to the kit's skills\wrap" }
 }
+# personal rules for all projects: creates ~\.claude\CLAUDE.md or appends the sections it lacks
+$out = Invoke-Py (Join-Path $Kit "scripts\global_rules.py") --apply 2>&1 | Select-Object -Last 1
+if ($LASTEXITCODE -eq 0) { Good "$out" } else { Bad "$out" }
 
 Say "== 7/8 Self-check"
 $broken = Invoke-Py -c "import sys`nfor f in sys.argv[1:]:`n    try: compile(open(f, encoding='utf-8').read(), f, 'exec')`n    except SyntaxError: print(f.replace(chr(92), '/').rsplit('/', 1)[-1], end=' ')" (Get-ChildItem (Join-Path $Kit "scripts\*.py") | ForEach-Object { $_.FullName })
