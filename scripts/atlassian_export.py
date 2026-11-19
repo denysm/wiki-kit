@@ -4,7 +4,7 @@ Usage:
   atlassian_export.py confluence <page_id> [<page_id> ...] --out DIR [--tree] [--tags t1,t2] [--files DIR]
   atlassian_export.py jira --jql "project = KEY" --out DIR [--tags t1,t2] [--files DIR]
   common: [--profile NAME] [--confluence-url URL] [--jira-url URL] [--title-suffix TEXT]
-Run: uv run --no-project --with markdownify python -I atlassian_export.py ...
+Run: uv run --no-project --with markdownify --with beautifulsoup4 python -I atlassian_export.py ...
 
 Attachments: every export lists them in an "## Attachments" section (name, type, size,
 author, date, URL). With --files DIR the files themselves are downloaded to
