@@ -7,7 +7,8 @@ token from JIRA_TOKEN or the Keychain). No host is built in.
 
   jira_create.py user "Surname"                      # name (use it for --assignee), display name, e-mail
   jira_create.py create --project KEY --summary "..." --description-file desc.txt \\
-      [--type Task] [--priority Medium] [--label L ...] [--assignee NAME] [--relates KEY-1 ...] [--apply]
+      [--type Task] [--priority Medium] [--label L ...] [--assignee NAME] [--epic KEY-1] \\
+      [--relates KEY-1 ...] [--apply]
 
 The description file is Jira wiki markup. A custom User-Agent is always sent: some hosts sit
 behind Cloudflare, which refuses the default Python-urllib one with HTTP 403.
@@ -62,6 +63,12 @@ def create(cfg, a):
         fields["labels"] = a.label
     if a.assignee:
         fields["assignee"] = {"name": a.assignee}
+    if a.epic:
+        # Epic Link is a custom field whose id differs per Jira: find it by name.
+        epic_fields = [f["id"] for f in call(cfg, "GET", "/rest/api/2/field") if f.get("name") == "Epic Link"]
+        if not epic_fields:
+            sys.exit("no 'Epic Link' field on this Jira")
+        fields[epic_fields[0]] = a.epic
     if not a.apply:
         print(json.dumps({"fields": fields}, ensure_ascii=False, indent=2))
         for k in a.relates:
@@ -93,6 +100,7 @@ def main():
     c.add_argument("--label", action="append", default=[])
     c.add_argument("--assignee", help="Jira user name (see the user command)")
     c.add_argument("--relates", action="append", default=[], help="issue key to link with Relates")
+    c.add_argument("--epic", help="epic key to set as Epic Link, for example KEY-760")
     c.add_argument("--apply", action="store_true")
     a = p.parse_args()
     cfg = atlassian_config.settings(a.profile, jira_url=a.jira_url)
