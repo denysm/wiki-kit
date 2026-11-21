@@ -6,7 +6,8 @@ Usage:
                 [--names FILE] [--patterns FILE] [--allow FILE]
 
 Checks the committed tree of REV (default HEAD), not the working copy:
-  1. forbidden paths: topics/, raw/, inbox/, *.local.md;
+  1. forbidden paths: topics/, raw/, inbox/, *.local.md (except catalog/raw/ and
+     catalog/wiki/topics/, the public tool catalog);
   2. private names: every line of --names (default
      ~/.config/wiki-kit/private-names.txt) is a case-insensitive regex, as in
      `grep -iEf`; file names are checked too;
@@ -36,6 +37,9 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 NAMES = Path.home() / ".config/wiki-kit/private-names.txt"
 FORBIDDEN = re.compile(r"(^|/)(topics|raw|inbox)/|\.local\.md$")
+# The public tool catalog is an llm-wiki topic: its raw/ and wiki/topics/ are public by design
+# (docs/catalog-design.md). Private-name and secret checks still apply there.
+CATALOG_OK = re.compile(r"^catalog/(raw|wiki/topics)/")
 OWNER_LINE = re.compile(r"^Copyright \(c\) \d{4}(-\d{4})? \S")
 
 
@@ -150,7 +154,7 @@ def main() -> int:
 
     all_paths = git(args.repo, "ls-tree", "-r", "-z", "--name-only", args.rev).decode().split("\0")
     for p in filter(None, all_paths):
-        if FORBIDDEN.search(p):
+        if FORBIDDEN.search(p) and not (CATALOG_OK.match(p) and not p.endswith(".local.md")):
             report(p, "forbidden path (data never belongs in the kit)")
         if name_hits(p):
             report(p, "private name in the file name")
