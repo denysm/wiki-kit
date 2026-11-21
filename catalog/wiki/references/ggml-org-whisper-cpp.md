@@ -83,6 +83,8 @@ whisper.cpp is the kit's speech-to-text: `whisper-cli` with one multilingual mod
 
 - [[area-converting-documents-and-recordings|Converting documents and recordings]] ([Converting documents and recordings](../topics/area-converting-documents-and-recordings.md)): area page; documents, audio and video to Markdown or transcripts
 - [[ffmpeg-ffmpeg|FFmpeg/FFmpeg]] (../references/ffmpeg-ffmpeg.md): makes the 16 kHz audio it reads
+- [[nvidia-parakeet-tdt-0-6b-v3|nvidia/parakeet-tdt-0.6b-v3]] (../references/nvidia-parakeet-tdt-0-6b-v3.md): the model `parakeet-cli` runs
+- [[snakers4-silero-vad|snakers4/silero-vad]] (../references/snakers4-silero-vad.md): the VAD model behind `--vad`
 
 ## Sources
 
