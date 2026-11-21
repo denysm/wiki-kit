@@ -8,4 +8,5 @@ Last updated: 2026-11-21
 
 | File | Summary | Tags | Updated |
 |------|---------|------|---------|
+| [Measurements: local embedding models and runtimes for hybrid search over a Markdown knowledge base](2026-11-21-measurements-local-embeddings.md) | Retold measurements behind the search-and-embeddings cards: recall of words, vectors and both on a fixed question set; EmbeddingGemma 2, bge-m3 and Qwen3-Embedding-4B on llama.cpp llama-server; Ollama and ONNX Runtime as runtimes; numpy scoring; the choice of EmbeddingGemma 2 through Ollama. | catalog, measurements, embeddings, search | 2026-11-21 |
 | [trials](trials/_index.md) |  |  |  |
