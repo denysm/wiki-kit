@@ -208,6 +208,20 @@ The engine measurements (owner's step 5) run alongside phase 1, so that phase 2 
 - How the earpiece device is picked when the call app uses a different output from the system default.
 - Echo handling when the owner uses speakers instead of a headset. With a headset, nothing is needed.
 
+## Progress (home Mac)
+
+- **2026-11-21, session 1.**
+  - Design approved.
+  - Catalog: area `live-speech-and-calls` with 9 cards.
+  - Phase 0: `scripts/speak_answer.py` is installed as a Stop hook at home and off until `speak_answer.py on`. `/voice` dictation is not checked yet: the home Mac has no microphone until a headset is paired.
+  - Bench: `voice/bench/` texts and `scripts/asr_bench.py`. A smoke test on synthetic speech passed for whisper-cli and NeMo-Speech.cpp (Nemotron, Parakeet); whisper.cpp `parakeet-cli` aborts. The owner's recordings are not made yet.
+  - Kit Voice prototype: `voice/` (SwiftPM, `build.sh`, `run.sh`). It builds with the Command Line Tools alone; `list` works; `capture` runs, but the tap returned silence while the system-audio permission was not yet granted.
+  - Waiting on the owner: the permission, a paired Bluetooth headset, Zoom and Teams installed (`brew install --cask zoom microsoft-teams` needs a password), and the five recordings.
+- **Next.**
+  - The test call at home with `voice/run.sh capture --consent --apps <call app ids> --debug-wav <dir>`.
+  - The accuracy bench on the owner's recordings.
+  - Then the first work Mac check (phase 0 and capture on a real call).
+
 ## Work Mac checks
 
 None yet. The first one is added when phase 0 and the capture prototype are committed.
