@@ -4,6 +4,7 @@ category: topic
 sources:
   - raw/notes/trials/2026-11-21-apple-speech-synthesis-voices-and-speed.md
   - raw/notes/trials/2026-11-21-apple-translation-languages-and-speed.md
+  - raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md
   - raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md
   - raw/repos/apple-translation-desk-check-2026-11-21.md
   - raw/repos/fluidinference-fluidaudio-desk-check-2026-11-21.md
@@ -55,7 +56,7 @@ Neighbouring areas: [Converting documents and recordings](area-converting-docume
 | [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `synthesize` | candidate |
 | [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `transcribe --live` | candidate |
 | [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `translate` | candidate |
-| [nvidia/nemotron-3.5-asr-streaming-0.6b](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | `q8_0.gguf` | candidate |
+| [nvidia/nemotron-3.5-asr-streaming-0.6b](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | `q8_0.gguf` | tried |
 | [nvidia/parakeet-tdt-0.6b-v3](../references/nvidia-parakeet-tdt-0-6b-v3.md) | Parakeet Ultra (FluidAudio) | candidate |
 | [snakers4/silero-vad](../references/snakers4-silero-vad.md) | `silero_vad.onnx` | candidate |
 | [snakers4/silero-vad](../references/snakers4-silero-vad.md) | the copy inside the recogniser | candidate |
@@ -79,6 +80,7 @@ Neighbouring areas: [Converting documents and recordings](area-converting-docume
 
 - [raw/notes/trials/2026-11-21-apple-speech-synthesis-voices-and-speed.md](../../raw/notes/trials/2026-11-21-apple-speech-synthesis-voices-and-speed.md)
 - [raw/notes/trials/2026-11-21-apple-translation-languages-and-speed.md](../../raw/notes/trials/2026-11-21-apple-translation-languages-and-speed.md)
+- [raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md)
 - [raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md](../../raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md)
 - [raw/repos/apple-translation-desk-check-2026-11-21.md](../../raw/repos/apple-translation-desk-check-2026-11-21.md)
 - [raw/repos/fluidinference-fluidaudio-desk-check-2026-11-21.md](../../raw/repos/fluidinference-fluidaudio-desk-check-2026-11-21.md)

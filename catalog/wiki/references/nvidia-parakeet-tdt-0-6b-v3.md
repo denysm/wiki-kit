@@ -8,6 +8,7 @@ version: "541d1f9"
 licence: CC-BY-4.0
 desk_checked: 2026-11-21
 sources:
+  - raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md
   - raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md
   - raw/repos/fluidinference-fluidaudio-desk-check-2026-11-21.md
 created: 2026-11-21
@@ -44,8 +45,8 @@ summary: "NVIDIA's batch multilingual speech recogniser for 25 European language
 
 | Part | What it does | Status | Needs | Check when |
 |------|--------------|--------|-------|------------|
-| `q8_0.gguf` | The model quantized for NeMo-Speech.cpp. | candidate | NeMo-Speech.cpp and 713975456 bytes | Try it on the speech-recognition bench against `large-v3-turbo`. |
-| `ggml-parakeet-tdt-0.6b-v3-f16.bin` | ggml-org's conversion for whisper.cpp `parakeet-cli` (`-ps` prints segments). | candidate | `parakeet-cli` from whisper.cpp 1.9.5; the file from `ggml-org/parakeet-GGUF` | Try it on the same bench to compare the two runtimes. |
+| `q8_0.gguf` | The model quantized for NeMo-Speech.cpp. | tried | NeMo-Speech.cpp and 713975456 bytes; peak memory 268 MB in the trial | The real task that would move it to `in use`: the after-call pass, if it beats `large-v3-turbo` on the owner's recordings. |
+| `ggml-parakeet-tdt-0.6b-v3-f16.bin` | ggml-org's conversion for whisper.cpp `parakeet-cli` (`-ps` prints segments), 1255897319 bytes. | rejected | `parakeet-cli` from whisper.cpp 1.9.5; the file from `ggml-org/parakeet-GGUF` | Revisit on a whisper.cpp release after 1.9.5. Rejected: the Homebrew 1.9.5 `parakeet-cli` aborted on it in the trial; the NeMo-Speech.cpp path works. |
 | Parakeet TDT v3 (FluidAudio) | FluidAudio's default batch model, 25 European languages, on the Neural Engine. | candidate | FluidAudio in a Swift app | Try it for the precise pass inside a native app. |
 | Parakeet Ultra (FluidAudio) | Post-training of v3 with the same languages: FLEURS 24-language mean 11.67 vs 14.81 % for v3; int8 encoder (595 MB). | candidate | FluidAudio in a Swift app | Try it on the bench next to v3. |
 | `.nemo` | The NeMo checkpoint, 2509332480 bytes. | listed | NeMo and PyTorch | Read when a fine-tune is wanted. |
@@ -53,7 +54,10 @@ summary: "NVIDIA's batch multilingual speech recogniser for 25 European language
 
 ## Tried
 
-none yet
+| Date | Task (by kind) | Part | Result | Cost | Record |
+|------|----------------|------|--------|------|--------|
+| 2026-11-21 | Smoke test on synthetic Russian speech, 51.4 s | `q8_0.gguf` | Ran through NeMo-Speech.cpp on an Apple M4, real-time factor 0.345; terms transliterated. | No cost | [trial record](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md) |
+| 2026-11-21 | Same test with whisper.cpp | `ggml-parakeet-tdt-0.6b-v3-f16.bin` | Homebrew `parakeet-cli` 1.9.5 aborted (exit 134) in `ggml_view_3d` on the 51.4 s file and a 10 s cut. | No cost | [trial record](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md) |
 
 ## Verdict
 
@@ -71,3 +75,4 @@ The strongest non-Whisper candidate for an accurate pass after a call in the own
 
 - [Desk check: nvidia/parakeet-tdt-0.6b-v3 revision 541d1f9](../../raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md): card, licence, languages, files, runtimes.
 - [Desk check: FluidInference/FluidAudio v0.18.4](../../raw/repos/fluidinference-fluidaudio-desk-check-2026-11-21.md): the CoreML conversions and Parakeet Ultra.
+- [Trial: speech engines, smoke test on synthetic Russian speech](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md): runs on an Apple M4, speeds, a pipeline check only.

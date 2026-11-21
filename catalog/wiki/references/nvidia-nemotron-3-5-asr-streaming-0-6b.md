@@ -8,6 +8,7 @@ version: "ea30d66"
 licence: OpenMDW-1.1
 desk_checked: 2026-11-21
 sources:
+  - raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md
   - raw/repos/nvidia-nemotron-3-5-asr-streaming-0-6b-desk-check-2026-11-21.md
   - raw/repos/fluidinference-fluidaudio-desk-check-2026-11-21.md
 created: 2026-11-21
@@ -42,14 +43,16 @@ summary: "NVIDIA's multilingual streaming speech recogniser (600M, cache-aware, 
 
 | Part | What it does | Status | Needs | Check when |
 |------|--------------|--------|-------|------------|
-| `q8_0.gguf` | The model quantized for NeMo-Speech.cpp; FLEURS word error rate for Russian 10.84 at 80ms and 9.17 at 1.12s with the language given, Ukrainian 15.70 and 13.07, English 9.43 and 7.91, French 10.97 and 9.03. | candidate | NeMo-Speech.cpp and 742090464 bytes | Try it on the speech-recognition bench and in a live test, at 560ms and 1.12s chunks. |
+| `q8_0.gguf` | The model quantized for NeMo-Speech.cpp; FLEURS word error rate for Russian 10.84 at 80ms and 9.17 at 1.12s with the language given, Ukrainian 15.70 and 13.07, English 9.43 and 7.91, French 10.97 and 9.03. | tried | NeMo-Speech.cpp and 742090464 bytes; peak memory 498 MB in the trial | The real task that would move it to `in use`: live text in a real call, after the accuracy bench on the owner's recordings. |
 | `.nemo` | The NeMo checkpoint. | listed | NeMo from git and PyTorch (Python 3.11 or later), 2368284501 bytes | Read when a fine-tune on the owner's terms is wanted. |
 | `model.safetensors` | The Transformers checkpoint, Transformers v5.13.0 or later. | listed | A venv with Transformers and PyTorch, 2552062944 bytes | Read when a Python reference result is needed to check a port. |
 | CoreML conversion (FluidAudio) | `FluidInference/Nemotron-3.5-ASR-Streaming-Multilingual-0.6b-CoreML`, for en/es/fr/it/pt/de/zh/ja only, chunk tiers 560ms / 1120ms / 2240ms / 4480ms. | candidate | FluidAudio in a Swift app; no Russian or Ukrainian | Try it for the English or French "them" track against the GGUF path on the Neural Engine. |
 
 ## Tried
 
-none yet
+| Date | Task (by kind) | Part | Result | Cost | Record |
+|------|----------------|------|--------|------|--------|
+| 2026-11-21 | Smoke test on synthetic Russian speech, 51.4 s | `q8_0.gguf` | Ran through NeMo-Speech.cpp on an Apple M4, whole file and `--stream`, real-time factor 0.071 and 0.119; English terms transliterated into Cyrillic, some numbers written as words. | No cost | [trial record](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md) |
 
 ## Verdict
 
@@ -65,3 +68,4 @@ The only streaming model found that covers the owner's Russian and Ukrainian wit
 
 - [Desk check: nvidia/nemotron-3.5-asr-streaming-0.6b revision ea30d66](../../raw/repos/nvidia-nemotron-3-5-asr-streaming-0-6b-desk-check-2026-11-21.md): card, licence, languages, chunk sizes, error rates, files.
 - [Desk check: FluidInference/FluidAudio v0.18.4](../../raw/repos/fluidinference-fluidaudio-desk-check-2026-11-21.md): the CoreML conversion and its languages.
+- [Trial: speech engines, smoke test on synthetic Russian speech](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md): runs on an Apple M4, speeds, a pipeline check only.

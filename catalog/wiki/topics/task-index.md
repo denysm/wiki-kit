@@ -17,6 +17,7 @@ sources:
   - raw/notes/trials/2026-11-21-libreoffice-deck-to-pdf-headless.md
   - raw/notes/trials/2026-11-21-llm-wiki-engine-knowledge-bases.md
   - raw/notes/trials/2026-11-21-markitdown-quick-office-and-pdf-to-markdown.md
+  - raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md
   - raw/notes/trials/2026-11-21-numpy-vector-scoring-in-search.md
   - raw/notes/trials/2026-11-21-ollama-embedding-server-for-search.md
   - raw/notes/trials/2026-11-21-pypdf-page-text-to-markdown.md
@@ -335,11 +336,11 @@ Area page: [Converting documents and recordings](area-converting-documents-and-r
 | Read text out of images inside PDF or Office files with a vision model (data leaves the machine) | [microsoft/markitdown: `markitdown-ocr`](../references/microsoft-markitdown.md) | candidate |  |
 | Add a converter for a format it lacks | [microsoft/markitdown: plugin mechanism](../references/microsoft-markitdown.md) | candidate |  |
 | turn PDFs, Office files and e-books into wiki pages | [nashsu/llm_wiki: document parsing](../references/nashsu-llm-wiki.md) | rejected | for work data, its own API keys send data past the organisation's model account |
-| Compare speech models on your own recordings without PyTorch | [NVIDIA/NeMo-Speech.cpp: `transcribe`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
-| Transcribe a recorded call in Russian, Ukrainian, English, French, German, Spanish or Dutch on this machine, as a second opinion to Whisper | [nvidia/parakeet-tdt-0.6b-v3: `q8_0.gguf`](../references/nvidia-parakeet-tdt-0-6b-v3.md) | candidate |  |
-| Get word timestamps to line text up with speaker turns | [nvidia/parakeet-tdt-0.6b-v3: `q8_0.gguf`](../references/nvidia-parakeet-tdt-0-6b-v3.md) | candidate |  |
-| Transcribe with the model already installed with whisper.cpp | [nvidia/parakeet-tdt-0.6b-v3: `ggml-parakeet-tdt-0.6b-v3-f16.bin`](../references/nvidia-parakeet-tdt-0-6b-v3.md) | candidate |  |
-| Kazakh speech. It is not among the 25 languages | [nvidia/parakeet-tdt-0.6b-v3: `q8_0.gguf`](../references/nvidia-parakeet-tdt-0-6b-v3.md) | candidate | see the card's rejected row |
+| Compare speech models on your own recordings without PyTorch | [NVIDIA/NeMo-Speech.cpp: `transcribe`](../references/nvidia-nemo-speech-cpp.md) | tried |  |
+| Transcribe a recorded call in Russian, Ukrainian, English, French, German, Spanish or Dutch on this machine, as a second opinion to Whisper | [nvidia/parakeet-tdt-0.6b-v3: `q8_0.gguf`](../references/nvidia-parakeet-tdt-0-6b-v3.md) | tried |  |
+| Get word timestamps to line text up with speaker turns | [nvidia/parakeet-tdt-0.6b-v3: `q8_0.gguf`](../references/nvidia-parakeet-tdt-0-6b-v3.md) | tried |  |
+| Transcribe with the model already installed with whisper.cpp | [nvidia/parakeet-tdt-0.6b-v3: `ggml-parakeet-tdt-0.6b-v3-f16.bin`](../references/nvidia-parakeet-tdt-0-6b-v3.md) | rejected |  |
+| Kazakh speech. It is not among the 25 languages | [nvidia/parakeet-tdt-0.6b-v3: `q8_0.gguf`](../references/nvidia-parakeet-tdt-0-6b-v3.md) | tried | see the card's rejected row |
 | Turn a PDF with a text layer into Markdown, one section per page | [py-pdf/pypdf: `pypdf.PdfReader`](../references/py-pdf-pypdf.md) | in use |  |
 | Get a page's text as a string, plain or laid out like the page | [py-pdf/pypdf: `pypdf.PageObject.extract_text`](../references/py-pdf-pypdf.md) | in use |  |
 | Split, merge, crop or encrypt PDFs in code | [py-pdf/pypdf: `pypdf.PdfWriter`](../references/py-pdf-pypdf.md) | candidate |  |
@@ -440,9 +441,9 @@ Area page: [Live speech and calls](area-live-speech-and-calls.md).
 | Translate text locally between English and Russian, Ukrainian, French, German or Dutch | [NVIDIA/NeMo-Speech.cpp: `translate`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
 | Speak text aloud locally in English, French, German or Spanish | [NVIDIA/NeMo-Speech.cpp: `synthesize`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
 | Serve live transcription to other local programs over a WebSocket | [NVIDIA/NeMo-Speech.cpp: `serve`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
-| Show what a call participant says within about a second, in Russian, Ukrainian, English, French, German, Spanish or Dutch, on this machine | [nvidia/nemotron-3.5-asr-streaming-0.6b: `q8_0.gguf`](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | candidate |  |
-| Transcribe a call where the language changes, with a language tag per utterance | [nvidia/nemotron-3.5-asr-streaming-0.6b: `q8_0.gguf`](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | candidate |  |
-| Kazakh speech. It is in none of the card's language tiers | [nvidia/nemotron-3.5-asr-streaming-0.6b: `q8_0.gguf`](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | candidate | see the card's rejected row |
+| Show what a call participant says within about a second, in Russian, Ukrainian, English, French, German, Spanish or Dutch, on this machine | [nvidia/nemotron-3.5-asr-streaming-0.6b: `q8_0.gguf`](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | tried |  |
+| Transcribe a call where the language changes, with a language tag per utterance | [nvidia/nemotron-3.5-asr-streaming-0.6b: `q8_0.gguf`](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | tried |  |
+| Kazakh speech. It is in none of the card's language tiers | [nvidia/nemotron-3.5-asr-streaming-0.6b: `q8_0.gguf`](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | tried | see the card's rejected row |
 | Transcribe on the Neural Engine from a Swift app, with a more accurate post-trained variant | [nvidia/parakeet-tdt-0.6b-v3: Parakeet Ultra (FluidAudio)](../references/nvidia-parakeet-tdt-0-6b-v3.md) | candidate |  |
 | Cut live call audio into speech segments before recognition, so the recogniser skips silence | [snakers4/silero-vad: the copy inside the recogniser](../references/snakers4-silero-vad.md) | candidate |  |
 | Detect speech in a native app with ONNX Runtime and no Python | [snakers4/silero-vad: `silero_vad.onnx`](../references/snakers4-silero-vad.md) | candidate |  |
@@ -605,6 +606,7 @@ Area page: [Science](area-science.md).
 - [raw/notes/trials/2026-11-21-libreoffice-deck-to-pdf-headless.md](../../raw/notes/trials/2026-11-21-libreoffice-deck-to-pdf-headless.md)
 - [raw/notes/trials/2026-11-21-llm-wiki-engine-knowledge-bases.md](../../raw/notes/trials/2026-11-21-llm-wiki-engine-knowledge-bases.md)
 - [raw/notes/trials/2026-11-21-markitdown-quick-office-and-pdf-to-markdown.md](../../raw/notes/trials/2026-11-21-markitdown-quick-office-and-pdf-to-markdown.md)
+- [raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md)
 - [raw/notes/trials/2026-11-21-numpy-vector-scoring-in-search.md](../../raw/notes/trials/2026-11-21-numpy-vector-scoring-in-search.md)
 - [raw/notes/trials/2026-11-21-ollama-embedding-server-for-search.md](../../raw/notes/trials/2026-11-21-ollama-embedding-server-for-search.md)
 - [raw/notes/trials/2026-11-21-pypdf-page-text-to-markdown.md](../../raw/notes/trials/2026-11-21-pypdf-page-text-to-markdown.md)

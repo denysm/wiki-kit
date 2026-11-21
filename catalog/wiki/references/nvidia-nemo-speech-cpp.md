@@ -8,6 +8,7 @@ version: "0.3.0"
 licence: Apache-2.0
 desk_checked: 2026-11-21
 sources:
+  - raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md
   - raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md
 created: 2026-11-21
 updated: 2026-11-21
@@ -49,7 +50,7 @@ Parts are the commands of `app/main.cpp` and the SDK component that matters here
 | Part | What it does | Status | Needs | Check when |
 |------|--------------|--------|-------|------------|
 | `NeMoSpeech::ASR` streaming API | `nemo_speech_asr_stream_push_f32` / `nemo_speech_asr_stream_next`, results flagged final or not, per-stream VAD, endpointing, language code or `auto`, speech contexts, word time offsets. | candidate | The release archive's headers and shared libraries, a GGUF model | Try it as the recogniser inside a native capture app, one stream per track. |
-| `transcribe` | Transcribe WAV files with any supported model and language. | candidate | The archive and a GGUF model (sizes on the Parakeet v3 and Nemotron 3.5 cards) | Try it on the speech-recognition bench recordings against whisper.cpp. |
+| `transcribe` | Transcribe WAV files with any supported model and language; `--stream` feeds a file through the streaming recogniser. | tried | The archive and a GGUF model (sizes on the Parakeet v3 and Nemotron 3.5 cards) | The real task that would move it to `in use`: the accuracy bench on the owner's recordings, then the after-call pass. |
 | `transcribe --live` | Live transcription of the default microphone (miniaudio capture). | candidate | The archive, a model, a microphone | Try it to measure time to first text before building the native path. |
 | `diarize` | Streaming Sortformer 4-speaker v2 (`cc-by-4.0`) or Nemotron 3 Diarization (`openmdw-1.1`, up to eight speakers), alone or with ASR. | candidate | The archive and a diarization GGUF | Try it on a call recording with three or more speakers. |
 | `translate` | Riva Translate 4B Instruct v2 (`nvidia-open-model-license`): English and 36 other languages, including Russian, Ukrainian, French, German and Dutch; not Kazakh. | candidate | The archive, a 4B-parameter model (several GB of memory) | Try it against Apple Translation and a local LLM on call sentences. |
@@ -60,7 +61,9 @@ Parts are the commands of `app/main.cpp` and the SDK component that matters here
 
 ## Tried
 
-none yet
+| Date | Task (by kind) | Part | Result | Cost | Record |
+|------|----------------|------|--------|------|--------|
+| 2026-11-21 | Smoke test on synthetic Russian speech, 51.4 s | `transcribe` | The macOS Metal archive (checksum matched) ran Nemotron 3.5 and Parakeet v3 faster than real time on an Apple M4: real-time factor 0.071 (Nemotron, whole file), 0.119 (`--stream`), 0.345 (Parakeet); English terms came out in Cyrillic. | No cost | [trial record](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md) |
 
 ## Verdict
 
@@ -77,3 +80,4 @@ A strong candidate for the live recogniser of a native call app: one runtime, a 
 ## Sources
 
 - [Desk check: NVIDIA/NeMo-Speech.cpp v0.3.0](../../raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md): commands, SDK streaming API, install and build paths, outbound calls, model licences and languages.
+- [Trial: speech engines, smoke test on synthetic Russian speech](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md): runs on an Apple M4, speeds, a pipeline check only.
