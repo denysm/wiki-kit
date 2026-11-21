@@ -1,0 +1,87 @@
+---
+title: "ggml-org/whisper.cpp"
+category: reference
+kind: cli
+areas: [converting-documents-and-recordings]
+repo: ggml-org/whisper.cpp
+version: "1.9.5"
+licence: MIT
+desk_checked: 2026-11-21
+sources:
+  - raw/repos/ggml-org-whisper-cpp-desk-check-2026-11-21.md
+  - raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md
+created: 2026-11-21
+updated: 2026-11-21
+tags: [catalog, card, area-converting-documents-and-recordings, kind-cli, whisper-cpp, speech-to-text, transcription, local]
+confidence: high
+volatility: hot
+verified: 2026-11-21
+summary: "C/C++ port of the Whisper speech-to-text model with command-line tools. whisper-cli with the large-v3-turbo model is in use in the kit's meeting-recording script for local transcription; the server, stream, quantize, bench and VAD tools are read, the example programs listed. The tools make no network call; models are downloaded from a model hub by a script."
+---
+
+# ggml-org/whisper.cpp
+
+> A local speech-to-text program (kind `cli`, licence MIT, version `1.9.5` read in a clone): `whisper-cli` and a few other tools run OpenAI's Whisper models on one machine. Here `whisper-cli` with the `large-v3-turbo` model transcribes recorded calls for the kit's meeting script; the version in use is `1.9.5`.
+
+## Tasks it serves
+
+| Task | Part | Area |
+|------|------|------|
+| Turn a recorded call into a timestamped transcript on this machine, with no audio leaving it | `whisper-cli` | converting-documents-and-recordings |
+| Get names and terms right in a transcript by giving the model a list of them | `whisper-cli` | converting-documents-and-recordings |
+| Transcribe Russian speech with English technical terms | `large-v3-turbo` | converting-documents-and-recordings |
+| Run the same model in less disk space, with a quantized file | `large-v3-turbo-q5_0` | converting-documents-and-recordings |
+| Skip silence to speed up a long transcription | `whisper-vad-speech-segments` | converting-documents-and-recordings |
+| Serve transcription to other programs over HTTP on this machine | `whisper-server` | converting-documents-and-recordings |
+
+## Run it here
+
+- **Clone, read-only, to read docs only**: `git clone --depth 1 --branch v1.9.5 https://github.com/ggml-org/whisper.cpp $EXTERNAL/whisper.cpp`. Never build or edit it. Read first: `README.md` ("Quick start", "Memory usage", "Voice Activity Detection (VAD)"), then `examples/cli/README.md` and `models/README.md`.
+- **In use**: `whisper-cli` with `ggml-large-v3-turbo.bin`, called by the kit's `scripts/meeting2md.py` as `whisper-cli -m <model> -f <wav> -l <lang> -t 10 -oj -of <path>` plus `--prompt` when names are given. The installed `whisper-cli` is `1.9.5` (checked 2026-11-21 with `--version`), the same as the tag read.
+- **Sends outward**: nothing from the tools; a search of `src/`, `include/` and `examples/cli/cli.cpp` for `http` found only reference links. The model download scripts fetch from Hugging Face. Read in the source, not observed.
+- **Switch off**: nothing to switch off; download a model once and pass it with `-m`.
+- **Do not install**: the Docker images, Conan, or the Core ML, OpenVINO, CUDA and other build options; building the clone waits for the user's yes. Input must be flac, mp3, ogg or wav; a video file is converted first.
+
+## What's inside
+
+Parts are the command-line programs and the model sizes. Defined by `examples/*/CMakeLists.txt` and `models/README.md`.
+
+| Part | What it does | Status | Needs | Check when |
+|------|--------------|--------|-------|------------|
+| `whisper-cli` | The main program: transcribe or translate audio; `-oj` JSON with segments, `-l` language, `--prompt`, `-t` threads, `-tdrz` speaker turns, `--vad`. | in use | A binary and a model file | Re-check when a release newer than `1.9.5` ships or the JSON output changes. |
+| `large-v3-turbo` | Multilingual model, 1.5 GiB on disk; the file `ggml-large-v3-turbo.bin` used by the meeting script. | in use | The model file; the memory figure for it is not in the README | Re-check when a newer large model is listed in `models/README.md`. |
+| `large-v3-turbo-q5_0` | The same model quantized to 547 MiB. | candidate | The model file | Try it when memory or disk is short, and compare the wording on a recording with names and numbers. |
+| `large-v3` | Multilingual large model, 2.9 GiB. | candidate | The model file; about 3.9 GB of memory (the README row is `large`) | Try it when the turbo model misses words. |
+| `medium` | Multilingual model, 1.5 GiB. | candidate | The model file; about 2.1 GB of memory | Try it when memory is short, and compare the wording. |
+| `small` | Multilingual model, 466 MiB. | candidate | The model file; about 852 MB of memory | Try it when memory is short, and compare the wording. |
+| `base` | Multilingual model, 142 MiB. | candidate | The model file; about 388 MB of memory | Try it when disk is very short, and compare the wording. |
+| `tiny` | Multilingual model, 75 MiB. | candidate | The model file; about 273 MB of memory | Try it to check a pipeline end to end. |
+| `whisper-server` | A simple HTTP server: WAV files are passed to the model in requests; `--convert` needs ffmpeg. | candidate | A binary and a model; binds the loopback address by default | Try it when several programs need transcription without reloading the model each time. |
+| `whisper-stream` | Real-time transcription from a microphone, every half a second. | candidate | A binary, a model, SDL2 and a microphone | Try it when live text from a microphone is wanted. |
+| `whisper-quantize` | Integer quantization of `ggml` model files. | candidate | A binary and a model file | Try it when a model has no ready quantized file. |
+| `whisper-bench` | Times the encoder on random audio for one device. | candidate | A binary and a model file | Try it to compare two machines or two models. |
+| `whisper-vad-speech-segments` | Splits audio into speech segments with a VAD model (Silero-VAD). | candidate | A binary, the VAD model download | Try it on a long recording with long silences. |
+| `parakeet-cli`, `parakeet-quantize` | A second speech model (Parakeet) in the same repository, with a quantizer. | listed | A binary and a converted model | Read when Whisper's wording is not enough. |
+| `whisper-command`, `whisper-talk-llama`, `whisper-lsp` | Voice commands, a talk-with-a-language-model demo, a language server. | listed | A binary, SDL2 for the first two | Read when a voice interface is wanted. |
+| `bindings` | `go`, `java`, `javascript` and `ruby` folders. | listed | Their own toolchains | Read when a program in those languages must call it. |
+
+## Tried
+
+| Date | Task (by kind) | Part | Result | Cost | Record |
+|------|----------------|------|--------|------|--------|
+| not stated | Transcribe recorded calls locally | `whisper-cli` | In use at `1.9.5`: 58 minutes of audio took about 2.5 minutes on an Apple M4 Pro (Metal), model `large-v3-turbo`. | No tokens; model file about 1.6 GB | [use record](../../raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md) |
+| not stated | Transcribe Russian speech with English terms | `large-v3-turbo` | In use; wording, names and numbers right "far more often" than the platform transcript. | Same run | [use record](../../raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md) |
+
+## Verdict
+
+whisper.cpp is the kit's speech-to-text: `whisper-cli` with one multilingual model, run locally, so a recording never leaves the machine. Two parts are in use and the rest are read from the docs, not run. Version in use and version read are both `1.9.5`. Revisit when a newer release ships, when a release changes the JSON output, or when a quantized model is tried on a real recording.
+
+## See Also
+
+- [[area-converting-documents-and-recordings|Converting documents and recordings]] ([Converting documents and recordings](../topics/area-converting-documents-and-recordings.md)): area page; documents, audio and video to Markdown or transcripts
+- [[ffmpeg-ffmpeg|FFmpeg/FFmpeg]] (../references/ffmpeg-ffmpeg.md): makes the 16 kHz audio it reads
+
+## Sources
+
+- [Desk check: ggml-org/whisper.cpp v1.9.5](../../raw/repos/ggml-org-whisper-cpp-desk-check-2026-11-21.md): programs, models, options and outbound calls read from the clone; freshness through the GitHub API.
+- [Use record: whisper-cli for local meeting transcription](../../raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md): how the kit's script calls it and the measured speed.
