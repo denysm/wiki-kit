@@ -98,7 +98,6 @@ A reference set to read and adapt, not a package to install: every part was read
 
 - [[area-science|Science]] ([Science](../topics/area-science.md)): area page; sections protein engineering and design, machine learning and AI, infrastructure and platforms
 - [[facebookresearch-esm|facebookresearch/esm]] ([facebookresearch/esm](../references/facebookresearch-esm.md)): the original ESM-2 code and weights that `models/esm2` converts
-- [[deepchem-deepchem|deepchem/deepchem]] ([deepchem/deepchem](../references/deepchem-deepchem.md)): another machine-learning library for drug discovery in the catalog
 
 ## Sources
 

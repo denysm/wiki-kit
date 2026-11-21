@@ -119,7 +119,6 @@ No verdict for the collection as a whole: it is read from the clone part by part
 - [[google-deepmind-alphafold|google-deepmind/alphafold]] ([google-deepmind/alphafold](../references/google-deepmind-alphafold.md)): run hosted through `tamarind`; AlphaFold DB is a reference of `database-lookup`
 - [[rosettacommons-rfdiffusion|RosettaCommons/RFdiffusion]] ([RosettaCommons/RFdiffusion](../references/rosettacommons-rfdiffusion.md)): run hosted through `tamarind`
 - [[dauparas-proteinmpnn|dauparas/ProteinMPNN]] ([dauparas/ProteinMPNN](../references/dauparas-proteinmpnn.md)): run hosted through `tamarind`
-- [[deepchem-deepchem|deepchem/deepchem]] ([deepchem/deepchem](../references/deepchem-deepchem.md)): the library behind the `deepchem` skill
 - [[microsoft-markitdown|microsoft/markitdown]] ([microsoft/markitdown](../references/microsoft-markitdown.md)): the library behind the `markitdown` skill
 
 ## Sources
