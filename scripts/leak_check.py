@@ -40,6 +40,14 @@ FORBIDDEN = re.compile(r"(^|/)(topics|raw|inbox)/|\.local\.md$")
 # The public tool catalog is an llm-wiki topic: its raw/ and wiki/topics/ are public by design
 # (docs/catalog-design.md). Private-name and secret checks still apply there.
 CATALOG_OK = re.compile(r"^catalog/(raw|wiki/topics)/")
+
+
+def forbidden_path(p: str) -> bool:
+    """A data path; catalog/raw/ and catalog/wiki/topics/ pass unless the rest is a data path again."""
+    if not FORBIDDEN.search(p):
+        return False
+    m = CATALOG_OK.match(p)
+    return not m or p.endswith(".local.md") or bool(FORBIDDEN.search(p[m.end():]))
 OWNER_LINE = re.compile(r"^Copyright \(c\) \d{4}(-\d{4})? \S")
 
 
@@ -154,7 +162,7 @@ def main() -> int:
 
     all_paths = git(args.repo, "ls-tree", "-r", "-z", "--name-only", args.rev).decode().split("\0")
     for p in filter(None, all_paths):
-        if FORBIDDEN.search(p) and not (CATALOG_OK.match(p) and not p.endswith(".local.md")):
+        if forbidden_path(p):
             report(p, "forbidden path (data never belongs in the kit)")
         if name_hits(p):
             report(p, "private name in the file name")

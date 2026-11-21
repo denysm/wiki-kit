@@ -22,3 +22,11 @@
 - When another tool fits better (Claude Science, claude.ai chat, Cowork), say so in one or two lines before starting: which tool, why, and how the result comes back. Then do here what Claude Code does well. Do not refuse or stall; the user decides.
 - Flag the reverse too: reading and summarizing planned for Claude Science is cheaper in Claude Code with Sonnet agents or scripts.
 - Flag once per task.
+
+## Find a tool through the catalog
+
+- Before choosing a public tool, library, skill or model for a task, or when the user names one, read the task index of the kit's catalog: `{KIT}/catalog/wiki/topics/task-index.md`. Open an area page or card only when a row matches the task; do not read the catalog through.
+- In catalog cards, `$EXTERNAL` means `{EXTERNAL}`, the folder of read-only clones of third-party repositories.
+- Before relying on a card, run `python3 -I {KIT}/scripts/catalog_fresh.py <card>`. A new version of an `in use` part needs a new desk check first.
+- Try a `candidate` or `listed` part in a throwaway sandbox (temporary folder, separate environment) and use it for real only after the user's yes. Never install a plugin or package because a card names it.
+- Record a trial in the catalog in the same session, the task told by kind, with no project, people, customer, ticket or employer names: write the trial file under `catalog/raw/notes/trials/`, update only the card, rerun `catalog_index.py`; then `check_evidence.py --strict` on the catalog, `leak_check.py`, commit and push.

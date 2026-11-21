@@ -19,7 +19,7 @@ Not sure whether an idea fits? Open an issue first.
 1. A GitHub account, with **Keep my email addresses private** turned on at <https://github.com/settings/emails>.
 2. In the kit folder, set your name (a nickname is fine) and the `@users.noreply.github.com` address from that page: `git config user.name ...`, `git config user.email ...`. Only this address goes into the public history.
 3. The GitHub command line tool (<https://cli.github.com>), signed in with `gh auth login`.
-4. Your private names in `~/.config/wiki-kit/private-names.txt`, one per line. The pre-push hook (`hooks/pre-push`, turned on by the installer: `git config core.hooksPath` prints `hooks`) runs `scripts/leak_check.py` with that list and refuses a push that matches it or carries secrets.
+4. Your private names in `~/.config/wiki-kit/private-names.txt`, one per line. The pre-push hook (`hooks/pre-push`, turned on by the installer: `git config core.hooksPath` prints `hooks`) runs `scripts/leak_check.py` with that list and refuses a push that matches it or carries secrets. Data paths (`topics/`, `raw/`, `inbox/`, `*.local.md`) are refused everywhere except the public catalog's `catalog/raw/` and `catalog/wiki/topics/`; what goes there is retold without names (see `docs/catalog-design.md`).
 
 ## Sending a change
 

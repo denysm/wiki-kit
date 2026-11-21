@@ -33,7 +33,9 @@ broken link) exit 1; --strict makes ungrounded values errors too.
 import argparse, json, os, re, sys
 
 SKIP_SECTIONS = {"sources", "see also"}
-NUM = re.compile(r"(?<![\w./:#-])(\d{1,3}(?:,\d{3})+|\d+(?:[.,]\d+)?)(?![\w-]*[/\\])")
+# a dotted version of three or more parts ("0.2.1") is one token, searched word for word;
+# split at the first dot it would ask the sources for a standalone "0.2"
+NUM = re.compile(r"(?<![\w./:#-])(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+){2,}|\d+(?:[.,]\d+)?)(?![\w-]*[/\\])")
 ISO = re.compile(r"\b(20\d\d-\d\d-\d\d)\b")
 QUOTE = re.compile(r"“([^“”\n]{20,}?)”|(?<![\w*])\"([^\"\n]{20,}?)\"(?![\w])")
 MDLINK = re.compile(r"\[[^\]]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")

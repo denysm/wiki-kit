@@ -8,4 +8,6 @@ inbox/
 *.local.md
 # compiled from pdf2txt.swift
 scripts/pdf2txt
+!catalog/raw/
+!catalog/wiki/topics/
 catalog/inbox/

@@ -2,7 +2,7 @@
 """Install the kit's personal rules for all projects into ~/.claude/CLAUDE.md.
 Dry run unless --apply: prints what it would change.
 
-  global_rules.py [--template FILE] [--target FILE] [--apply]
+  global_rules.py [--template FILE] [--target FILE] [--external DIR] [--apply]
 
 --template defaults to templates/global-CLAUDE.md of this kit, --target to
 ~/.claude/CLAUDE.md (Claude Code reads it in every project on this computer).
@@ -14,12 +14,17 @@ Dry run unless --apply: prints what it would change.
   text differs from the template, and the target's own sections are never touched.
   Before the change the target is copied to <target>.bak-YYYYmmdd-HHMMSS.
 
+In the template, `{KIT}` becomes this kit's folder and `{EXTERNAL}` the folder of
+read-only third-party clones: --external DIR, else $WIKI_KIT_EXTERNAL, else
+~/Projects/external; a path under the home folder is written with `~`.
+
 Safe to run again: a target that has every heading is not written. Prints one line.
 Exit 0 done (or nothing to do), 2 the template is missing or unreadable.
 """
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
 import sys
 import time
@@ -46,6 +51,14 @@ def sections(text: str) -> tuple[str, list[tuple[str, str]]]:
     return "".join(head), [(h, "".join(b).rstrip("\n") + "\n") for h, b in out]
 
 
+def tilde(p: Path) -> str:
+    p = p.expanduser().resolve()
+    try:
+        return "~/" + p.relative_to(Path.home()).as_posix()
+    except ValueError:
+        return p.as_posix()
+
+
 def key(heading: str) -> str:
     return " ".join(heading.split()).casefold()
 
@@ -54,14 +67,17 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--template", type=Path, default=KIT / "templates" / "global-CLAUDE.md")
     ap.add_argument("--target", type=Path, default=Path.home() / ".claude" / "CLAUDE.md")
+    ap.add_argument("--external", type=Path, help="folder of read-only third-party clones ($EXTERNAL in catalog cards)")
     ap.add_argument("--apply", action="store_true")
     a = ap.parse_args()
+    external = a.external or Path(os.environ.get("WIKI_KIT_EXTERNAL") or "~/Projects/external")
 
     try:
         tpl = a.template.read_text(encoding="utf-8")
     except OSError as e:
         print(f"global rules: cannot read the template {a.template}: {e.strerror}", file=sys.stderr)
         return 2
+    tpl = tpl.replace("{KIT}", tilde(KIT)).replace("{EXTERNAL}", tilde(external))
     _, tpl_sections = sections(tpl)
     target = a.target.expanduser()
     verb = "" if a.apply else "would be "
