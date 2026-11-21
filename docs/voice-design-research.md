@@ -1,6 +1,6 @@
 # Voice subsystem — brainstorm inputs and research (2026-11-21)
 
-Status: **research done, design not written yet.** This file carries the findings of one planning session so the design can continue on another machine without re-doing the research. The next step is `docs/voice-design.md` (brainstorm → design → phased plan). Nothing here is installed or adopted yet; tools named below that are not `in use` in `catalog/` need a catalog card and a sandbox trial first.
+Status: **research done; design written in [voice-design.md](voice-design.md) (2026-11-21).** This file carries the findings of one planning session so the design can continue on another machine without re-doing the research. The next step is `docs/voice-design.md` (brainstorm → design → phased plan). Nothing here is installed or adopted yet; tools named below that are not `in use` in `catalog/` need a catalog card and a sandbox trial first.
 
 ## Goal (owner's words, condensed)
 
@@ -22,6 +22,22 @@ Status: **research done, design not written yet.** This file carries the finding
 - Reference machine (work Mac): Apple M4 Pro 24 GB, macOS 27.2, whisper.cpp 1.9.5 (`whisper-cli`, `whisper-stream`, `whisper-server`, `parakeet-cli`) with `ggml-large-v3-turbo`, ffmpeg 9, llama.cpp, Ollama with `gemma4:12b` and `embeddinggemma-2`, Swift 6.4. No Tailscale, no virtual audio device. A wireless DECT headset is used for calls.
 - Windows VDI: 16-core CPU, no GPU, huggingface.co blocked, GitHub and PyPI reachable, installs restricted.
 - Monthly paid-model budget is small: local processing by default, paid calls only on demand.
+- Claude runs on subscriptions only (`claude -p`, Claude Code), on both Macs; there is no Anthropic API key. A "Haiku per hour" figure below is therefore spent from a subscription quota, not billed per token; the work Mac's quota is nearly used up.
+
+### Home Mac (development machine), checked 2026-11-21
+
+| | Home Mac | Work Mac (reference) | What it changes |
+|---|---|---|---|
+| Machine | Mac mini, Apple M4: 10 CPU cores (4 performance, 6 efficiency), 10-core GPU | Apple M4 Pro | Speed measured at home is a lower bound for the work Mac. |
+| Memory | 16 GB | 24 GB | `gemma4:12b` (7.7 GB on disk) plus a speech model plus a second one may not fit at once: measure memory, run one heavy model at a time at home. |
+| macOS | 27.2.1 (26B131) | 27.2 | Permission prompts may differ; check on both. |
+| Swift | 6.4.2, Command Line Tools, no Xcode | 6.4 | Same build path (`swiftc`). |
+| Python | 3.15.2 (Homebrew); numpy not in the system interpreter; `uv` present | not recorded | numpy-dependent scripts run through `uv run --with numpy` or a venv. |
+| whisper.cpp | not installed, no model files | 1.9.5 + `ggml-large-v3-turbo` | The Homebrew `whisper.cpp` 1.9.5 bottle depends on `ggml`, `llama.cpp` and `sdl2-compat`, so one install gives the same set of programs (including `whisper-stream`). |
+| ffmpeg, Ollama | ffmpeg 9.0.2; Ollama 0.40.13 with `gemma4:12b`, `embeddinggemma-2` | same models | none |
+| Audio input | **none**: a Mac mini has no built-in microphone and no headset was connected (outputs only: HDMI display, USB DAC, built-in speakers); no virtual audio device | DECT headset | A headset or USB microphone is needed for any live test at home. |
+| Call apps | FaceTime, Telegram, WhatsApp, browsers; no Teams, Zoom or Webex app | Teams, Zoom, Webex | Home tests tap "all output except the helper", or the browser's audio process; per-app taps of the three call apps are checked on the work Mac only. |
+| Network | Tailscale installed | no Tailscale | none for this design |
 
 ## Catalog check (2026-11-21)
 
@@ -106,8 +122,9 @@ Each phase ends with a short check list for the work Mac (pull, permissions, a r
 - Recognition accuracy on the owner's speech (test above).
 - Which app macOS credits for the tap permission when the tool starts from VS Code; whether an `open`-launched `.app` prompts cleanly on 27.2.
 - Maturity and licence of Nemotron ports; whether FluidAudio / Argmax builds need Xcode.
-- Employer policy on recording and AI tools.
-- Home Mac hardware (Apple Silicon assumed).
+- ~~Employer policy on recording and AI tools~~: answered 2026-11-21, the owner has the employer's approval for recording and AI notes (see `voice-design.md`, decision 1).
+- Xcode: installed on both Macs on 2026-11-21 (Xcode 27.2 at home), so an Xcode-only build is no longer a blocker for the owner; it still is for friends without Xcode.
+- ~~Home Mac hardware~~: answered 2026-11-21, see "Home Mac" under Constraints.
 
 ## Sources (selection, dates as read 2026-11-21)
 
