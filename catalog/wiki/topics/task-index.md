@@ -309,6 +309,8 @@ Area page: [Converting documents and recordings](area-converting-documents-and-r
 | Run the same model in less disk space, with a quantized file | [ggml-org/whisper.cpp: `large-v3-turbo-q5_0`](../references/ggml-org-whisper-cpp.md) | candidate |  |
 | Skip silence to speed up a long transcription | [ggml-org/whisper.cpp: `whisper-vad-speech-segments`](../references/ggml-org-whisper-cpp.md) | candidate |  |
 | Serve transcription to other programs over HTTP on this machine | [ggml-org/whisper.cpp: `whisper-server`](../references/ggml-org-whisper-cpp.md) | candidate |  |
+| Turn live speech from a microphone into text on this machine as it is spoken | [ggml-org/whisper.cpp: `whisper-stream`](../references/ggml-org-whisper-cpp.md) | candidate |  |
+| Recognise spoken commands from a microphone on this machine | [ggml-org/whisper.cpp: `whisper-command`](../references/ggml-org-whisper-cpp.md) | listed |  |
 | Turn a slide deck whose slides are mostly pictures into a PDF that can be read page by page | [LibreOffice/core: `soffice --headless --convert-to pdf`](../references/libreoffice-libreoffice.md) | in use |  |
 | Convert an office file to HTML or plain text without opening a window | [LibreOffice/core: `soffice --headless --convert-to <other targets>`](../references/libreoffice-libreoffice.md) | candidate |  |
 | Dump the text of a text document to the console | [LibreOffice/core: `soffice --cat`](../references/libreoffice-libreoffice.md) | candidate |  |

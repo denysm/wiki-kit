@@ -43,7 +43,9 @@ Neighbouring areas: [Knowledge bases](area-knowledge-bases.md), [Writing documen
 | [ggml-org/whisper.cpp](../references/ggml-org-whisper-cpp.md) | `large-v3-turbo-q5_0` | candidate |
 | [ggml-org/whisper.cpp](../references/ggml-org-whisper-cpp.md) | `large-v3-turbo` | in use |
 | [ggml-org/whisper.cpp](../references/ggml-org-whisper-cpp.md) | `whisper-cli` | in use |
+| [ggml-org/whisper.cpp](../references/ggml-org-whisper-cpp.md) | `whisper-command` | listed |
 | [ggml-org/whisper.cpp](../references/ggml-org-whisper-cpp.md) | `whisper-server` | candidate |
+| [ggml-org/whisper.cpp](../references/ggml-org-whisper-cpp.md) | `whisper-stream` | candidate |
 | [ggml-org/whisper.cpp](../references/ggml-org-whisper-cpp.md) | `whisper-vad-speech-segments` | candidate |
 | [LibreOffice/core](../references/libreoffice-libreoffice.md) | `soffice --cat` | candidate |
 | [LibreOffice/core](../references/libreoffice-libreoffice.md) | `soffice --headless --convert-to <other targets>` | candidate |
