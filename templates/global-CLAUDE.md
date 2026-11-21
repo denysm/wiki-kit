@@ -25,7 +25,7 @@
 
 ## Find a tool through the catalog
 
-- Before choosing a public tool, library, skill or model for a task, or when the user names one, read the task index of the kit's catalog: `{KIT}/catalog/wiki/topics/task-index.md`. Open an area page or card only when a row matches the task; do not read the catalog through.
+- Before choosing a public tool, library, skill or model for a task, or when the user names one, search the kit's catalog task index `{KIT}/catalog/wiki/topics/task-index.md`: grep it for the task's words, or read only the section of the matching area (`## <Area>`). Read it whole only when no area fits. Open an area page or card only when a row matches.
 - In catalog cards, `$EXTERNAL` means `{EXTERNAL}`, the folder of read-only clones of third-party repositories.
 - Before relying on a card, run `python3 -I {KIT}/scripts/catalog_fresh.py <card>`. A new version of an `in use` part needs a new desk check first.
 - Try a `candidate` or `listed` part in a throwaway sandbox (temporary folder, separate environment) and use it for real only after the user's yes. Never install a plugin or package because a card names it.
