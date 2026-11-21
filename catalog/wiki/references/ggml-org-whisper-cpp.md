@@ -33,6 +33,8 @@ summary: "C/C++ port of the Whisper speech-to-text model with command-line tools
 | Run the same model in less disk space, with a quantized file | `large-v3-turbo-q5_0` | converting-documents-and-recordings |
 | Skip silence to speed up a long transcription | `whisper-vad-speech-segments` | converting-documents-and-recordings |
 | Serve transcription to other programs over HTTP on this machine | `whisper-server` | converting-documents-and-recordings |
+| Turn live speech from a microphone into text on this machine as it is spoken | `whisper-stream` | converting-documents-and-recordings |
+| Recognise spoken commands from a microphone on this machine | `whisper-command` | converting-documents-and-recordings |
 
 ## Run it here
 
@@ -62,7 +64,8 @@ Parts are the command-line programs and the model sizes. Defined by `examples/*/
 | `whisper-bench` | Times the encoder on random audio for one device. | candidate | A binary and a model file | Try it to compare two machines or two models. |
 | `whisper-vad-speech-segments` | Splits audio into speech segments with a VAD model (Silero-VAD). | candidate | A binary, the VAD model download | Try it on a long recording with long silences. |
 | `parakeet-cli`, `parakeet-quantize` | A second speech model (Parakeet) in the same repository, with a quantizer. | listed | A binary and a converted model | Read when Whisper's wording is not enough. |
-| `whisper-command`, `whisper-talk-llama`, `whisper-lsp` | Voice commands, a talk-with-a-language-model demo, a language server. | listed | A binary, SDL2 for the first two | Read when a voice interface is wanted. |
+| `whisper-command` | Voice commands. | listed | A binary, SDL2 | Read when a voice interface is wanted. |
+| `whisper-talk-llama`, `whisper-lsp` | A talk-with-a-language-model demo, a language server. | listed | A binary, SDL2 for the first | Read when a voice interface is wanted. |
 | `bindings` | `go`, `java`, `javascript` and `ruby` folders. | listed | Their own toolchains | Read when a program in those languages must call it. |
 
 ## Tried
