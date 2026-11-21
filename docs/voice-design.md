@@ -28,6 +28,7 @@ The owner wants every call they take to turn into live text they can follow, in 
 - Anything running that the other participants were not told about.
 - Subtitles that flicker or rewrite themselves so they cannot be read; an earpiece voice more than about 4 s behind.
 - The helper's own voice (translation, answers) appearing in the "them" track.
+- Faces identified, or notifications and other windows captured with the call.
 - The subtitle window visible to others when the owner shares their screen.
 - Spending the work Mac's subscription quota without the owner pressing a key for it.
 - Work data in the kit, on the home Mac, or in the home wiki.
@@ -49,7 +50,8 @@ The owner wants every call they take to turn into live text they can follow, in 
 4. **Tone and emotion analysis** is wanted for the owner's personal use; the owner works outside the EU, uses the output there, and takes international calls.
 5. **The fastest, most optimal variant**: the owner handed over the how ("пусть будет самый шустрый и оптимальный вариант").
 6. **Languages** (2026-11-21): first Russian with English terms, English and French; then Russian, Ukrainian, Kazakh, Flemish (Belgian Dutch), Dutch, Spanish and German; others may follow.
-7. **Home test calls** run in Zoom and Teams (free versions installed at home), with Bluetooth headphones on the home Mac as the "me" microphone and the owner's iPhone with a wired headset as the second participant.
+7. **Screen** (2026-11-21): capture the call window only (Teams, Zoom, Webex), not the whole screen. Without recording consent, keep only frames taken when the picture changes (slides, demos, tiles with names), in memory, and turn them into text and descriptions. With recording consent, also write the full video to a file in the owner's recordings folder. Frames are analysed locally (on-device text recognition, a local vision model); Claude only on its own key, with the frames the owner picks.
+8. **Home test calls** run in Zoom and Teams (free versions installed at home), with Bluetooth headphones on the home Mac as the "me" microphone and the owner's iPhone with a wired headset as the second participant.
 
 ## Approaches considered
 
@@ -81,6 +83,8 @@ after the call (same app, from RAM): precise pass ─► speaker separation ─�
 
 **1. Capture.** A Core Audio process tap on the call apps (Teams, Zoom, Webex, by bundle id), or on all output except Kit Voice itself, plus the microphone, in one private aggregate device, so both tracks share a clock and arrive in one callback. Each track is converted in-process to 16 kHz mono and appended to a ring buffer in RAM (about 230 MB per hour for two 16-bit tracks), locked against paging where the memory-lock limit allows. Kit Voice speaks through its own process, so a tap that excludes it never hears its own voice. It asks for two permissions: microphone and system audio recording (`NSAudioCaptureUsageDescription`; without it the tap returns silence and no error). It is signed with one stable identity so the permissions survive rebuilds.
 
+**1b. Screen.** A ScreenCaptureKit stream of the call app's windows, with Kit Voice's own windows left out; the Screen Recording permission. A frame is kept when the picture changes enough (as `meeting2md.py --frames` does with ffmpeg's scene score), compressed, with its time, in memory next to the audio. With recording consent, the same stream is also written to a video file. Nobody's face is identified: names come only from the text labels on the tiles.
+
 **2. Recognition, live.** Per track: voice detection cuts speech from silence; a streaming recogniser produces a dim tail that may still change and committed words that never change. Committing follows the engine's own streaming output, or agreement between consecutive hypotheses for engines that have none. Languages are set per track per session (default: "me" Russian, "them" English, `auto` allowed). A per-session glossary of names and terms is fed to engines that accept one.
 
 **3. Speaker separation.** "Me" and "them" come from the tracks, with no model. Inside "them", speakers are separated after the call, from RAM. Names come from the platform transcript or participant list by time, the way `meeting2md.py` already maps Teams turns, or are typed by the owner. No voiceprints are enrolled or stored.
@@ -94,6 +98,15 @@ after the call (same app, from RAM): precise pass ─► speaker separation ─�
 - **Window:** a borderless, always-on-top panel over the call that does not take focus. It shows "me" and "them" lines in two colours, the uncommitted tail dimmed and the translation under each line. Size, opacity and position are adjustable, and clicks can pass through it. It is excluded from screen capture, which is checked on real screen shares.
 - **Earpiece:** speech from Kit Voice's own synthesiser to a chosen output device (default: the system output, normally the headset). Voices are taken per language from the installed system voices.
 - **Mode switch** (hotkey and menu): text, text and voice, voice, off.
+
+**5b. What was on the screen (after the call).** From the frames in memory:
+- slide and screen text through Apple's on-device text recognition (Vision), which reads Russian, Ukrainian, English, French, German, Spanish and Dutch, not Kazakh (checked 2026-11-21);
+- one entry per distinct slide;
+- participant names read from tile labels, to help name the speakers;
+- a short description of each slide or demo by the local `gemma4:12b`, which accepts images (checked 2026-11-21);
+- Claude, only on its key, for the frames the owner picks.
+
+The result goes into the Markdown as a "What was on the screen" section with times. The frame images are kept next to the transcript only with recording consent; otherwise only their text and descriptions are kept.
 
 **6. Session log.**
 - **Text log:** JSONL per session, with time, track, speaker, language, text, committed flag, translation, engine and latency. It lives outside the wiki and the kit, in the app's support folder, and is deleted after 30 days by default.
@@ -111,7 +124,8 @@ Nothing is captured until the gate passes, every session; no answer is remembere
 | Notice given (in the invitation or aloud) | Required. Suggested words: "I use a local tool for notes and analysis of our conversation; tell me if you object." |
 | Nobody objected; recording not disabled by the organiser | Required. |
 | Someone may be in Germany, Switzerland, France or a US all-party state | Then an explicit "yes" from everyone is required. |
-| Everyone agreed to recording | Optional; only then may the audio be saved to a file. |
+| Everyone agreed to recording | Optional; only then may the audio and the call-window video be saved to files. |
+| Screen frames of the call window | On with the notice; frames stay in memory and become text; off for a call where screens show others' private data. |
 | Tone analysis | Optional; offered only when the owner enabled it in the local config. |
 
 While capturing, the menu-bar icon shows a red dot. **Pause** stops capture. **Stop and purge** wipes this session's buffer and log at once, for when someone objects mid-call. The audit log gets the gate answers.
@@ -166,11 +180,11 @@ Each phase ends with a "Work Mac check" section added below, committed and pushe
 | Phase | Builds | Done when |
 |---|---|---|
 | 0 | Claude Code `/voice` dictation + a Stop hook that speaks the answer (kit script, toggle off by default) | On both Macs: a prompt dictated in Russian is understood; the answer's first paragraph is spoken in the right language's voice within about 1 s of the answer ending; code blocks are not read; the toggle works; no tokens added. |
-| 1 | Kit Voice: gate, two-track capture to RAM, stop, precise pass from RAM, Markdown with Me/Them; save only with recording consent | A 10-minute test call gives Me/Them right on at least 95 % of segments with a headset; no audio file appears on disk (checked); permissions are asked once and survive a rebuild; the gate blocks capture until it passes; stop-and-purge leaves nothing. |
+| 1 | Kit Voice: gate, two-track capture to RAM, frames of the call window to RAM, stop, precise pass from RAM, Markdown with Me/Them; audio and video files only with recording consent | A 10-minute test call gives Me/Them right on at least 95 % of segments with a headset; no audio file appears on disk (checked); permissions are asked once and survive a rebuild; the gate blocks capture until it passes; stop-and-purge leaves nothing. |
 | 2 | Live recognition per track, the window, the session log | On the work Mac: median time to first text at most 1.5 s; committed words never change; a 60-minute session runs without drift or memory growth beyond the buffer; the call stays smooth; the window does not show in a screen share. |
 | 3 | Live translation, earpiece speech with the mode switch, back-translation on a key | Translation shows at most 1 s after a committed sentence; earpiece lag at most 4 s; Kit Voice's own speech absent from the "them" track (checked on a recording); the switch works mid-call. |
 | 4 | Answers on a key (wiki + local model), Claude on its own key | Local answer on screen within 5 s; Claude used only on its key, with its cost line in the log; the excerpt sent stays within the set limit. |
-| 5 | After the call: speaker separation, naming, speech metrics, opt-in tone analysis, Markdown into the wiki | Speaker turns right on a test call (error measured and recorded); names right on at least 90 % of turns when a platform transcript exists; the source passes the wiki's raw checks. |
+| 5 | After the call: speaker separation, naming (also from tile labels), speech metrics, opt-in tone analysis, slide text and descriptions from the frames, Markdown into the wiki | Speaker turns right on a test call (error measured and recorded); names right on at least 90 % of turns when a platform transcript exists; the source passes the wiki's raw checks. |
 | 6 | iPhone/Watch voice memos through a watched folder; the VDI from the endpoint; in-person meetings (one microphone, separation after the event) | One real case of each, recorded de-identified. |
 
 The engine measurements (owner's step 5) run alongside phase 1, so that phase 2 starts with a chosen live engine.
