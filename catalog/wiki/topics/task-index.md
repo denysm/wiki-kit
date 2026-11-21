@@ -6,6 +6,8 @@ sources:
   - raw/data/k-dense-ai-scientific-agent-skills-parts-2.72.0.md
   - raw/data/neolabhq-context-engineering-kit-parts-3.10.0.md
   - raw/notes/2026-11-21-measurements-local-embeddings.md
+  - raw/notes/trials/2026-11-21-apple-speech-synthesis-voices-and-speed.md
+  - raw/notes/trials/2026-11-21-apple-translation-languages-and-speed.md
   - raw/notes/trials/2026-11-21-bge-m3-q8-0-llama-server-index.md
   - raw/notes/trials/2026-11-21-codegraph-per-repo-mcp.md
   - raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md
@@ -25,6 +27,8 @@ sources:
   - raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md
   - raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md
   - raw/repos/agemagician-prottrans-desk-check-2026-11-21.md
+  - raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md
+  - raw/repos/apple-translation-desk-check-2026-11-21.md
   - raw/repos/baai-bge-m3-desk-check-2026-11-21.md
   - raw/repos/blader-humanizer-desk-check-2026-11-21.md
   - raw/repos/colbymchenry-codegraph-desk-check-2026-11-21.md
@@ -33,6 +37,7 @@ sources:
   - raw/repos/facebookresearch-faiss-desk-check-2026-11-21.md
   - raw/repos/ffmpeg-ffmpeg-desk-check-2026-11-21.md
   - raw/repos/fission-ai-openspec-desk-check-2026-11-21.md
+  - raw/repos/fluidinference-fluidaudio-desk-check-2026-11-21.md
   - raw/repos/ggml-org-llama-cpp-desk-check-2026-11-21.md
   - raw/repos/ggml-org-whisper-cpp-desk-check-2026-11-21.md
   - raw/repos/github-spec-kit-desk-check-2026-11-21.md
@@ -40,14 +45,19 @@ sources:
   - raw/repos/google-deepmind-code-verification-desk-check-2026-11-21.md
   - raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md
   - raw/repos/google-embeddinggemma-2-desk-check-2026-11-21.md
+  - raw/repos/insidegui-audiocap-desk-check-2026-11-21.md
   - raw/repos/k-dense-ai-scientific-agent-skills-desk-check-2026-11-21.md
   - raw/repos/karpathy-llm-wiki-gist-desk-check-2026-11-21.md
   - raw/repos/libreoffice-libreoffice-desk-check-2026-11-21.md
+  - raw/repos/makeusabrew-audiotee-desk-check-2026-11-21.md
   - raw/repos/microsoft-markitdown-desk-check-2026-11-21.md
   - raw/repos/nashsu-llm-wiki-desk-check-2026-11-21.md
   - raw/repos/neolabhq-context-engineering-kit-desk-check-2026-11-21.md
   - raw/repos/numpy-numpy-desk-check-2026-11-21.md
   - raw/repos/nvidia-bionemo-bionemo-recipes-desk-check-2026-11-21.md
+  - raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md
+  - raw/repos/nvidia-nemotron-3-5-asr-streaming-0-6b-desk-check-2026-11-21.md
+  - raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md
   - raw/repos/nvk-llm-wiki-desk-check-2026-11-21.md
   - raw/repos/obra-superpowers-desk-check-2026-11-21.md
   - raw/repos/ollama-ollama-desk-check-2026-11-21.md
@@ -57,6 +67,7 @@ sources:
   - raw/repos/qwen-qwen3-embedding-4b-desk-check-2026-11-21.md
   - raw/repos/rosettacommons-rfdiffusion-desk-check-2026-11-21.md
   - raw/repos/scanny-python-pptx-desk-check-2026-11-21.md
+  - raw/repos/snakers4-silero-vad-desk-check-2026-11-21.md
   - raw/repos/sokrypton-colabfold-desk-check-2026-11-21.md
   - raw/repos/tobi-qmd-desk-check-2026-11-21.md
   - raw/repos/ygavrilov-claude-code-kit-desk-check-2026-11-21.md
@@ -303,6 +314,8 @@ Area page: [Converting documents and recordings](area-converting-documents-and-r
 | Save a picture each time the screen in a recording changes, with the time of each | [FFmpeg/FFmpeg: `select`](../references/ffmpeg-ffmpeg.md) | in use |  |
 | Read the times of the frames a filter passed | [FFmpeg/FFmpeg: `showinfo`](../references/ffmpeg-ffmpeg.md) | in use |  |
 | Check the format, streams and length of a recording before converting it | [FFmpeg/FFmpeg: `ffprobe`](../references/ffmpeg-ffmpeg.md) | candidate |  |
+| Transcribe a finished call inside a Swift app, on the Neural Engine, in 25 European languages | [FluidInference/FluidAudio: Parakeet Ultra](../references/fluidinference-fluidaudio.md) | candidate |  |
+| Separate speakers after a call | [FluidInference/FluidAudio: Pyannote CoreML Pipeline](../references/fluidinference-fluidaudio.md) | candidate |  |
 | Turn a recorded call into a timestamped transcript on this machine, with no audio leaving it | [ggml-org/whisper.cpp: `whisper-cli`](../references/ggml-org-whisper-cpp.md) | in use |  |
 | Get names and terms right in a transcript by giving the model a list of them | [ggml-org/whisper.cpp: `whisper-cli`](../references/ggml-org-whisper-cpp.md) | in use |  |
 | Transcribe Russian speech with English technical terms | [ggml-org/whisper.cpp: `large-v3-turbo`](../references/ggml-org-whisper-cpp.md) | in use |  |
@@ -322,6 +335,11 @@ Area page: [Converting documents and recordings](area-converting-documents-and-r
 | Read text out of images inside PDF or Office files with a vision model (data leaves the machine) | [microsoft/markitdown: `markitdown-ocr`](../references/microsoft-markitdown.md) | candidate |  |
 | Add a converter for a format it lacks | [microsoft/markitdown: plugin mechanism](../references/microsoft-markitdown.md) | candidate |  |
 | turn PDFs, Office files and e-books into wiki pages | [nashsu/llm_wiki: document parsing](../references/nashsu-llm-wiki.md) | rejected | for work data, its own API keys send data past the organisation's model account |
+| Compare speech models on your own recordings without PyTorch | [NVIDIA/NeMo-Speech.cpp: `transcribe`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
+| Transcribe a recorded call in Russian, Ukrainian, English, French, German, Spanish or Dutch on this machine, as a second opinion to Whisper | [nvidia/parakeet-tdt-0.6b-v3: `q8_0.gguf`](../references/nvidia-parakeet-tdt-0-6b-v3.md) | candidate |  |
+| Get word timestamps to line text up with speaker turns | [nvidia/parakeet-tdt-0.6b-v3: `q8_0.gguf`](../references/nvidia-parakeet-tdt-0-6b-v3.md) | candidate |  |
+| Transcribe with the model already installed with whisper.cpp | [nvidia/parakeet-tdt-0.6b-v3: `ggml-parakeet-tdt-0.6b-v3-f16.bin`](../references/nvidia-parakeet-tdt-0-6b-v3.md) | candidate |  |
+| Kazakh speech. It is not among the 25 languages | [nvidia/parakeet-tdt-0.6b-v3: `q8_0.gguf`](../references/nvidia-parakeet-tdt-0-6b-v3.md) | candidate | see the card's rejected row |
 | Turn a PDF with a text layer into Markdown, one section per page | [py-pdf/pypdf: `pypdf.PdfReader`](../references/py-pdf-pypdf.md) | in use |  |
 | Get a page's text as a string, plain or laid out like the page | [py-pdf/pypdf: `pypdf.PageObject.extract_text`](../references/py-pdf-pypdf.md) | in use |  |
 | Split, merge, crop or encrypt PDFs in code | [py-pdf/pypdf: `pypdf.PdfWriter`](../references/py-pdf-pypdf.md) | candidate |  |
@@ -389,6 +407,45 @@ Area page: [Verifying code](area-verifying-code.md).
 | Prove that a compiled Rust or C function meets a contract at the arm64 assembly level, with an agent writing the proof | [google-deepmind/code-verification: `arm64-semantics`](../references/google-deepmind-code-verification.md) | candidate |  |
 | Pin the exact binary a proof is about and rebuild it reproducibly | [google-deepmind/code-verification: Pinned binary scripts](../references/google-deepmind-code-verification.md) | reference |  |
 | Read the statements of a large verification without building it | [google-deepmind/code-verification: Reviewers' site, `docs/PAPER_MAP.md`](../references/google-deepmind-code-verification.md) | reference |  |
+
+## Live speech and calls
+
+Area page: [Live speech and calls](area-live-speech-and-calls.md).
+
+| Task | Go to | Status | Not this, because |
+|------|-------|--------|-------------------|
+| Speak a translated sentence into a headset during a call, in the listener's language | [Apple speech synthesis (say, AVSpeechSynthesizer): `AVSpeechSynthesizer`](../references/apple-speech-synthesis.md) | candidate |  |
+| Read an assistant's answer aloud from a script or a hook | [Apple speech synthesis (say, AVSpeechSynthesizer): `say`](../references/apple-speech-synthesis.md) | tried |  |
+| Send speech to the headset only, not the speakers (`--audio-device`) | [Apple speech synthesis (say, AVSpeechSynthesizer): `say`](../references/apple-speech-synthesis.md) | tried |  |
+| Speak Kazakh, Flemish or Ukrainian when other engines have no voice for them | [Apple speech synthesis (say, AVSpeechSynthesizer): installed voices](../references/apple-speech-synthesis.md) | tried |  |
+| Translate a call's committed sentences into the listener's language within half a second, on the device | [Apple Translation: `TranslationSession(installedSource:target:)`](../references/apple-translation.md) | tried |  |
+| Translate the listener's own sentence into the call language to read or hear it back | [Apple Translation: `TranslationSession(installedSource:target:)`](../references/apple-translation.md) | tried |  |
+| Check which language pairs a Mac can translate before a call | [Apple Translation: `LanguageAvailability`](../references/apple-translation.md) | tried |  |
+| Kazakh. The pair status is `unsupported` | [Apple Translation: `LanguageAvailability`](../references/apple-translation.md) | tried | see the card's rejected row |
+| Show live text for an English, French, German or Spanish speaker in a Swift app | [FluidInference/FluidAudio: Nemotron Speech Streaming Multilingual 0.6B](../references/fluidinference-fluidaudio.md) | candidate |  |
+| Tell up to 4 speakers apart while a call runs | [FluidInference/FluidAudio: Sortformer](../references/fluidinference-fluidaudio.md) | candidate |  |
+| Cut speech from silence before recognition | [FluidInference/FluidAudio: Silero VAD](../references/fluidinference-fluidaudio.md) | candidate |  |
+| Remove loudspeaker echo from the microphone when no headset is used | [FluidInference/FluidAudio: LocalVQE](../references/fluidinference-fluidaudio.md) | candidate |  |
+| Speak text in Russian, Ukrainian, Dutch, French, German or Spanish from a Swift app | [FluidInference/FluidAudio: Supertonic-3](../references/fluidinference-fluidaudio.md) | candidate |  |
+| Read the code of open-source apps that already capture both sides of a Mac call | [FluidInference/FluidAudio: Showcase apps](../references/fluidinference-fluidaudio.md) | reference |  |
+| Capture a call app's sound on a Mac without a virtual audio driver | [insidegui/AudioCap: `ProcessTap`](../references/insidegui-audiocap.md) | reference |  |
+| Know which Info.plist key and which steps a capture app needs | [insidegui/AudioCap: README "API Description"](../references/insidegui-audiocap.md) | reference |  |
+| check the system-audio permission through public API. There is none; AudioCap uses private TCC calls behind a flag | [insidegui/AudioCap: `AudioRecordingPermission`](../references/insidegui-audiocap.md) | rejected | see the card's rejected row |
+| Capture all output audio except some processes (for example your own app's voice) | [makeusabrew/audiotee: `--exclude-processes`](../references/makeusabrew-audiotee.md) | reference |  |
+| Pipe system audio at 16 kHz into another program | [makeusabrew/audiotee: `--sample-rate`](../references/makeusabrew-audiotee.md) | reference |  |
+| reuse its code in the kit. No licence | [makeusabrew/audiotee: `AudioTapManager`](../references/makeusabrew-audiotee.md) | reference | see the card's rejected row |
+| Recognise speech as it is spoken inside a native app, pushing audio from your own capture and reading partial and final text | [NVIDIA/NeMo-Speech.cpp: `NeMoSpeech::ASR` streaming API](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
+| Transcribe the microphone live from a terminal on this machine | [NVIDIA/NeMo-Speech.cpp: `transcribe --live`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
+| Tell up to eight speakers apart in a call, as it runs or afterwards | [NVIDIA/NeMo-Speech.cpp: `diarize`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
+| Translate text locally between English and Russian, Ukrainian, French, German or Dutch | [NVIDIA/NeMo-Speech.cpp: `translate`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
+| Speak text aloud locally in English, French, German or Spanish | [NVIDIA/NeMo-Speech.cpp: `synthesize`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
+| Serve live transcription to other local programs over a WebSocket | [NVIDIA/NeMo-Speech.cpp: `serve`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
+| Show what a call participant says within about a second, in Russian, Ukrainian, English, French, German, Spanish or Dutch, on this machine | [nvidia/nemotron-3.5-asr-streaming-0.6b: `q8_0.gguf`](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | candidate |  |
+| Transcribe a call where the language changes, with a language tag per utterance | [nvidia/nemotron-3.5-asr-streaming-0.6b: `q8_0.gguf`](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | candidate |  |
+| Kazakh speech. It is in none of the card's language tiers | [nvidia/nemotron-3.5-asr-streaming-0.6b: `q8_0.gguf`](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | candidate | see the card's rejected row |
+| Transcribe on the Neural Engine from a Swift app, with a more accurate post-trained variant | [nvidia/parakeet-tdt-0.6b-v3: Parakeet Ultra (FluidAudio)](../references/nvidia-parakeet-tdt-0-6b-v3.md) | candidate |  |
+| Cut live call audio into speech segments before recognition, so the recogniser skips silence | [snakers4/silero-vad: the copy inside the recogniser](../references/snakers4-silero-vad.md) | candidate |  |
+| Detect speech in a native app with ONNX Runtime and no Python | [snakers4/silero-vad: `silero_vad.onnx`](../references/snakers4-silero-vad.md) | candidate |  |
 
 ## Science
 
@@ -528,6 +585,7 @@ Area page: [Science](area-science.md).
 - [[area-writing-documents-and-articles|Writing documents and articles]] ([Writing documents and articles](area-writing-documents-and-articles.md))
 - [[area-building-interfaces-for-agents|Building interfaces for agents]] ([Building interfaces for agents](area-building-interfaces-for-agents.md))
 - [[area-verifying-code|Verifying code]] ([Verifying code](area-verifying-code.md))
+- [[area-live-speech-and-calls|Live speech and calls]] ([Live speech and calls](area-live-speech-and-calls.md))
 - [[area-science|Science]] ([Science](area-science.md))
 
 ## Sources
@@ -536,6 +594,8 @@ Area page: [Science](area-science.md).
 - [raw/data/k-dense-ai-scientific-agent-skills-parts-2.72.0.md](../../raw/data/k-dense-ai-scientific-agent-skills-parts-2.72.0.md)
 - [raw/data/neolabhq-context-engineering-kit-parts-3.10.0.md](../../raw/data/neolabhq-context-engineering-kit-parts-3.10.0.md)
 - [raw/notes/2026-11-21-measurements-local-embeddings.md](../../raw/notes/2026-11-21-measurements-local-embeddings.md)
+- [raw/notes/trials/2026-11-21-apple-speech-synthesis-voices-and-speed.md](../../raw/notes/trials/2026-11-21-apple-speech-synthesis-voices-and-speed.md)
+- [raw/notes/trials/2026-11-21-apple-translation-languages-and-speed.md](../../raw/notes/trials/2026-11-21-apple-translation-languages-and-speed.md)
 - [raw/notes/trials/2026-11-21-bge-m3-q8-0-llama-server-index.md](../../raw/notes/trials/2026-11-21-bge-m3-q8-0-llama-server-index.md)
 - [raw/notes/trials/2026-11-21-codegraph-per-repo-mcp.md](../../raw/notes/trials/2026-11-21-codegraph-per-repo-mcp.md)
 - [raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md](../../raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md)
@@ -555,6 +615,8 @@ Area page: [Science](area-science.md).
 - [raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md](../../raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md)
 - [raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md](../../raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md)
 - [raw/repos/agemagician-prottrans-desk-check-2026-11-21.md](../../raw/repos/agemagician-prottrans-desk-check-2026-11-21.md)
+- [raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md](../../raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md)
+- [raw/repos/apple-translation-desk-check-2026-11-21.md](../../raw/repos/apple-translation-desk-check-2026-11-21.md)
 - [raw/repos/baai-bge-m3-desk-check-2026-11-21.md](../../raw/repos/baai-bge-m3-desk-check-2026-11-21.md)
 - [raw/repos/blader-humanizer-desk-check-2026-11-21.md](../../raw/repos/blader-humanizer-desk-check-2026-11-21.md)
 - [raw/repos/colbymchenry-codegraph-desk-check-2026-11-21.md](../../raw/repos/colbymchenry-codegraph-desk-check-2026-11-21.md)
@@ -563,6 +625,7 @@ Area page: [Science](area-science.md).
 - [raw/repos/facebookresearch-faiss-desk-check-2026-11-21.md](../../raw/repos/facebookresearch-faiss-desk-check-2026-11-21.md)
 - [raw/repos/ffmpeg-ffmpeg-desk-check-2026-11-21.md](../../raw/repos/ffmpeg-ffmpeg-desk-check-2026-11-21.md)
 - [raw/repos/fission-ai-openspec-desk-check-2026-11-21.md](../../raw/repos/fission-ai-openspec-desk-check-2026-11-21.md)
+- [raw/repos/fluidinference-fluidaudio-desk-check-2026-11-21.md](../../raw/repos/fluidinference-fluidaudio-desk-check-2026-11-21.md)
 - [raw/repos/ggml-org-llama-cpp-desk-check-2026-11-21.md](../../raw/repos/ggml-org-llama-cpp-desk-check-2026-11-21.md)
 - [raw/repos/ggml-org-whisper-cpp-desk-check-2026-11-21.md](../../raw/repos/ggml-org-whisper-cpp-desk-check-2026-11-21.md)
 - [raw/repos/github-spec-kit-desk-check-2026-11-21.md](../../raw/repos/github-spec-kit-desk-check-2026-11-21.md)
@@ -570,14 +633,19 @@ Area page: [Science](area-science.md).
 - [raw/repos/google-deepmind-code-verification-desk-check-2026-11-21.md](../../raw/repos/google-deepmind-code-verification-desk-check-2026-11-21.md)
 - [raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md](../../raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md)
 - [raw/repos/google-embeddinggemma-2-desk-check-2026-11-21.md](../../raw/repos/google-embeddinggemma-2-desk-check-2026-11-21.md)
+- [raw/repos/insidegui-audiocap-desk-check-2026-11-21.md](../../raw/repos/insidegui-audiocap-desk-check-2026-11-21.md)
 - [raw/repos/k-dense-ai-scientific-agent-skills-desk-check-2026-11-21.md](../../raw/repos/k-dense-ai-scientific-agent-skills-desk-check-2026-11-21.md)
 - [raw/repos/karpathy-llm-wiki-gist-desk-check-2026-11-21.md](../../raw/repos/karpathy-llm-wiki-gist-desk-check-2026-11-21.md)
 - [raw/repos/libreoffice-libreoffice-desk-check-2026-11-21.md](../../raw/repos/libreoffice-libreoffice-desk-check-2026-11-21.md)
+- [raw/repos/makeusabrew-audiotee-desk-check-2026-11-21.md](../../raw/repos/makeusabrew-audiotee-desk-check-2026-11-21.md)
 - [raw/repos/microsoft-markitdown-desk-check-2026-11-21.md](../../raw/repos/microsoft-markitdown-desk-check-2026-11-21.md)
 - [raw/repos/nashsu-llm-wiki-desk-check-2026-11-21.md](../../raw/repos/nashsu-llm-wiki-desk-check-2026-11-21.md)
 - [raw/repos/neolabhq-context-engineering-kit-desk-check-2026-11-21.md](../../raw/repos/neolabhq-context-engineering-kit-desk-check-2026-11-21.md)
 - [raw/repos/numpy-numpy-desk-check-2026-11-21.md](../../raw/repos/numpy-numpy-desk-check-2026-11-21.md)
 - [raw/repos/nvidia-bionemo-bionemo-recipes-desk-check-2026-11-21.md](../../raw/repos/nvidia-bionemo-bionemo-recipes-desk-check-2026-11-21.md)
+- [raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md](../../raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md)
+- [raw/repos/nvidia-nemotron-3-5-asr-streaming-0-6b-desk-check-2026-11-21.md](../../raw/repos/nvidia-nemotron-3-5-asr-streaming-0-6b-desk-check-2026-11-21.md)
+- [raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md](../../raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md)
 - [raw/repos/nvk-llm-wiki-desk-check-2026-11-21.md](../../raw/repos/nvk-llm-wiki-desk-check-2026-11-21.md)
 - [raw/repos/obra-superpowers-desk-check-2026-11-21.md](../../raw/repos/obra-superpowers-desk-check-2026-11-21.md)
 - [raw/repos/ollama-ollama-desk-check-2026-11-21.md](../../raw/repos/ollama-ollama-desk-check-2026-11-21.md)
@@ -587,6 +655,7 @@ Area page: [Science](area-science.md).
 - [raw/repos/qwen-qwen3-embedding-4b-desk-check-2026-11-21.md](../../raw/repos/qwen-qwen3-embedding-4b-desk-check-2026-11-21.md)
 - [raw/repos/rosettacommons-rfdiffusion-desk-check-2026-11-21.md](../../raw/repos/rosettacommons-rfdiffusion-desk-check-2026-11-21.md)
 - [raw/repos/scanny-python-pptx-desk-check-2026-11-21.md](../../raw/repos/scanny-python-pptx-desk-check-2026-11-21.md)
+- [raw/repos/snakers4-silero-vad-desk-check-2026-11-21.md](../../raw/repos/snakers4-silero-vad-desk-check-2026-11-21.md)
 - [raw/repos/sokrypton-colabfold-desk-check-2026-11-21.md](../../raw/repos/sokrypton-colabfold-desk-check-2026-11-21.md)
 - [raw/repos/tobi-qmd-desk-check-2026-11-21.md](../../raw/repos/tobi-qmd-desk-check-2026-11-21.md)
 - [raw/repos/ygavrilov-claude-code-kit-desk-check-2026-11-21.md](../../raw/repos/ygavrilov-claude-code-kit-desk-check-2026-11-21.md)
