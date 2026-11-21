@@ -36,7 +36,8 @@ def pptx_md(p: Path) -> str:
                 texts.append("\n".join(f"| {r} |" for r in rows))
         notes = ""
         if slide.has_notes_slide:
-            notes = slide.notes_slide.notes_text_frame.text.strip()
+            frame = slide.notes_slide.notes_text_frame  # None when the notes slide has no notes placeholder
+            notes = frame.text.strip() if frame is not None else ""
         out.append(f"## Slide {i}\n\n" + ("\n\n".join(texts) or "*(no text)*"))
         if notes:
             out.append(f"**Speaker notes:**\n\n{notes}")
