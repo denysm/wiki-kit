@@ -55,14 +55,14 @@ Status: **research done; design written in [voice-design.md](voice-design.md) (2
 | iPhone | Take calls on the Mac; in person — Voice Memos (iPhone/Watch) saved to a synced folder the Mac watches | Built-in call recording is not available in the EU; apps cannot capture other apps' calls; a Safari web app loses the mic in background. A native iOS app needs Xcode. |
 | Android | Pixel Recorder export only | Low priority. |
 
-Reusable products: MacWhisper (proprietary; system audio, real-time, watch folder, Markdown) as a stopgap; anarlog (ex-Hyprnote, MIT) as the best open-source base; Meetily (MIT core). None puts me/others on separate channels.
+Reusable products: MacWhisper (proprietary; system audio, real-time, watch folder, Markdown) as a stopgap; anarlog (ex-Hyprnote, MIT) as the best open-source base; Meetily (MIT core). None puts me/others on separate channels. **Update 2026-11-21 (evening):** FluidAudio's showcase lists open-source Mac apps close to this design, not read yet: Meeting Transcriber (`pasrom/meeting-transcriber`, menu bar, Teams/Zoom/Webex, dual-track diarization), Subtitles (`daformat/subtitles`, process tap, always-on-top live captions, Nemotron streaming, Silero VAD, Sortformer), Muesli (`pHequals7/muesli`, microphone + system audio).
 
 ### Speech recognition and diarization
 
 | Use | Recommendation | Why / caveat |
 |---|---|---|
 | Mac live, now | `whisper-stream` + turbo, `--step 700-1000`, `--vad`, `-kc`, one stream per channel | Already installed; first text ~1–2 s (estimate), flickering tail. |
-| Mac live, target | NVIDIA Nemotron 3.5 ASR Streaming 0.6B | Only streaming model found covering ru/uk/en/de/fr with punctuation; FLEURS WER en 7.91, de 8.31, fr 9.03, ru 9.17, uk 13.07 at 1.12 s chunks. Non-torch ports (ONNX, CoreML, OpenVINO) of unknown maturity; licence conflict between ports. |
+| Mac live, target | NVIDIA Nemotron 3.5 ASR Streaming 0.6B | Only streaming model found covering ru/uk/en/de/fr with punctuation; FLEURS WER en 7.91, de 8.31, fr 9.03, ru 9.17, uk 13.07 at 1.12 s chunks. **Update 2026-11-21 (evening):** NVIDIA's own native runtime NeMo-Speech.cpp (Apache-2.0, v0.3.0, ggml with Metal, stable C streaming SDK) runs the official `q8_0.gguf`; model licence OpenMDW-1.1. FluidAudio's CoreML conversion of it covers en/es/fr/it/pt/de/zh/ja only. Catalog cards: `nvidia-nemo-speech-cpp`, `nvidia-nemotron-3-5-asr-streaming-0-6b`. |
 | Rejected | Apple SpeechTranscriber (no ru/uk), Voxtral Realtime (no uk, GPU), Kyutai STT (en/fr) | |
 | Mac after the call | `whisper-cli` turbo; second opinion `parakeet-cli` (Parakeet TDT v3, 25 EU languages) | Accurate pass replaces the live draft. |
 | Diarization (others channel) | pyannote community-1 via FluidAudio / Argmax SpeakerKit (Swift) or sherpa-onnx | sherpa-onnx models are on GitHub releases (works where HF is blocked) and run on Windows CPU. Live options (Sortformer v2, LS-EEND) lack meeting DER evidence. |
@@ -121,7 +121,7 @@ Each phase ends with a short check list for the work Mac (pull, permissions, a r
 
 - Recognition accuracy on the owner's speech (test above).
 - Which app macOS credits for the tap permission when the tool starts from VS Code; whether an `open`-launched `.app` prompts cleanly on 27.2.
-- Maturity and licence of Nemotron ports; whether FluidAudio / Argmax builds need Xcode.
+- ~~Maturity and licence of Nemotron ports~~: answered 2026-11-21, NeMo-Speech.cpp (official, Apache-2.0) runs the GGUF; the model is OpenMDW-1.1. Whether FluidAudio builds with the Command Line Tools alone is still open (Xcode is installed on both Macs, so it does not block the owner).
 - ~~Employer policy on recording and AI tools~~: answered 2026-11-21, the owner has the employer's approval for recording and AI notes (see `voice-design.md`, decision 1).
 - Xcode: installed on both Macs on 2026-11-21 (Xcode 27.2 at home), so an Xcode-only build is no longer a blocker for the owner; it still is for friends without Xcode.
 - ~~Home Mac hardware~~: answered 2026-11-21, see "Home Mac" under Constraints.

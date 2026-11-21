@@ -48,7 +48,8 @@ The owner wants every call they take to turn into live text they can follow, in 
 3. **Back-translation goes to the owner only**: as text on screen, and on a key press as speech in the owner's earpiece. Nothing machine-voiced goes into the call.
 4. **Tone and emotion analysis** is wanted for the owner's personal use; the owner works outside the EU, uses the output there, and takes international calls.
 5. **The fastest, most optimal variant**: the owner handed over the how ("пусть будет самый шустрый и оптимальный вариант").
-6. **Home test calls** run in Zoom and Teams (free versions installed at home), with Bluetooth headphones on the home Mac as the "me" microphone and the owner's iPhone with a wired headset as the second participant.
+6. **Languages** (2026-11-21): first Russian with English terms, English and French; then Russian, Ukrainian, Kazakh, Flemish (Belgian Dutch), Dutch, Spanish and German; others may follow.
+7. **Home test calls** run in Zoom and Teams (free versions installed at home), with Bluetooth headphones on the home Mac as the "me" microphone and the owner's iPhone with a wired headset as the second participant.
 
 ## Approaches considered
 
@@ -131,6 +132,21 @@ The live default and the precise default are both picked by measurement, not by 
 3. **Defaults.** The result table goes into the catalog as trial records, and the defaults are set per track, language and live or precise.
 
 Until then the default is whisper.cpp `large-v3-turbo`, the one engine `in use`.
+
+Coverage of the owner's languages by the candidate engines, from the catalog's desk checks and trials (2026-11-21). "Whisper" is the language list of the Whisper models, not tested here.
+
+| Language | Whisper turbo | Nemotron 3.5 streaming | Parakeet v3 | Apple Translation | System voice |
+|---|---|---|---|---|---|
+| Russian | yes | yes | yes | yes | Milena |
+| English | yes | yes | yes | yes | Samantha, Daniel |
+| French | yes | yes | yes | yes | Thomas, Jacques |
+| Ukrainian | yes | yes | yes | yes | Lesya |
+| Kazakh | yes | **no** | **no** | **no** | Aru |
+| Flemish / Dutch | yes | nl-NL | nl | nl, nl-BE | Ellen (nl-BE), Xander |
+| Spanish | yes | yes | yes | yes | Mónica |
+| German | yes | yes | yes | yes | Anna |
+
+So a Kazakh session uses Whisper for recognition and the local `gemma4:12b` for translation; every other language can use the faster engines. The primary candidate for the live recogniser is NeMo-Speech.cpp's C streaming SDK with Nemotron 3.5, linked into Kit Voice; FluidAudio (Neural Engine) is the challenger, and its VAD, diarization and echo cancellation are candidates for the same app.
 
 ## Device matrix
 
