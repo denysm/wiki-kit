@@ -5,6 +5,7 @@ sources:
   - raw/notes/trials/2026-11-21-ffmpeg-audio-and-scene-frames-for-transcripts.md
   - raw/notes/trials/2026-11-21-libreoffice-deck-to-pdf-headless.md
   - raw/notes/trials/2026-11-21-markitdown-quick-office-and-pdf-to-markdown.md
+  - raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md
   - raw/notes/trials/2026-11-21-pypdf-page-text-to-markdown.md
   - raw/notes/trials/2026-11-21-python-docx-body-text-to-markdown.md
   - raw/notes/trials/2026-11-21-python-pptx-slide-text-to-markdown.md
@@ -62,9 +63,9 @@ Neighbouring areas: [Knowledge bases](area-knowledge-bases.md), [Writing documen
 | [microsoft/markitdown](../references/microsoft-markitdown.md) | `markitdown` command | in use |
 | [microsoft/markitdown](../references/microsoft-markitdown.md) | plugin mechanism | candidate |
 | [nashsu/llm_wiki](../references/nashsu-llm-wiki.md) | document parsing | rejected |
-| [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `transcribe` | candidate |
-| [nvidia/parakeet-tdt-0.6b-v3](../references/nvidia-parakeet-tdt-0-6b-v3.md) | `ggml-parakeet-tdt-0.6b-v3-f16.bin` | candidate |
-| [nvidia/parakeet-tdt-0.6b-v3](../references/nvidia-parakeet-tdt-0-6b-v3.md) | `q8_0.gguf` | candidate |
+| [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `transcribe` | tried |
+| [nvidia/parakeet-tdt-0.6b-v3](../references/nvidia-parakeet-tdt-0-6b-v3.md) | `ggml-parakeet-tdt-0.6b-v3-f16.bin` | rejected |
+| [nvidia/parakeet-tdt-0.6b-v3](../references/nvidia-parakeet-tdt-0-6b-v3.md) | `q8_0.gguf` | tried |
 | [py-pdf/pypdf](../references/py-pdf-pypdf.md) | `page.images` | candidate |
 | [py-pdf/pypdf](../references/py-pdf-pypdf.md) | `pypdf.PageObject.extract_text` | in use |
 | [py-pdf/pypdf](../references/py-pdf-pypdf.md) | `pypdf.PdfReader` | in use |
@@ -99,6 +100,7 @@ Neighbouring areas: [Knowledge bases](area-knowledge-bases.md), [Writing documen
 - [raw/notes/trials/2026-11-21-ffmpeg-audio-and-scene-frames-for-transcripts.md](../../raw/notes/trials/2026-11-21-ffmpeg-audio-and-scene-frames-for-transcripts.md)
 - [raw/notes/trials/2026-11-21-libreoffice-deck-to-pdf-headless.md](../../raw/notes/trials/2026-11-21-libreoffice-deck-to-pdf-headless.md)
 - [raw/notes/trials/2026-11-21-markitdown-quick-office-and-pdf-to-markdown.md](../../raw/notes/trials/2026-11-21-markitdown-quick-office-and-pdf-to-markdown.md)
+- [raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md)
 - [raw/notes/trials/2026-11-21-pypdf-page-text-to-markdown.md](../../raw/notes/trials/2026-11-21-pypdf-page-text-to-markdown.md)
 - [raw/notes/trials/2026-11-21-python-docx-body-text-to-markdown.md](../../raw/notes/trials/2026-11-21-python-docx-body-text-to-markdown.md)
 - [raw/notes/trials/2026-11-21-python-pptx-slide-text-to-markdown.md](../../raw/notes/trials/2026-11-21-python-pptx-slide-text-to-markdown.md)

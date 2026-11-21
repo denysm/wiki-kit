@@ -8,6 +8,7 @@ version: "1.9.5"
 licence: MIT
 desk_checked: 2026-11-21
 sources:
+  - raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md
   - raw/repos/ggml-org-whisper-cpp-desk-check-2026-11-21.md
   - raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md
 created: 2026-11-21
@@ -63,7 +64,8 @@ Parts are the command-line programs and the model sizes. Defined by `examples/*/
 | `whisper-quantize` | Integer quantization of `ggml` model files. | candidate | A binary and a model file | Try it when a model has no ready quantized file. |
 | `whisper-bench` | Times the encoder on random audio for one device. | candidate | A binary and a model file | Try it to compare two machines or two models. |
 | `whisper-vad-speech-segments` | Splits audio into speech segments with a VAD model (Silero-VAD). | candidate | A binary, the VAD model download | Try it on a long recording with long silences. |
-| `parakeet-cli`, `parakeet-quantize` | A second speech model (Parakeet) in the same repository, with a quantizer. | listed | A binary and a converted model | Read when Whisper's wording is not enough. |
+| `parakeet-cli` | Runs the Parakeet model in the same repository. | rejected | A binary and a converted model | Revisit on a release after `1.9.5`. Rejected: the Homebrew `1.9.5` build aborted on the converted Parakeet v3 model in a trial; NeMo-Speech.cpp runs Parakeet instead. |
+| `parakeet-quantize` | Quantizer for Parakeet model files. | listed | A binary and a model file | Read when a Parakeet file must be quantized. |
 | `whisper-command` | Voice commands. | listed | A binary, SDL2 | Read when a voice interface is wanted. |
 | `whisper-talk-llama`, `whisper-lsp` | A talk-with-a-language-model demo, a language server. | listed | A binary, SDL2 for the first | Read when a voice interface is wanted. |
 | `bindings` | `go`, `java`, `javascript` and `ruby` folders. | listed | Their own toolchains | Read when a program in those languages must call it. |
@@ -74,10 +76,12 @@ Parts are the command-line programs and the model sizes. Defined by `examples/*/
 |------|----------------|------|--------|------|--------|
 | not stated | Transcribe recorded calls locally | `whisper-cli` | In use at `1.9.5`: 58 minutes of audio took about 2.5 minutes on an Apple M4 Pro (Metal), model `large-v3-turbo`. | No tokens; model file about 1.6 GB | [use record](../../raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md) |
 | not stated | Transcribe Russian speech with English terms | `large-v3-turbo` | In use; wording, names and numbers right "far more often" than the platform transcript. | Same run | [use record](../../raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md) |
+| 2026-11-21 | Smoke test on synthetic Russian speech, 51.4 s | `whisper-cli` | `large-v3-turbo` on an Apple M4 16 GB: real-time factor 0.098, peak memory 1899 MB; kept English terms in Latin script more often than the NVIDIA models. | No cost | [trial record](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md) |
+| 2026-11-21 | Same test | `parakeet-cli` | Aborted (exit 134) in `ggml_view_3d`. | No cost | [trial record](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md) |
 
 ## Verdict
 
-whisper.cpp is the kit's speech-to-text: `whisper-cli` with one multilingual model, run locally, so a recording never leaves the machine. Two parts are in use and the rest are read from the docs, not run. Version in use and version read are both `1.9.5`. Revisit when a newer release ships, when a release changes the JSON output, or when a quantized model is tried on a real recording.
+whisper.cpp is the kit's speech-to-text: `whisper-cli` with one multilingual model, run locally, so a recording never leaves the machine. Two parts are in use; `parakeet-cli` was run once and rejected (it aborted); the rest are read from the docs, not run. Version in use and version read are both `1.9.5`. Revisit when a newer release ships, when a release changes the JSON output, or when a quantized model is tried on a real recording.
 
 ## See Also
 
@@ -90,3 +94,4 @@ whisper.cpp is the kit's speech-to-text: `whisper-cli` with one multilingual mod
 
 - [Desk check: ggml-org/whisper.cpp v1.9.5](../../raw/repos/ggml-org-whisper-cpp-desk-check-2026-11-21.md): programs, models, options and outbound calls read from the clone; freshness through the GitHub API.
 - [Use record: whisper-cli for local meeting transcription](../../raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md): how the kit's script calls it and the measured speed.
+- [Trial: speech engines, smoke test on synthetic Russian speech](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md): runs on an Apple M4, speeds, a pipeline check only.
