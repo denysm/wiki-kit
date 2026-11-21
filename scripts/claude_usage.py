@@ -11,6 +11,9 @@ the previous total in ~/.cache/wiki-kit/usage_last.json to compute the per-answe
 The monthly budget in USD comes from --budget, else the WIKI_KIT_MONTHLY_BUDGET
 environment variable, else `monthly_budget` in ~/.config/wiki-kit/usage.json
 (`{"monthly_budget": 500}`); with none of them, or 0, the budget line is hidden.
+`billing_factor` in the same file (default 1.0) scales list-price spend to what the account
+is billed: the budget line and the tips use list-price spend times the factor; per-session
+and per-call costs stay at list prices. Calibrate it as portal spend / list-price spend.
 
 The brief report also counts Claude Science, which shares the budget: it reads
 ~/.claude-science/orgs/*/operon-cli.db read-only (table frames; cost = total_cost +
@@ -84,6 +87,16 @@ def default_budget():
     except (OSError, ValueError, TypeError, AttributeError) as e:
         print(f"warning: {USAGE_CONFIG} not read ({e})", file=sys.stderr)
         return 0.0
+
+
+def billing_factor():
+    """Billed spend / list-price spend from usage.json `billing_factor`; 1.0 when unset or invalid."""
+    try:
+        with open(USAGE_CONFIG, encoding="utf-8") as fh:
+            f = float(json.load(fh).get("billing_factor") or 1.0)
+        return f if 0 < f <= 2 else 1.0
+    except (OSError, ValueError, TypeError, AttributeError):
+        return 1.0
 
 
 def science_steps(pattern=SCIENCE_DBS):
@@ -294,22 +307,24 @@ def brief(calls, results, events, project, session, root, budget):
             sci_models[m] += cost
         print(f"Claude Science: today ${sci_day:.2f}; month ${sci_month:.2f} ({len(sci)} steps; "
               + ", ".join(f"{k} ${v:.2f}" for k, v in sci_models.most_common(3)) + "; its own cost records)")
+    fac = billing_factor()
+    billed = month_all * fac
     if budget:
-        left = budget - month_all
-        print(f"Budget ${budget:.0f}/month: spent ${month_all:.2f} ({100*month_all/budget:.1f}%) in {today[:7]} "
-              f"(Claude Code ${month_cc:.2f} all projects + Claude Science ${sci_month:.2f}), "
-              f"left ${left:.2f} ({100*left/budget:.1f}%); this machine, list prices")
+        left = budget - billed
+        print(f"Budget ${budget:.0f}/month: spent ≈ ${billed:.2f} ({100*billed/budget:.1f}%) in {today[:7]} "
+              f"(list prices ${month_all:.2f} × billing factor {fac:g}; Claude Code ${month_cc:.2f} all projects "
+              f"+ Claude Science ${sci_month:.2f}), left ≈ ${left:.2f} ({100*left/budget:.1f}%); this machine")
     print("Models: " + ", ".join(f"{k} ${v:.2f}" for k, v in by_model.most_common(3))
           + f"; context now {ctx[-1]//1000 if ctx else 0}k tokens")
     tips = []
-    if budget and month_all >= 0.8 * budget:
-        tips.append(f"Monthly budget {100*month_all/budget:.0f}% spent: only essential work, via scripts and Sonnet/Haiku agents.")
-    elif budget and month_all:
+    if budget and billed >= 0.8 * budget:
+        tips.append(f"Monthly budget {100*billed/budget:.0f}% spent: only essential work, via scripts and Sonnet/Haiku agents.")
+    elif budget and billed:
         dom = int(today[8:10])
-        rate = month_all / dom  # today counts as a full day, so early in the day this runs high
+        rate = billed / dom  # today counts as a full day, so early in the day this runs high
         days = calendar.monthrange(int(today[:4]), int(today[5:7]))[1]
         if rate * days > budget:
-            runout = min(days, dom + int((budget - month_all) / rate))
+            runout = min(days, dom + int((budget - billed) / rate))
             tips.append(f"At this month's pace (${rate:.0f}/day) the ${budget:.0f} budget runs out around {today[:8]}{runout:02d}.")
     if ctx and ctx[-1] > 150_000:
         tips.append(f"Context is {ctx[-1]//1000}k (>150k): note the state in README.md and start a new session.")
