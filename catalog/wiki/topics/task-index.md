@@ -26,6 +26,7 @@ sources:
   - raw/notes/trials/2026-11-21-qwen3-embedding-4b-q8-0-llama-server-index.md
   - raw/notes/trials/2026-11-21-superpowers-brainstorming-catalog-design.md
   - raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md
+  - raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md
   - raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md
   - raw/repos/agemagician-prottrans-desk-check-2026-11-21.md
   - raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md
@@ -615,6 +616,7 @@ Area page: [Science](area-science.md).
 - [raw/notes/trials/2026-11-21-qwen3-embedding-4b-q8-0-llama-server-index.md](../../raw/notes/trials/2026-11-21-qwen3-embedding-4b-q8-0-llama-server-index.md)
 - [raw/notes/trials/2026-11-21-superpowers-brainstorming-catalog-design.md](../../raw/notes/trials/2026-11-21-superpowers-brainstorming-catalog-design.md)
 - [raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md](../../raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md)
+- [raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md](../../raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md)
 - [raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md](../../raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md)
 - [raw/repos/agemagician-prottrans-desk-check-2026-11-21.md](../../raw/repos/agemagician-prottrans-desk-check-2026-11-21.md)
 - [raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md](../../raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md)

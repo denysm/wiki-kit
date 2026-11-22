@@ -8,11 +8,12 @@ version: "1.9.5"
 licence: MIT
 desk_checked: 2026-11-21
 sources:
+  - raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md
   - raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md
   - raw/repos/ggml-org-whisper-cpp-desk-check-2026-11-21.md
   - raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md
 created: 2026-11-21
-updated: 2026-11-21
+updated: 2026-11-22
 tags: [catalog, card, area-converting-documents-and-recordings, kind-cli, whisper-cpp, speech-to-text, transcription, local]
 confidence: high
 volatility: hot
@@ -77,6 +78,7 @@ Parts are the command-line programs and the model sizes. Defined by `examples/*/
 | not stated | Transcribe recorded calls locally | `whisper-cli` | In use at `1.9.5`: 58 minutes of audio took about 2.5 minutes on an Apple M4 Pro (Metal), model `large-v3-turbo`. | No tokens; model file about 1.6 GB | [use record](../../raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md) |
 | not stated | Transcribe Russian speech with English terms | `large-v3-turbo` | In use; wording, names and numbers right "far more often" than the platform transcript. | Same run | [use record](../../raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md) |
 | 2026-11-21 | Smoke test on synthetic Russian speech, 51.4 s | `whisper-cli` | `large-v3-turbo` on an Apple M4 16 GB: real-time factor 0.098, peak memory 1899 MB; kept English terms in Latin script more often than the NVIDIA models. | No cost | [trial record](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md) |
+| 2026-11-22 | Emulate whisper-stream (pause-cut pieces, greedy, no context) on synthetic Russian speech | `whisper-cli` | 6 pieces covering 51.4 s: WER 26.5 % against 20.7 % for the whole file, Latin-script terms 31.4 % against 51.4 %; an optimistic bound for live whisper. | No cost | [trial record](../../raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md) |
 | 2026-11-21 | Same test | `parakeet-cli` | Aborted (exit 134) in `ggml_view_3d`. | No cost | [trial record](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md) |
 
 ## Verdict
@@ -95,3 +97,4 @@ whisper.cpp is the kit's speech-to-text: `whisper-cli` with one multilingual mod
 - [Desk check: ggml-org/whisper.cpp v1.9.5](../../raw/repos/ggml-org-whisper-cpp-desk-check-2026-11-21.md): programs, models, options and outbound calls read from the clone; freshness through the GitHub API.
 - [Use record: whisper-cli for local meeting transcription](../../raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md): how the kit's script calls it and the measured speed.
 - [Trial: speech engines, smoke test on synthetic Russian speech](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md): runs on an Apple M4, speeds, a pipeline check only.
+- [Trial: whisper-cli on pause-cut pieces, emulating whisper-stream](../../raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md): 6 pieces of synthetic Russian speech, WER 26.5 % against 20.7 % whole-file.

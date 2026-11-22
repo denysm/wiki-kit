@@ -10,6 +10,7 @@ sources:
   - raw/notes/trials/2026-11-21-python-docx-body-text-to-markdown.md
   - raw/notes/trials/2026-11-21-python-pptx-slide-text-to-markdown.md
   - raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md
+  - raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md
   - raw/repos/ffmpeg-ffmpeg-desk-check-2026-11-21.md
   - raw/repos/fluidinference-fluidaudio-desk-check-2026-11-21.md
   - raw/repos/ggml-org-whisper-cpp-desk-check-2026-11-21.md
@@ -22,7 +23,7 @@ sources:
   - raw/repos/python-openxml-python-docx-desk-check-2026-11-21.md
   - raw/repos/scanny-python-pptx-desk-check-2026-11-21.md
 created: 2026-11-21
-updated: 2026-11-21
+updated: 2026-11-22
 tags: [catalog, area, area-converting-documents-and-recordings]
 confidence: medium
 volatility: hot
@@ -105,6 +106,7 @@ Neighbouring areas: [Knowledge bases](area-knowledge-bases.md), [Writing documen
 - [raw/notes/trials/2026-11-21-python-docx-body-text-to-markdown.md](../../raw/notes/trials/2026-11-21-python-docx-body-text-to-markdown.md)
 - [raw/notes/trials/2026-11-21-python-pptx-slide-text-to-markdown.md](../../raw/notes/trials/2026-11-21-python-pptx-slide-text-to-markdown.md)
 - [raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md](../../raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md)
+- [raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md](../../raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md)
 - [raw/repos/ffmpeg-ffmpeg-desk-check-2026-11-21.md](../../raw/repos/ffmpeg-ffmpeg-desk-check-2026-11-21.md)
 - [raw/repos/fluidinference-fluidaudio-desk-check-2026-11-21.md](../../raw/repos/fluidinference-fluidaudio-desk-check-2026-11-21.md)
 - [raw/repos/ggml-org-whisper-cpp-desk-check-2026-11-21.md](../../raw/repos/ggml-org-whisper-cpp-desk-check-2026-11-21.md)
