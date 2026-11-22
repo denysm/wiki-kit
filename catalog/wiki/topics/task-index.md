@@ -73,7 +73,7 @@ sources:
   - raw/repos/tobi-qmd-desk-check-2026-11-21.md
   - raw/repos/ygavrilov-claude-code-kit-desk-check-2026-11-21.md
 created: 2026-11-21
-updated: 2026-11-21
+updated: 2026-11-22
 tags: [catalog, area, task-index]
 confidence: medium
 volatility: hot
@@ -152,7 +152,7 @@ Area page: [Writing code with agents](area-writing-code-with-agents.md).
 | Check that a plan leaves no design choice to the implementer | [google/elephant-goldfish-model: `implementation_readiness`](../references/google-elephant-goldfish-model.md) | candidate |  |
 | Document an existing code tree folder by folder | [google/elephant-goldfish-model: `egm-bootstrap`](../references/google-elephant-goldfish-model.md) | candidate |  |
 | Find where code has drifted from its design documents | [google/elephant-goldfish-model: `egm-drift-report`](../references/google-elephant-goldfish-model.md) | candidate |  |
-| Make a small change or bug fix with a checklist and a fresh diff review | [google/elephant-goldfish-model: `egm-lite`](../references/google-elephant-goldfish-model.md) | candidate |  |
+| Make a small change or bug fix with a checklist and a fresh diff review | [google/elephant-goldfish-model: `egm-lite`](../references/google-elephant-goldfish-model.md) | in use |  |
 | Find the root cause of a bug or a repeating problem by asking why until a process cause appears | [NeoLabHQ/context-engineering-kit: `why` (method in the kit's own words)](../references/neolabhq-context-engineering-kit.md) | method taken |  |
 | Run an improvement as measured plan, do, check, act cycles | [NeoLabHQ/context-engineering-kit: `plan-do-check-act` (method in the kit's own words)](../references/neolabhq-context-engineering-kit.md) | method taken |  |
 | Write a problem up on one page, from background to follow-up (A3) | [NeoLabHQ/context-engineering-kit: `analyse-problem` (method in the kit's own words)](../references/neolabhq-context-engineering-kit.md) | method taken |  |

@@ -11,12 +11,12 @@ sources:
   - raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md
   - raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md
 created: 2026-11-21
-updated: 2026-11-21
+updated: 2026-11-22
 tags: [catalog, card, area-designing-something-new, area-writing-code-with-agents, area-writing-documents-and-articles, kind-plugin, claude-code, skills, agents, design-review, specifications]
 confidence: high
 volatility: hot
 verified: 2026-11-21
-summary: "Agent plugin for designing with full context and reviewing with fresh, context-free reviewer subagents: 8 skills (brainstorm, draft, staged review, review loop, resolve, codebase READMEs, drift report, a light loop for small changes), 10 reviewer personas, 5 document standards. No hooks, no telemetry; read from a clone. The comprehension persona is in use, the standard form is in the kit's card standard, the rest wait for a task."
+summary: "Agent plugin for designing with full context and reviewing with fresh, context-free reviewer subagents: 8 skills (brainstorm, draft, staged review, review loop, resolve, codebase READMEs, drift report, a light loop for small changes), 10 reviewer personas, 5 document standards. No hooks, no telemetry; read from a clone. The comprehension persona and egm-lite are in use, the standard form is in the kit's card standard, the rest wait for a task."
 ---
 
 # google/elephant-goldfish-model
@@ -46,7 +46,7 @@ summary: "Agent plugin for designing with full context and reviewing with fresh,
 - **Clone**: `git clone --depth 1 https://github.com/google/elephant-goldfish-model $EXTERNAL/elephant-goldfish-model`, read-only. This card read `main` at commit `70406c4`, 48 commits after the `v0.1.1` release; `egm-lite` exists only on `main`. For the release add `--branch v0.1.1`.
 - **Version**: `0.1.1` (manifest). Before relying on this card: `gh api repos/google/elephant-goldfish-model --jq .pushed_at` and `gh api repos/google/elephant-goldfish-model/releases/latest --jq .tag_name`.
 - **Read**: `skills/<skill>/SKILL.md`, reading `${CLAUDE_PLUGIN_ROOT}` as `$EXTERNAL/elephant-goldfish-model`. For a reviewer, spawn a general-purpose subagent told to read `agents/<persona>.md` first, as the skills allow; tell it to stay read-only and pass only the target, persona and standard paths. One skill runs another by reading its `SKILL.md` in the same thread.
-- **In use**: `comprehension` at `0.1.1` (commit `70406c4`), read from the clone, as a fresh reviewer of a design document and its sample card against the kit's card standard. The catalog design plans the same review for each new card.
+- **In use**: `comprehension` at `0.1.1` (commit `70406c4`), read from the clone, as a fresh reviewer of a design document and its sample card against the kit's card standard. The catalog design plans the same review for each new card. `egm-lite` (unchanged on `main` up to `7d1b721`), read from the clone and followed by hand, with fresh general-purpose subagents as Goldfish reviewers: Section 4 on an existing diff, then Section 5 triage and `exec`.
 - **Switch off**: nothing. `docs/privacy.md` names no telemetry endpoint and no network call was found in skills, personas or resources; the analytics in `site/` belong to the website, not the plugin. `egm-bootstrap` may run a project's formatter, which can reach a package registry.
 - **Do not install**: the plugin (`claude plugin install egm@egm`) in any scope; a real install waits for the user's yes. It has no hooks. To see its read-only adapters work, run one session `claude --plugin-dir <copy>` on a uniquely named copy from a scratch folder.
 
@@ -63,7 +63,7 @@ Parts: 8 skills, 10 personas in `agents/` (Claude adapters in `.claude-plugin/ag
 | `egm-resolve` | Sorts findings into contest (with evidence), escalate, fix, decline; writes `goldfish_review_report.md`; applies approved edits. | candidate | Works; run it in the session that wrote the document. | Try it with the first `egm-review-loop` run. |
 | `egm-bootstrap` | Writes a `README.md` contract (interfaces, invariants, side effects) per folder of a code tree; asks before more than 15 subdirectories; no code edits, no commits. | candidate | Works; needs a shell and write access, subagents for large trees. | Try it on a script repo with undocumented folders, `target_filename` set; re-read first, upstream changed it after the clone. |
 | `egm-drift-report` | Compares each design doc or README in a folder with the code; lists only divergences. | candidate | Works; no subagents. | Try it on design docs whose code has moved on. |
-| `egm-lite` | Small-change loop: critique, checklist, fresh spec review, `exec`, fresh diff review, resolution. Not in `v0.1.1`. | candidate | Works; subagents for the reviews, git for the diff. | Try it on a small refactor or bug fix in a script repo. |
+| `egm-lite` | Small-change loop: critique, checklist, fresh spec review, `exec`, fresh diff review, resolution. Not in `v0.1.1`. | in use | Works; subagents for the reviews, git for the diff. | Without the plugin the reviewers still load the user's own instruction file; write the checklist to the working directory as the Claude guide asks. |
 | `comprehension` | Naive reader: paraphrases what the document proposes, then flags undefined project terms, assumed steps, vague explanations; an unparaphrasable section is a Blocker. | in use | Works as a general-purpose subagent reading the persona; tell it to stay read-only. | Re-check the persona file on a release after `0.1.1`. |
 | `design_critic` | Hostile critic: gaps against the standard, unbacked assumptions, unmitigated risks. | candidate | Works as a general-purpose subagent reading the persona. | Try it with `feature-spec-standard` on a design with cost or scale claims. |
 | `structural` | Heading hierarchy, required sections from the standard, Markdown and link form. | candidate | Same. | Try it with the card standard on a new card, beside `comprehension`. |

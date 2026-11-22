@@ -15,7 +15,7 @@ sources:
   - raw/repos/neolabhq-context-engineering-kit-desk-check-2026-11-21.md
   - raw/repos/obra-superpowers-desk-check-2026-11-21.md
 created: 2026-11-21
-updated: 2026-11-21
+updated: 2026-11-22
 tags: [catalog, area, area-writing-code-with-agents]
 confidence: high
 volatility: hot
@@ -61,7 +61,7 @@ Neighbouring areas: [Designing something new](area-designing-something-new.md), 
 | [github/spec-kit](../references/github-spec-kit.md) | `specify integration` | rejected |
 | [google/elephant-goldfish-model](../references/google-elephant-goldfish-model.md) | `egm-bootstrap` | candidate |
 | [google/elephant-goldfish-model](../references/google-elephant-goldfish-model.md) | `egm-drift-report` | candidate |
-| [google/elephant-goldfish-model](../references/google-elephant-goldfish-model.md) | `egm-lite` | candidate |
+| [google/elephant-goldfish-model](../references/google-elephant-goldfish-model.md) | `egm-lite` | in use |
 | [google/elephant-goldfish-model](../references/google-elephant-goldfish-model.md) | `implementation_readiness` | candidate |
 | [NeoLabHQ/context-engineering-kit](../references/neolabhq-context-engineering-kit.md) | `analyse-problem` | method taken |
 | [NeoLabHQ/context-engineering-kit](../references/neolabhq-context-engineering-kit.md) | `analyse` | candidate |
