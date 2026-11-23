@@ -72,12 +72,13 @@ sources:
   - raw/repos/scanny-python-pptx-desk-check-2026-11-21.md
   - raw/repos/snakers4-silero-vad-desk-check-2026-11-21.md
   - raw/repos/sokrypton-colabfold-desk-check-2026-11-21.md
+  - raw/repos/speech-emotion-models-desk-check-2026-11-23.md
   - raw/repos/tobi-qmd-desk-check-2026-11-21.md
   - raw/repos/ygavrilov-claude-code-kit-desk-check-2026-11-21.md
 created: 2026-11-21
 updated: 2026-11-23
 tags: [catalog, area, task-index]
-confidence: medium
+confidence: low
 volatility: hot
 verified: 2026-11-23
 summary: "Generated entry to the catalog: one table per area, each task in the words an agent arrives with, the part to open, its status, and why a rejected part is not the answer."
@@ -417,6 +418,7 @@ Area page: [Live speech and calls](area-live-speech-and-calls.md).
 
 | Task | Go to | Status | Not this, because |
 |------|-------|--------|-------------------|
+| Track how aroused and how positive a speaker sounds, as numbers from 0 to 1, during a call | [3loi Odyssey 2024 WavLM baselines (SER-Odyssey-Baseline-WavLM): Multi-Attributes](../references/3loi-ser-odyssey-baseline-wavlm.md) | tried |  |
 | Speak a translated sentence into a headset during a call, in the listener's language | [Apple speech synthesis (say, AVSpeechSynthesizer): `AVSpeechSynthesizer`](../references/apple-speech-synthesis.md) | candidate |  |
 | Read an assistant's answer aloud from a script or a hook | [Apple speech synthesis (say, AVSpeechSynthesizer): `say`](../references/apple-speech-synthesis.md) | tried |  |
 | Send speech to the headset only, not the speakers (`--audio-device`) | [Apple speech synthesis (say, AVSpeechSynthesizer): `say`](../references/apple-speech-synthesis.md) | tried |  |
@@ -446,6 +448,7 @@ Area page: [Live speech and calls](area-live-speech-and-calls.md).
 | Transcribe a call where the language changes, with a language tag per utterance | [nvidia/nemotron-3.5-asr-streaming-0.6b: `q8_0.gguf`](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | tried |  |
 | Kazakh speech. It is in none of the card's language tiers | [nvidia/nemotron-3.5-asr-streaming-0.6b: `q8_0.gguf`](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | tried | see the card's rejected row |
 | Transcribe on the Neural Engine from a Swift app, with a more accurate post-trained variant | [nvidia/parakeet-tdt-0.6b-v3: Parakeet Ultra (FluidAudio)](../references/nvidia-parakeet-tdt-0-6b-v3.md) | candidate |  |
+| Transcribe Russian speech, as a bench candidate against Whisper and Parakeet | [salute-developers/GigaAM: GigaAM-v3](../references/salute-developers-gigaam.md) | candidate |  |
 | Cut live call audio into speech segments before recognition, so the recogniser skips silence | [snakers4/silero-vad: the copy inside the recogniser](../references/snakers4-silero-vad.md) | candidate |  |
 | Detect speech in a native app with ONNX Runtime and no Python | [snakers4/silero-vad: `silero_vad.onnx`](../references/snakers4-silero-vad.md) | candidate |  |
 
@@ -662,5 +665,6 @@ Area page: [Science](area-science.md).
 - [raw/repos/scanny-python-pptx-desk-check-2026-11-21.md](../../raw/repos/scanny-python-pptx-desk-check-2026-11-21.md)
 - [raw/repos/snakers4-silero-vad-desk-check-2026-11-21.md](../../raw/repos/snakers4-silero-vad-desk-check-2026-11-21.md)
 - [raw/repos/sokrypton-colabfold-desk-check-2026-11-21.md](../../raw/repos/sokrypton-colabfold-desk-check-2026-11-21.md)
+- [raw/repos/speech-emotion-models-desk-check-2026-11-23.md](../../raw/repos/speech-emotion-models-desk-check-2026-11-23.md)
 - [raw/repos/tobi-qmd-desk-check-2026-11-21.md](../../raw/repos/tobi-qmd-desk-check-2026-11-21.md)
 - [raw/repos/ygavrilov-claude-code-kit-desk-check-2026-11-21.md](../../raw/repos/ygavrilov-claude-code-kit-desk-check-2026-11-21.md)

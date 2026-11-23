@@ -15,10 +15,11 @@ sources:
   - raw/repos/nvidia-nemotron-3-5-asr-streaming-0-6b-desk-check-2026-11-21.md
   - raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md
   - raw/repos/snakers4-silero-vad-desk-check-2026-11-21.md
+  - raw/repos/speech-emotion-models-desk-check-2026-11-23.md
 created: 2026-11-21
 updated: 2026-11-23
 tags: [catalog, area, area-live-speech-and-calls]
-confidence: medium
+confidence: low
 volatility: hot
 verified: 2026-11-23
 summary: "Generated area page: cards and parts that serve live speech and calls tasks, with their status."
@@ -34,6 +35,8 @@ Neighbouring areas: [Converting documents and recordings](area-converting-docume
 
 | Card | Part | Status |
 |------|------|--------|
+| [3loi Odyssey 2024 WavLM baselines (SER-Odyssey-Baseline-WavLM)](../references/3loi-ser-odyssey-baseline-wavlm.md) | Categorical | tried |
+| [3loi Odyssey 2024 WavLM baselines (SER-Odyssey-Baseline-WavLM)](../references/3loi-ser-odyssey-baseline-wavlm.md) | Multi-Attributes | tried |
 | [Apple speech synthesis (say, AVSpeechSynthesizer)](../references/apple-speech-synthesis.md) | `AVSpeechSynthesizer` | candidate |
 | [Apple speech synthesis (say, AVSpeechSynthesizer)](../references/apple-speech-synthesis.md) | `say` | tried |
 | [Apple speech synthesis (say, AVSpeechSynthesizer)](../references/apple-speech-synthesis.md) | installed voices | tried |
@@ -58,6 +61,8 @@ Neighbouring areas: [Converting documents and recordings](area-converting-docume
 | [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `translate` | candidate |
 | [nvidia/nemotron-3.5-asr-streaming-0.6b](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | `q8_0.gguf` | tried |
 | [nvidia/parakeet-tdt-0.6b-v3](../references/nvidia-parakeet-tdt-0-6b-v3.md) | Parakeet Ultra (FluidAudio) | candidate |
+| [salute-developers/GigaAM](../references/salute-developers-gigaam.md) | GigaAM-Emo | tried |
+| [salute-developers/GigaAM](../references/salute-developers-gigaam.md) | GigaAM-v3 | candidate |
 | [snakers4/silero-vad](../references/snakers4-silero-vad.md) | `silero_vad.onnx` | candidate |
 | [snakers4/silero-vad](../references/snakers4-silero-vad.md) | the copy inside the recogniser | candidate |
 
@@ -66,14 +71,17 @@ Neighbouring areas: [Converting documents and recordings](area-converting-docume
 - [[task-index|Task index]] ([Task index](task-index.md))
 - [[area-converting-documents-and-recordings|Converting documents and recordings]] ([Converting documents and recordings](area-converting-documents-and-recordings.md))
 - [[area-building-interfaces-for-agents|Building interfaces for agents]] ([Building interfaces for agents](area-building-interfaces-for-agents.md))
+- [[3loi-ser-odyssey-baseline-wavlm|3loi Odyssey 2024 WavLM baselines (SER-Odyssey-Baseline-WavLM)]] ([3loi Odyssey 2024 WavLM baselines (SER-Odyssey-Baseline-WavLM)](../references/3loi-ser-odyssey-baseline-wavlm.md))
 - [[apple-speech-synthesis|Apple speech synthesis (say, AVSpeechSynthesizer)]] ([Apple speech synthesis (say, AVSpeechSynthesizer)](../references/apple-speech-synthesis.md))
 - [[apple-translation|Apple Translation]] ([Apple Translation](../references/apple-translation.md))
+- [[emotion2vec-emotion2vec-plus-large|emotion2vec/emotion2vec_plus_large]] ([emotion2vec/emotion2vec_plus_large](../references/emotion2vec-emotion2vec-plus-large.md))
 - [[fluidinference-fluidaudio|FluidInference/FluidAudio]] ([FluidInference/FluidAudio](../references/fluidinference-fluidaudio.md))
 - [[insidegui-audiocap|insidegui/AudioCap]] ([insidegui/AudioCap](../references/insidegui-audiocap.md))
 - [[makeusabrew-audiotee|makeusabrew/audiotee]] ([makeusabrew/audiotee](../references/makeusabrew-audiotee.md))
 - [[nvidia-nemo-speech-cpp|NVIDIA/NeMo-Speech.cpp]] ([NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md))
 - [[nvidia-nemotron-3-5-asr-streaming-0-6b|nvidia/nemotron-3.5-asr-streaming-0.6b]] ([nvidia/nemotron-3.5-asr-streaming-0.6b](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md))
 - [[nvidia-parakeet-tdt-0-6b-v3|nvidia/parakeet-tdt-0.6b-v3]] ([nvidia/parakeet-tdt-0.6b-v3](../references/nvidia-parakeet-tdt-0-6b-v3.md))
+- [[salute-developers-gigaam|salute-developers/GigaAM]] ([salute-developers/GigaAM](../references/salute-developers-gigaam.md))
 - [[snakers4-silero-vad|snakers4/silero-vad]] ([snakers4/silero-vad](../references/snakers4-silero-vad.md))
 
 ## Sources
@@ -91,3 +99,4 @@ Neighbouring areas: [Converting documents and recordings](area-converting-docume
 - [raw/repos/nvidia-nemotron-3-5-asr-streaming-0-6b-desk-check-2026-11-21.md](../../raw/repos/nvidia-nemotron-3-5-asr-streaming-0-6b-desk-check-2026-11-21.md)
 - [raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md](../../raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md)
 - [raw/repos/snakers4-silero-vad-desk-check-2026-11-21.md](../../raw/repos/snakers4-silero-vad-desk-check-2026-11-21.md)
+- [raw/repos/speech-emotion-models-desk-check-2026-11-23.md](../../raw/repos/speech-emotion-models-desk-check-2026-11-23.md)
