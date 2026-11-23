@@ -21,6 +21,7 @@ summary: "Two sandbox checks of Apple Translation for live call subtitles, 2026-
 
 ## Speed and quality (planning session, 2026-11-21)
 
+As recorded in `docs/design-research.md` of the owner's private voice repository (the kit's `docs/voice-design-research.md` until 2026-11-23) (the machine is not stated there): `TranslationSession(installedSource:target:)` works from a `swiftc` command-line program with no app bundle; all 20 pairs among ru/uk/en/de/fr were installed; 0.3–0.5 s per sentence, 1.5 s for the first call; one error seen: "ordre du jour" translated as "schedule".
 
 ## Languages on this machine (2026-11-21)
 

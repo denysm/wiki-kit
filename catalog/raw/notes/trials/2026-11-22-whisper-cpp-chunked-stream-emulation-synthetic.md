@@ -16,6 +16,7 @@ summary: "Sandbox smoke test, 2026-11-22, Apple M4 Mac mini 16 GB: the kit bench
 # Trial: whisper-cli on pause-cut pieces (whisper-stream emulation)
 
 - **Task, by kind**: estimating what live recognition with whisper would cost in accuracy, before investing in a streaming recogniser (Nemotron 3.5 through NeMo-Speech.cpp) for live captions of Russian speech with English terms.
+- **Kind of record**: sandbox trial with `scripts/asr_bench.py` of the owner's private voice repository (in the kit until 2026-11-23), engine `whisper-chunks`. Nothing installed beyond the Homebrew `whisper.cpp` package already in use.
 - **Machine**: Apple M4 Mac mini, 16 GB.
 
 ## Setup

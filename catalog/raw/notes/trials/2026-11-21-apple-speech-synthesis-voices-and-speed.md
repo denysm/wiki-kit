@@ -21,6 +21,7 @@ summary: "Sandbox checks of macOS speech output for an earpiece voice, 2026-11-2
 
 ## Speed (planning session, 2026-11-21)
 
+As recorded in `docs/design-research.md` of the owner's private voice repository (the kit's `docs/voice-design-research.md` until 2026-11-23) (the machine is not stated there): "macOS `say` — Milena (ru), Lesya (uk), 0.6–1.0 s per sentence; Enhanced/Premium voices not installed. Personal Voice is denied to an unsigned CLI."
 
 ## Voices on this machine (2026-11-21)
 
