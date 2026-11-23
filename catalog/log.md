@@ -9,3 +9,4 @@
 ## [2026-11-21] ingest | Live speech and calls: new area; 9 desk checks (NeMo-Speech.cpp, Nemotron 3.5 ASR Streaming, Parakeet TDT v3, FluidAudio, Silero VAD, AudioCap, AudioTee, Apple Translation, Apple speech synthesis), 9 cards, 2 trial records; backlinks and directory indexes updated
 
 ## [2026-11-21] ingest | Trial: speech engines smoke test on synthetic Russian speech (NeMo-Speech.cpp Nemotron and Parakeet tried, whisper-cli measured on M4, whisper.cpp parakeet-cli rejected); four cards updated
+
