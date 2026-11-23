@@ -13,7 +13,7 @@ sources:
   - raw/repos/nvk-llm-wiki-desk-check-2026-11-21.md
   - raw/repos/obra-superpowers-desk-check-2026-11-21.md
 created: 2026-11-21
-updated: 2026-11-22
+updated: 2026-11-23
 tags: [catalog, area, area-designing-something-new]
 confidence: high
 volatility: hot
