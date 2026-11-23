@@ -10,3 +10,4 @@
 
 ## [2026-11-21] ingest | Trial: speech engines smoke test on synthetic Russian speech (NeMo-Speech.cpp Nemotron and Parakeet tried, whisper-cli measured on M4, whisper.cpp parakeet-cli rejected); four cards updated
 
+
