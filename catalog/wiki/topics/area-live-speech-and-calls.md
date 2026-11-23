@@ -11,15 +11,16 @@ sources:
   - raw/repos/insidegui-audiocap-desk-check-2026-11-21.md
   - raw/repos/makeusabrew-audiotee-desk-check-2026-11-21.md
   - raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md
+  - raw/repos/nvidia-nemo-speech-cpp-freshness-2026-11-23.md
   - raw/repos/nvidia-nemotron-3-5-asr-streaming-0-6b-desk-check-2026-11-21.md
   - raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md
   - raw/repos/snakers4-silero-vad-desk-check-2026-11-21.md
 created: 2026-11-21
-updated: 2026-11-21
+updated: 2026-11-23
 tags: [catalog, area, area-live-speech-and-calls]
 confidence: medium
 volatility: hot
-verified: 2026-11-21
+verified: 2026-11-23
 summary: "Generated area page: cards and parts that serve live speech and calls tasks, with their status."
 ---
 
@@ -51,7 +52,6 @@ Neighbouring areas: [Converting documents and recordings](area-converting-docume
 | [makeusabrew/audiotee](../references/makeusabrew-audiotee.md) | `--sample-rate` | reference |
 | [makeusabrew/audiotee](../references/makeusabrew-audiotee.md) | `AudioTapManager` | reference |
 | [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `NeMoSpeech::ASR` streaming API | candidate |
-| [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `diarize` | candidate |
 | [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `serve` | candidate |
 | [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `synthesize` | candidate |
 | [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `transcribe --live` | candidate |
@@ -87,6 +87,7 @@ Neighbouring areas: [Converting documents and recordings](area-converting-docume
 - [raw/repos/insidegui-audiocap-desk-check-2026-11-21.md](../../raw/repos/insidegui-audiocap-desk-check-2026-11-21.md)
 - [raw/repos/makeusabrew-audiotee-desk-check-2026-11-21.md](../../raw/repos/makeusabrew-audiotee-desk-check-2026-11-21.md)
 - [raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md](../../raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md)
+- [raw/repos/nvidia-nemo-speech-cpp-freshness-2026-11-23.md](../../raw/repos/nvidia-nemo-speech-cpp-freshness-2026-11-23.md)
 - [raw/repos/nvidia-nemotron-3-5-asr-streaming-0-6b-desk-check-2026-11-21.md](../../raw/repos/nvidia-nemotron-3-5-asr-streaming-0-6b-desk-check-2026-11-21.md)
 - [raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md](../../raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md)
 - [raw/repos/snakers4-silero-vad-desk-check-2026-11-21.md](../../raw/repos/snakers4-silero-vad-desk-check-2026-11-21.md)

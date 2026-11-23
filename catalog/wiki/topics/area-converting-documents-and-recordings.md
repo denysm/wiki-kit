@@ -18,16 +18,17 @@ sources:
   - raw/repos/microsoft-markitdown-desk-check-2026-11-21.md
   - raw/repos/nashsu-llm-wiki-desk-check-2026-11-21.md
   - raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md
+  - raw/repos/nvidia-nemo-speech-cpp-freshness-2026-11-23.md
   - raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md
   - raw/repos/py-pdf-pypdf-desk-check-2026-11-21.md
   - raw/repos/python-openxml-python-docx-desk-check-2026-11-21.md
   - raw/repos/scanny-python-pptx-desk-check-2026-11-21.md
 created: 2026-11-21
-updated: 2026-11-22
+updated: 2026-11-23
 tags: [catalog, area, area-converting-documents-and-recordings]
 confidence: medium
 volatility: hot
-verified: 2026-11-21
+verified: 2026-11-23
 summary: "Generated area page: cards and parts that serve converting documents and recordings tasks, with their status."
 ---
 
@@ -114,6 +115,7 @@ Neighbouring areas: [Knowledge bases](area-knowledge-bases.md), [Writing documen
 - [raw/repos/microsoft-markitdown-desk-check-2026-11-21.md](../../raw/repos/microsoft-markitdown-desk-check-2026-11-21.md)
 - [raw/repos/nashsu-llm-wiki-desk-check-2026-11-21.md](../../raw/repos/nashsu-llm-wiki-desk-check-2026-11-21.md)
 - [raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md](../../raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md)
+- [raw/repos/nvidia-nemo-speech-cpp-freshness-2026-11-23.md](../../raw/repos/nvidia-nemo-speech-cpp-freshness-2026-11-23.md)
 - [raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md](../../raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md)
 - [raw/repos/py-pdf-pypdf-desk-check-2026-11-21.md](../../raw/repos/py-pdf-pypdf-desk-check-2026-11-21.md)
 - [raw/repos/python-openxml-python-docx-desk-check-2026-11-21.md](../../raw/repos/python-openxml-python-docx-desk-check-2026-11-21.md)

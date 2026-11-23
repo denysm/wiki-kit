@@ -58,6 +58,7 @@ sources:
   - raw/repos/numpy-numpy-desk-check-2026-11-21.md
   - raw/repos/nvidia-bionemo-bionemo-recipes-desk-check-2026-11-21.md
   - raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md
+  - raw/repos/nvidia-nemo-speech-cpp-freshness-2026-11-23.md
   - raw/repos/nvidia-nemotron-3-5-asr-streaming-0-6b-desk-check-2026-11-21.md
   - raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md
   - raw/repos/nvk-llm-wiki-desk-check-2026-11-21.md
@@ -74,11 +75,11 @@ sources:
   - raw/repos/tobi-qmd-desk-check-2026-11-21.md
   - raw/repos/ygavrilov-claude-code-kit-desk-check-2026-11-21.md
 created: 2026-11-21
-updated: 2026-11-22
+updated: 2026-11-23
 tags: [catalog, area, task-index]
 confidence: medium
 volatility: hot
-verified: 2026-11-21
+verified: 2026-11-23
 summary: "Generated entry to the catalog: one table per area, each task in the words an agent arrives with, the part to open, its status, and why a rejected part is not the answer."
 ---
 
@@ -438,7 +439,6 @@ Area page: [Live speech and calls](area-live-speech-and-calls.md).
 | reuse its code in the kit. No licence | [makeusabrew/audiotee: `AudioTapManager`](../references/makeusabrew-audiotee.md) | reference | see the card's rejected row |
 | Recognise speech as it is spoken inside a native app, pushing audio from your own capture and reading partial and final text | [NVIDIA/NeMo-Speech.cpp: `NeMoSpeech::ASR` streaming API](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
 | Transcribe the microphone live from a terminal on this machine | [NVIDIA/NeMo-Speech.cpp: `transcribe --live`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
-| Tell up to eight speakers apart in a call, as it runs or afterwards | [NVIDIA/NeMo-Speech.cpp: `diarize`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
 | Translate text locally between English and Russian, Ukrainian, French, German or Dutch | [NVIDIA/NeMo-Speech.cpp: `translate`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
 | Speak text aloud locally in English, French, German or Spanish | [NVIDIA/NeMo-Speech.cpp: `synthesize`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
 | Serve live transcription to other local programs over a WebSocket | [NVIDIA/NeMo-Speech.cpp: `serve`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
@@ -648,6 +648,7 @@ Area page: [Science](area-science.md).
 - [raw/repos/numpy-numpy-desk-check-2026-11-21.md](../../raw/repos/numpy-numpy-desk-check-2026-11-21.md)
 - [raw/repos/nvidia-bionemo-bionemo-recipes-desk-check-2026-11-21.md](../../raw/repos/nvidia-bionemo-bionemo-recipes-desk-check-2026-11-21.md)
 - [raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md](../../raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md)
+- [raw/repos/nvidia-nemo-speech-cpp-freshness-2026-11-23.md](../../raw/repos/nvidia-nemo-speech-cpp-freshness-2026-11-23.md)
 - [raw/repos/nvidia-nemotron-3-5-asr-streaming-0-6b-desk-check-2026-11-21.md](../../raw/repos/nvidia-nemotron-3-5-asr-streaming-0-6b-desk-check-2026-11-21.md)
 - [raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md](../../raw/repos/nvidia-parakeet-tdt-0-6b-v3-desk-check-2026-11-21.md)
 - [raw/repos/nvk-llm-wiki-desk-check-2026-11-21.md](../../raw/repos/nvk-llm-wiki-desk-check-2026-11-21.md)

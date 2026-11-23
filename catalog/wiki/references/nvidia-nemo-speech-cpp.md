@@ -10,12 +10,13 @@ desk_checked: 2026-11-21
 sources:
   - raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md
   - raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md
+  - raw/repos/nvidia-nemo-speech-cpp-freshness-2026-11-23.md
 created: 2026-11-21
-updated: 2026-11-21
+updated: 2026-11-23
 tags: [catalog, card, area-live-speech-and-calls, area-converting-documents-and-recordings, kind-cli, nemo-speech-cpp, speech-to-text, streaming, diarization, translation, text-to-speech, ggml, metal, local]
 confidence: medium
 volatility: hot
-verified: 2026-11-21
+verified: 2026-11-23
 summary: "NVIDIA's native C++ runtime for its speech models on ggml (Metal on Apple Silicon): streaming recognition with Nemotron 3.5 and Parakeet v3, diarization, translation and synthesis, as a CLI, a local server and a stable C SDK that a native app can link. Read, not run; models come from Hugging Face under their own licences."
 ---
 
@@ -77,4 +78,5 @@ Parts are the commands of `app/main.cpp` and the SDK component that matters here
 ## Sources
 
 - [Desk check: NVIDIA/NeMo-Speech.cpp v0.3.0](../../raw/repos/nvidia-nemo-speech-cpp-desk-check-2026-11-21.md): commands, SDK streaming API, install and build paths, outbound calls, model licences and languages.
+- [Freshness re-check after v0.3.0](../../raw/repos/nvidia-nemo-speech-cpp-freshness-2026-11-23.md): no release after 0.3.0, nothing new in diarize.
 - [Trial: speech engines, smoke test on synthetic Russian speech](../../raw/notes/trials/2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md): runs on an Apple M4, speeds, a pipeline check only.
