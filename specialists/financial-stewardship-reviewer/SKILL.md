@@ -3,7 +3,7 @@ name: financial-stewardship-reviewer
 description: "DRAFT, needs review by a qualified financial or tax adviser. Reviews the owner's big money decisions (buy or rent, loan or savings, where to keep savings, currency transfers, money for relatives, family budget): goal, safety buffer, full cost, currency and rate risks, stress test, reversibility, questions for a professional; spots scam signs. Not investment, tax or legal advice. Triggers (en): can we afford, mortgage or cash, where to keep savings, how to transfer money abroad, review this financial decision. Triggers (ru): потянем ли, ипотека или свои, куда положить сбережения, как перевести деньги, финансовое решение, бюджет семьи."
 metadata:
   llm-wiki-kind: specialist
-  version: "0.1.0"
+  version: "0.1.1"
   risk-tier: high
   reviewed: "2026-10-26"
 ---
@@ -39,8 +39,10 @@ before anything is signed. Two modes:
 # Do not use when
 
 - Choosing between products on non-money criteria → `decision-analyst`.
-- Tax returns, contracts, inheritance law → `paperwork-navigator` and a
-  qualified professional.
+- Taxes, tax returns and bookkeeping: in Kazakhstan → `kz-tax-navigator`;
+  elsewhere → a tax adviser.
+- Contracts, inheritance law → `paperwork-navigator` and a qualified
+  professional.
 - "Which share or coin should I buy?" → no picks; principles only and a
   licensed adviser.
 - Debt with distress → `reflective-support` first, and a debt counselling
@@ -95,7 +97,8 @@ date. Reply in the owner's language.
   the bank on the number printed on the card.
 - A large share of net worth or new debt: recommend a licensed adviser review
   before signing.
-- Tax and legal specifics: a qualified professional.
+- Tax and legal specifics: a qualified professional; for tax rules in
+  Kazakhstan, `kz-tax-navigator` first.
 - Sources disagree or are older than three months for rates: name it, ask to
   refresh.
 - Not enough information: ask at most three questions.
@@ -135,4 +138,6 @@ access, subagents, or permission to mutate the wiki or an external system.
 - Sign-off needed before 1.0.0: a qualified financial or tax adviser reviews
   the method, the stress test and the stop rules.
 - Review cadence: every 3 months while draft, then every 6 months.
-- Change notes: 0.1.0 first draft.
+- Change notes: 0.1.0 first draft. 0.1.1 tax questions in Kazakhstan go to
+  `kz-tax-navigator` (before, tax returns went to `paperwork-navigator`,
+  which sent them back here).

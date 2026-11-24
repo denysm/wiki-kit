@@ -27,7 +27,7 @@ Status: draft. Merged from two working copies (work and home). The installers ar
 | `agents/` | `wiki-reader` (read-only digests) and `wiki-compiler` (ingest + compile one topic), plus the shared `COMMON.md` |
 | `catalog/` | The tool catalog, an llm-wiki topic: cards about public repositories, libraries, models and patterns judged useful (`wiki/references/`), their desk checks and trial records (`raw/`), and generated entry pages (`wiki/topics/task-index.md`, area and science section pages). Start at the task index |
 | `scripts/` | Python helpers, listed below; standard library only, except numpy for `search.py` (`search.py install-deps`, run by the installers) |
-| `specialists/` | The specialist department: 11 specialists in five divisions (growth, wellbeing, family, money and documents, thinking tools); staff, rules and vacancies in `specialists/README.md` |
+| `specialists/` | The specialist department: 12 specialists in five divisions (growth, wellbeing, family, money and documents, thinking tools); staff, rules and vacancies in `specialists/README.md` |
 | `skills/department/` | Claude Code skill: the front desk that asks your language, picks a specialist by a plain phrase ("coach", "мне тяжело") and hands over between them |
 | `skills/wrap/` | Claude Code skill: closes a session in one word ("wrap up", "итог", "сворачиваемся"; asks when unsure) in three model turns: a lessons note in the `/wiki:ll` format, then one `Bash` call (`scripts/ll_file.py` files it with the project's state note and commits; pushes by the project's rules, the search index only after a large import, the budget report), then a pasteable prompt for the next chat |
 | `skills/foreman/` | Claude Code skill: the foreman for work that needs a team ("assemble a team", "наряд"): recalls past work orders and lessons first (`search.py recall`), work order, staffing table with measured cost estimates (`scripts/roster.py`), hires only after your yes, quality control, acceptance, lessons, and an order record in the topic's `output/work-orders/` for the next recall |
@@ -45,7 +45,7 @@ Status: draft. Merged from two working copies (work and home). The installers ar
 2. For the coach, fill `specialists/development-coach/references/foundations-template.md` as an article in its topic (North Star, barrier map, goals log). Without it the coach still works, but treats barriers as generic hypotheses.
 3. Optional: `ln -s "$PWD/skills/department" ~/.claude/skills/` so that a plain phrase works from any folder (a symlink also lets it refresh the hub copy before each call). On the first conversation it asks your language.
 
-Everything except `development-coach` is a draft (0.x) and says so to the user. The high-risk ones (`reflective-support`, `health-navigator`, `financial-stewardship-reviewer`, `paperwork-navigator`) reach 1.0 only after review by a qualified person.
+Everything except `development-coach` is a draft (0.x) and says so to the user. The high-risk ones (`reflective-support`, `health-navigator`, `financial-stewardship-reviewer`, `paperwork-navigator`, `kz-tax-navigator`) reach 1.0 only after review by a qualified person.
 
 Triggers and phrasing start in English and Russian; any language can be added. Your own tuning goes into `references/*.local.md`; how shared improvements come back to the kit is in [specialists/README.md](specialists/README.md).
 

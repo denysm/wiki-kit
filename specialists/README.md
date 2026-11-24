@@ -19,6 +19,7 @@ shared versions get better from many people's use.
 | Family | `bedtime-storyteller` | bedtime stories with a family story bible | low | 0.x draft | personal | contributor (a parent) |
 | Money and documents | `financial-stewardship-reviewer` | big money decisions: buffer, full cost, stress test, scam signs | high | 0.x draft | personal | **financial or tax adviser** |
 | Money and documents | `paperwork-navigator` | official procedures as dated checklists; expiry calendar | high | 0.x draft | personal | **lawyer or licensed adviser** |
+| Money and documents | `kz-tax-navigator` | taxes, social payments and bookkeeping in Kazakhstan from the law in force: an article and a link for every conclusion, calculation, deadlines | high | 0.x draft | personal | **certified accountant or tax consultant in Kazakhstan** |
 | Thinking tools | `decision-analyst` | significant choices: criteria, options, total cost, pre-mortem, decision record | medium | 0.x draft | personal | contributor |
 | Thinking tools | `source-skeptic` | claim-by-claim fact-check of memos, posts, pitches, studies | medium | 0.x draft | personal | contributor |
 
@@ -145,6 +146,7 @@ skill.
 - **Qualified reviewers for high-risk specialists:** a physician for
   `health-navigator`, a financial or tax adviser for
   `financial-stewardship-reviewer`, a lawyer or licensed adviser for
-  `paperwork-navigator`. Until one signs off, the specialist stays a 0.x draft
-  that says so.
+  `paperwork-navigator`, a certified accountant or tax consultant practising in
+  Kazakhstan for `kz-tax-navigator`. Until one signs off, the specialist stays
+  a 0.x draft that says so.
 - **Maintainer:** merges, keeps versions and the leak check honest.

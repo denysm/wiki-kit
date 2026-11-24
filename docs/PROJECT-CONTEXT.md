@@ -61,7 +61,7 @@ Model choice by budget: the plugin runs on Claude Code and, per its own descript
 
 ## Specialist department (2026-10-26)
 
-- `specialists/`: 11 personal specialists in five divisions; `development-coach` is 1.2.0, the other ten are 0.1.0 drafts. Front desk: `skills/department` (asks the user's language on the first conversation, routes by meaning, safety first). Skeleton: `templates/specialist/`. Staff, rules, vacancies and roles: `specialists/README.md`.
+- `specialists/`: 12 personal specialists in five divisions; `development-coach` is 1.x, the other eleven are 0.x drafts (the twelfth, `kz-tax-navigator` for taxes and bookkeeping in Kazakhstan, since 2026-11-25). Front desk: `skills/department` (asks the user's language on the first conversation, routes by meaning, safety first). Skeleton: `templates/specialist/`. Staff, rules, vacancies and roles: `specialists/README.md`.
 - Model: shared core in the kit, personal tuning in `references/*.local.md`, facts about the person only in their wiki; de-identified lessons come back by pull request; any language, originals kept with a `lang` tag.
 - Status: format-validated only. No specialist has been tested on real requests yet (the plugin's eval gate: compare with the no-specialist baseline before enabling broadly).
 - People: a safety reviewer with psychology training (planned); a physician, a financial or tax adviser and a lawyer are needed before the high-risk specialists reach 1.0.
