@@ -17,7 +17,7 @@ sources:
   - raw/repos/snakers4-silero-vad-desk-check-2026-11-21.md
   - raw/repos/speech-emotion-models-desk-check-2026-11-23.md
 created: 2026-11-21
-updated: 2026-11-23
+updated: 2026-11-24
 tags: [catalog, area, area-live-speech-and-calls]
 confidence: low
 volatility: hot

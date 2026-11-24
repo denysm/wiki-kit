@@ -11,7 +11,7 @@ sources:
   - raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md
   - raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md
 created: 2026-11-21
-updated: 2026-11-23
+updated: 2026-11-24
 tags: [catalog, card, area-designing-something-new, area-writing-code-with-agents, area-writing-documents-and-articles, kind-plugin, claude-code, skills, agents, design-review, specifications]
 confidence: high
 volatility: hot
@@ -46,7 +46,7 @@ summary: "Agent plugin for designing with full context and reviewing with fresh,
 - **Clone**: `git clone --depth 1 https://github.com/google/elephant-goldfish-model $EXTERNAL/elephant-goldfish-model`, read-only. This card read `main` at commit `70406c4`, 48 commits after the `v0.1.1` release; `egm-lite` exists only on `main`. For the release add `--branch v0.1.1`.
 - **Version**: `0.1.1` (manifest). Before relying on this card: `gh api repos/google/elephant-goldfish-model --jq .pushed_at` and `gh api repos/google/elephant-goldfish-model/releases/latest --jq .tag_name`.
 - **Read**: `skills/<skill>/SKILL.md`, reading `${CLAUDE_PLUGIN_ROOT}` as `$EXTERNAL/elephant-goldfish-model`. For a reviewer, spawn a general-purpose subagent told to read `agents/<persona>.md` first, as the skills allow; tell it to stay read-only and pass only the target, persona and standard paths. One skill runs another by reading its `SKILL.md` in the same thread.
-- **In use**: `comprehension` at `0.1.1` (commit `70406c4`), read from the clone, as a fresh reviewer of a design document and its sample card against the kit's card standard. The catalog design plans the same review for each new card. `egm-lite` (unchanged on `main` up to `7d1b721`), read from the clone and followed by hand, with fresh general-purpose subagents as Goldfish reviewers: Section 4 on an existing diff, then Section 5 triage and `exec`.
+- **In use**: `comprehension` at `0.1.1` (commit `70406c4`), read from the clone, as a fresh reviewer of a design document and its sample card against the kit's card standard. The catalog design plans the same review for each new card. `egm-lite` (re-read at `ef27af6` on 2026-11-24: one change, #511, standalone diff reviews resolve in chat with no checklist; rubric and reviewer contract unchanged), read from the clone and followed by hand, with fresh general-purpose subagents as Goldfish reviewers: Section 4 on an existing diff, then Section 5 triage and `exec`.
 - **Switch off**: nothing. `docs/privacy.md` names no telemetry endpoint and no network call was found in skills, personas or resources; the analytics in `site/` belong to the website, not the plugin. `egm-bootstrap` may run a project's formatter, which can reach a package registry.
 - **Do not install**: the plugin (`claude plugin install egm@egm`) in any scope; a real install waits for the user's yes. It has no hooks. To see its read-only adapters work, run one session `claude --plugin-dir <copy>` on a uniquely named copy from a scratch folder.
 

@@ -24,7 +24,7 @@ sources:
   - raw/repos/python-openxml-python-docx-desk-check-2026-11-21.md
   - raw/repos/scanny-python-pptx-desk-check-2026-11-21.md
 created: 2026-11-21
-updated: 2026-11-23
+updated: 2026-11-24
 tags: [catalog, area, area-converting-documents-and-recordings]
 confidence: medium
 volatility: hot

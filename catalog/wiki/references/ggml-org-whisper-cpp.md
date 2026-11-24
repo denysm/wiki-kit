@@ -13,7 +13,7 @@ sources:
   - raw/repos/ggml-org-whisper-cpp-desk-check-2026-11-21.md
   - raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md
 created: 2026-11-21
-updated: 2026-11-22
+updated: 2026-11-24
 tags: [catalog, card, area-converting-documents-and-recordings, kind-cli, whisper-cpp, speech-to-text, transcription, local]
 confidence: high
 volatility: hot

@@ -10,7 +10,7 @@ desk_checked: 2026-11-21
 sources:
   - raw/repos/snakers4-silero-vad-desk-check-2026-11-21.md
 created: 2026-11-21
-updated: 2026-11-21
+updated: 2026-11-24
 tags: [catalog, card, area-live-speech-and-calls, kind-model, vad, voice-activity-detection, onnx, local]
 confidence: medium
 volatility: warm
@@ -46,7 +46,8 @@ summary: "Small voice activity detector (MIT, no telemetry, under 1 ms per 30 ms
 
 ## Tried
 
-none yet
+| Date | Task (by kind) | Part | Result | Cost | Record |
+|------|----------------|------|--------|------|--------|
 
 ## Verdict
 

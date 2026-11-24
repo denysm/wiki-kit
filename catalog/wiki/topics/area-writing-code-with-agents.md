@@ -15,7 +15,7 @@ sources:
   - raw/repos/neolabhq-context-engineering-kit-desk-check-2026-11-21.md
   - raw/repos/obra-superpowers-desk-check-2026-11-21.md
 created: 2026-11-21
-updated: 2026-11-23
+updated: 2026-11-24
 tags: [catalog, area, area-writing-code-with-agents]
 confidence: high
 volatility: hot
