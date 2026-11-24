@@ -3,6 +3,7 @@ title: "Task index"
 category: topic
 sources:
   - raw/data/a2ui-project-a2ui-parts-cli-v0.4.0.md
+  - raw/data/apple-xcode-agent-tools-mcp-tools-27.2.md
   - raw/data/k-dense-ai-scientific-agent-skills-parts-2.72.0.md
   - raw/data/neolabhq-context-engineering-kit-parts-3.10.0.md
   - raw/notes/2026-11-21-measurements-local-embeddings.md
@@ -27,10 +28,12 @@ sources:
   - raw/notes/trials/2026-11-21-superpowers-brainstorming-catalog-design.md
   - raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md
   - raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md
+  - raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md
   - raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md
   - raw/repos/agemagician-prottrans-desk-check-2026-11-21.md
   - raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md
   - raw/repos/apple-translation-desk-check-2026-11-21.md
+  - raw/repos/apple-xcode-agent-tools-desk-check-2026-11-25.md
   - raw/repos/baai-bge-m3-desk-check-2026-11-21.md
   - raw/repos/blader-humanizer-desk-check-2026-11-21.md
   - raw/repos/colbymchenry-codegraph-desk-check-2026-11-21.md
@@ -80,7 +83,7 @@ updated: 2026-11-25
 tags: [catalog, area, task-index]
 confidence: low
 volatility: hot
-verified: 2026-11-23
+verified: 2026-11-25
 summary: "Generated entry to the catalog: one table per area, each task in the words an agent arrives with, the part to open, its status, and why a rejected part is not the answer."
 ---
 
@@ -131,6 +134,11 @@ Area page: [Writing code with agents](area-writing-code-with-agents.md).
 | Route a coding agent to the right instruction file per task in a multi-language repo | [a2ui-project/a2ui: `AGENTS.md`](../references/a2ui-project-a2ui.md) | reference |  |
 | Turn reviewer feedback into review rules loaded by language | [a2ui-project/a2ui: `coding-principles`](../references/a2ui-project-a2ui.md) | reference |  |
 | Tune a prompt format with a benchmark loop that keeps or reverts each change | [a2ui-project/a2ui: `inference-format-optimizer`](../references/a2ui-project-a2ui.md) | reference |  |
+| Look up current Apple platform APIs that are newer than the model's training | [Xcode agent tools (mcpbridge, Apple skills, xctrace): `DocumentationSearch`](../references/apple-xcode-agent-tools.md) | tried |  |
+| Build a Swift package or Xcode project from an agent and get errors as fields, not log text | [Xcode agent tools (mcpbridge, Apple skills, xctrace): `BuildProject`](../references/apple-xcode-agent-tools.md) | tried |  |
+| Find out why a macOS app uses CPU or hangs, from an agent | [Xcode agent tools (mcpbridge, Apple skills, xctrace): `xctrace` skill](../references/apple-xcode-agent-tools.md) | in use |  |
+| Give a coding agent Apple's own guidance for SwiftUI, tests and build hardening | [Xcode agent tools (mcpbridge, Apple skills, xctrace): `run-agent skills export`](../references/apple-xcode-agent-tools.md) | in use |  |
+| work without Xcode installed. Every part ships inside Xcode, and the bridge needs Xcode running or its headless mode | [Xcode agent tools (mcpbridge, Apple skills, xctrace): `mcpbridge`](../references/apple-xcode-agent-tools.md) | tried | see the card's rejected row |
 | Ask how code works, what calls a function or how a request reaches the database, without grep and read loops | [colbymchenry/codegraph: `serve --mcp`](../references/colbymchenry-codegraph.md) | in use |  |
 | Give subagents, or an agent without MCP, the same answer from a shell | [colbymchenry/codegraph: `explore`](../references/colbymchenry-codegraph.md) | candidate |  |
 | Have structural prompts arrive with graph context already attached | [colbymchenry/codegraph: `prompt-hook`](../references/colbymchenry-codegraph.md) | candidate |  |
@@ -596,6 +604,7 @@ Area page: [Science](area-science.md).
 ## Sources
 
 - [raw/data/a2ui-project-a2ui-parts-cli-v0.4.0.md](../../raw/data/a2ui-project-a2ui-parts-cli-v0.4.0.md)
+- [raw/data/apple-xcode-agent-tools-mcp-tools-27.2.md](../../raw/data/apple-xcode-agent-tools-mcp-tools-27.2.md)
 - [raw/data/k-dense-ai-scientific-agent-skills-parts-2.72.0.md](../../raw/data/k-dense-ai-scientific-agent-skills-parts-2.72.0.md)
 - [raw/data/neolabhq-context-engineering-kit-parts-3.10.0.md](../../raw/data/neolabhq-context-engineering-kit-parts-3.10.0.md)
 - [raw/notes/2026-11-21-measurements-local-embeddings.md](../../raw/notes/2026-11-21-measurements-local-embeddings.md)
@@ -620,10 +629,12 @@ Area page: [Science](area-science.md).
 - [raw/notes/trials/2026-11-21-superpowers-brainstorming-catalog-design.md](../../raw/notes/trials/2026-11-21-superpowers-brainstorming-catalog-design.md)
 - [raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md](../../raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md)
 - [raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md](../../raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md)
+- [raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md](../../raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md)
 - [raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md](../../raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md)
 - [raw/repos/agemagician-prottrans-desk-check-2026-11-21.md](../../raw/repos/agemagician-prottrans-desk-check-2026-11-21.md)
 - [raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md](../../raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md)
 - [raw/repos/apple-translation-desk-check-2026-11-21.md](../../raw/repos/apple-translation-desk-check-2026-11-21.md)
+- [raw/repos/apple-xcode-agent-tools-desk-check-2026-11-25.md](../../raw/repos/apple-xcode-agent-tools-desk-check-2026-11-25.md)
 - [raw/repos/baai-bge-m3-desk-check-2026-11-21.md](../../raw/repos/baai-bge-m3-desk-check-2026-11-21.md)
 - [raw/repos/blader-humanizer-desk-check-2026-11-21.md](../../raw/repos/blader-humanizer-desk-check-2026-11-21.md)
 - [raw/repos/colbymchenry-codegraph-desk-check-2026-11-21.md](../../raw/repos/colbymchenry-codegraph-desk-check-2026-11-21.md)

@@ -3,11 +3,14 @@ title: "Writing code with agents"
 category: topic
 sources:
   - raw/data/a2ui-project-a2ui-parts-cli-v0.4.0.md
+  - raw/data/apple-xcode-agent-tools-mcp-tools-27.2.md
   - raw/data/neolabhq-context-engineering-kit-parts-3.10.0.md
   - raw/notes/trials/2026-11-21-codegraph-per-repo-mcp.md
   - raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md
   - raw/notes/trials/2026-11-21-superpowers-brainstorming-catalog-design.md
+  - raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md
   - raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md
+  - raw/repos/apple-xcode-agent-tools-desk-check-2026-11-25.md
   - raw/repos/colbymchenry-codegraph-desk-check-2026-11-21.md
   - raw/repos/fission-ai-openspec-desk-check-2026-11-21.md
   - raw/repos/github-spec-kit-desk-check-2026-11-21.md
@@ -17,9 +20,9 @@ sources:
 created: 2026-11-21
 updated: 2026-11-25
 tags: [catalog, area, area-writing-code-with-agents]
-confidence: high
+confidence: medium
 volatility: hot
-verified: 2026-11-21
+verified: 2026-11-25
 summary: "Generated area page: cards and parts that serve writing code with agents tasks, with their status."
 ---
 
@@ -37,6 +40,11 @@ Neighbouring areas: [Designing something new](area-designing-something-new.md), 
 | [a2ui-project/a2ui](../references/a2ui-project-a2ui.md) | `blueprints/` | reference |
 | [a2ui-project/a2ui](../references/a2ui-project-a2ui.md) | `coding-principles` | reference |
 | [a2ui-project/a2ui](../references/a2ui-project-a2ui.md) | `inference-format-optimizer` | reference |
+| [Xcode agent tools (mcpbridge, Apple skills, xctrace)](../references/apple-xcode-agent-tools.md) | `BuildProject` | tried |
+| [Xcode agent tools (mcpbridge, Apple skills, xctrace)](../references/apple-xcode-agent-tools.md) | `DocumentationSearch` | tried |
+| [Xcode agent tools (mcpbridge, Apple skills, xctrace)](../references/apple-xcode-agent-tools.md) | `mcpbridge` | tried |
+| [Xcode agent tools (mcpbridge, Apple skills, xctrace)](../references/apple-xcode-agent-tools.md) | `run-agent skills export` | in use |
+| [Xcode agent tools (mcpbridge, Apple skills, xctrace)](../references/apple-xcode-agent-tools.md) | `xctrace` skill | in use |
 | [colbymchenry/codegraph](../references/colbymchenry-codegraph.md) | `affected` | candidate |
 | [colbymchenry/codegraph](../references/colbymchenry-codegraph.md) | `callees` | candidate |
 | [colbymchenry/codegraph](../references/colbymchenry-codegraph.md) | `callers` | candidate |
@@ -101,6 +109,7 @@ Neighbouring areas: [Designing something new](area-designing-something-new.md), 
 - [[area-designing-something-new|Designing something new]] ([Designing something new](area-designing-something-new.md))
 - [[area-building-skills-and-plugins|Building skills and plugins]] ([Building skills and plugins](area-building-skills-and-plugins.md))
 - [[a2ui-project-a2ui|a2ui-project/a2ui]] ([a2ui-project/a2ui](../references/a2ui-project-a2ui.md))
+- [[apple-xcode-agent-tools|Xcode agent tools (mcpbridge, Apple skills, xctrace)]] ([Xcode agent tools (mcpbridge, Apple skills, xctrace)](../references/apple-xcode-agent-tools.md))
 - [[colbymchenry-codegraph|colbymchenry/codegraph]] ([colbymchenry/codegraph](../references/colbymchenry-codegraph.md))
 - [[fission-ai-openspec|Fission-AI/OpenSpec]] ([Fission-AI/OpenSpec](../references/fission-ai-openspec.md))
 - [[github-spec-kit|github/spec-kit]] ([github/spec-kit](../references/github-spec-kit.md))
@@ -111,11 +120,14 @@ Neighbouring areas: [Designing something new](area-designing-something-new.md), 
 ## Sources
 
 - [raw/data/a2ui-project-a2ui-parts-cli-v0.4.0.md](../../raw/data/a2ui-project-a2ui-parts-cli-v0.4.0.md)
+- [raw/data/apple-xcode-agent-tools-mcp-tools-27.2.md](../../raw/data/apple-xcode-agent-tools-mcp-tools-27.2.md)
 - [raw/data/neolabhq-context-engineering-kit-parts-3.10.0.md](../../raw/data/neolabhq-context-engineering-kit-parts-3.10.0.md)
 - [raw/notes/trials/2026-11-21-codegraph-per-repo-mcp.md](../../raw/notes/trials/2026-11-21-codegraph-per-repo-mcp.md)
 - [raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md](../../raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md)
 - [raw/notes/trials/2026-11-21-superpowers-brainstorming-catalog-design.md](../../raw/notes/trials/2026-11-21-superpowers-brainstorming-catalog-design.md)
+- [raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md](../../raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md)
 - [raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md](../../raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md)
+- [raw/repos/apple-xcode-agent-tools-desk-check-2026-11-25.md](../../raw/repos/apple-xcode-agent-tools-desk-check-2026-11-25.md)
 - [raw/repos/colbymchenry-codegraph-desk-check-2026-11-21.md](../../raw/repos/colbymchenry-codegraph-desk-check-2026-11-21.md)
 - [raw/repos/fission-ai-openspec-desk-check-2026-11-21.md](../../raw/repos/fission-ai-openspec-desk-check-2026-11-21.md)
 - [raw/repos/github-spec-kit-desk-check-2026-11-21.md](../../raw/repos/github-spec-kit-desk-check-2026-11-21.md)
