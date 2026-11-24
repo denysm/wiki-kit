@@ -64,7 +64,7 @@ Neighbouring areas: [Converting documents and recordings](area-converting-docume
 | [salute-developers/GigaAM](../references/salute-developers-gigaam.md) | GigaAM-Emo | tried |
 | [salute-developers/GigaAM](../references/salute-developers-gigaam.md) | GigaAM-v3 | candidate |
 | [snakers4/silero-vad](../references/snakers4-silero-vad.md) | `silero_vad.onnx` | candidate |
-| [snakers4/silero-vad](../references/snakers4-silero-vad.md) | the copy inside the recogniser | candidate |
+| [snakers4/silero-vad](../references/snakers4-silero-vad.md) | the copy inside the recogniser | tried |
 
 ## See Also
 

@@ -449,7 +449,7 @@ Area page: [Live speech and calls](area-live-speech-and-calls.md).
 | Kazakh speech. It is in none of the card's language tiers | [nvidia/nemotron-3.5-asr-streaming-0.6b: `q8_0.gguf`](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | tried | see the card's rejected row |
 | Transcribe on the Neural Engine from a Swift app, with a more accurate post-trained variant | [nvidia/parakeet-tdt-0.6b-v3: Parakeet Ultra (FluidAudio)](../references/nvidia-parakeet-tdt-0-6b-v3.md) | candidate |  |
 | Transcribe Russian speech, as a bench candidate against Whisper and Parakeet | [salute-developers/GigaAM: GigaAM-v3](../references/salute-developers-gigaam.md) | candidate |  |
-| Cut live call audio into speech segments before recognition, so the recogniser skips silence | [snakers4/silero-vad: the copy inside the recogniser](../references/snakers4-silero-vad.md) | candidate |  |
+| Cut live call audio into speech segments before recognition, so the recogniser skips silence | [snakers4/silero-vad: the copy inside the recogniser](../references/snakers4-silero-vad.md) | tried |  |
 | Detect speech in a native app with ONNX Runtime and no Python | [snakers4/silero-vad: `silero_vad.onnx`](../references/snakers4-silero-vad.md) | candidate |  |
 
 ## Science
