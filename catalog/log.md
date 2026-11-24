@@ -10,8 +10,6 @@
 
 ## [2026-11-21] ingest | Trial: speech engines smoke test on synthetic Russian speech (NeMo-Speech.cpp Nemotron and Parakeet tried, whisper-cli measured on M4, whisper.cpp parakeet-cli rejected); four cards updated
 
-
-
-
-
 ## [2026-11-25] card | "Xcode agent tools (mcpbridge, Apple skills, xctrace)" → wiki/references/apple-xcode-agent-tools.md (desk check, parts list of 54 MCP tools, trial and use record; task index and area page regenerated)
+
+## [2026-11-25] retract | 4 lesson notes of a private project moved to that project's private repository; 2 trial records no longer name its bench file

@@ -18,6 +18,7 @@ summary: "Sandbox smoke test, 2026-11-22, Apple M4 Mac mini 16 GB: the kit bench
 - **Task, by kind**: estimating what live recognition with whisper would cost in accuracy, before investing in a streaming recogniser (Nemotron 3.5 through NeMo-Speech.cpp) for live captions of Russian speech with English terms.
 - **Kind of record**: sandbox trial with `scripts/asr_bench.py` of the owner's private voice repository (in the kit until 2026-11-23), engine `whisper-chunks`. Nothing installed beyond the Homebrew `whisper.cpp` package already in use.
 - **Machine**: Apple M4 Mac mini, 16 GB.
+- **Input**: a bench text of the owner's private voice repository (in the kit until 2026-11-23, as `voice/bench/read-1.txt`) spoken by the macOS voice Milena, 51.4 s, 16 kHz mono, as in the [earlier smoke test](2026-11-21-nemo-speech-cpp-smoke-test-synthetic-russian.md). The file was deleted after the run.
 
 ## Setup
 

@@ -23,6 +23,7 @@ summary: "Sandbox smoke test, 2026-11-21, Apple M4 Mac mini 16 GB, macOS 27.2.1:
 
 - NeMo-Speech.cpp: the release archive `nemo-speech-0.3.0-macos-aarch64-metal.tar.gz`, SHA-256 `2b972ed8b5dba07492212acf8cb75cbf34ecb141198ffa1997febe84b7c4d9ed`, equal to the published `.sha256`; unpacked into a throwaway folder, not on `PATH`; `nemo-speech --version` printed "nemo-speech 0.3.0".
 - Models downloaded once from Hugging Face at the revisions of their desk checks: `nemotron-3.5-asr-streaming-0.6b.q8_0.gguf` (742090464 bytes) and `parakeet-tdt-0.6b-v3.q8_0.gguf` (713975456 bytes), sizes equal to the API listing; `ggml-parakeet-tdt-0.6b-v3-f16.bin` from `ggml-org/parakeet-GGUF` (1255897319 bytes).
+- Input: a bench text of the owner's private voice repository (in the kit until 2026-11-23, as `voice/bench/read-1.txt`) (121 words after normalisation) spoken by the macOS voice Milena into a file, 51.4 s, converted to 16 kHz mono WAV. Runner: `scripts/asr_bench.py` of the owner's private voice repository (in the kit until 2026-11-23).
 
 ## Result
 
