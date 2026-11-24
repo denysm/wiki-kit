@@ -76,7 +76,7 @@ sources:
   - raw/repos/tobi-qmd-desk-check-2026-11-21.md
   - raw/repos/ygavrilov-claude-code-kit-desk-check-2026-11-21.md
 created: 2026-11-21
-updated: 2026-11-24
+updated: 2026-11-25
 tags: [catalog, area, task-index]
 confidence: low
 volatility: hot

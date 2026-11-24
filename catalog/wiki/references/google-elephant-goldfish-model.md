@@ -11,7 +11,7 @@ sources:
   - raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md
   - raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md
 created: 2026-11-21
-updated: 2026-11-24
+updated: 2026-11-25
 tags: [catalog, card, area-designing-something-new, area-writing-code-with-agents, area-writing-documents-and-articles, kind-plugin, claude-code, skills, agents, design-review, specifications]
 confidence: high
 volatility: hot
