@@ -41,6 +41,8 @@ jobs:
           $lc --private-repo                                           # allowed in a private repository
           $lc --private-repo --more-names /nonexistent                 # a missing extra list is skipped
           if $lc --private-repo --more-names "$t.names"; then echo "extra names should be refused"; exit 1; fi
+      - name: Retired history (.leak-retired) on a throwaway repository
+        run: PY=python sh scripts/test_leak_retired.sh
       - name: Shell syntax
         run: for f in bootstrap.sh hooks/*; do sh -n "$f" || exit 1; done
       - name: One llm-wiki plugin version (bootstrap.sh, bootstrap.ps1, README.md and every other pin)

@@ -20,6 +20,19 @@ Checks the committed tree of REV (default HEAD), not the working copy:
 --history also checks the lines added and the messages of the commits in REV
 that are not in any --base (no --base: the whole history), because a leak
 removed by a later commit still travels with the push.
+Retired history: .leak-retired, written after a history rewrite, is read from
+REV, from every --base found here and from the working copy at --repo. Its
+lines: `before <ISO time with offset>`, `path <hash>` and `line <hash>` (the
+first 24 hex digits of the SHA-256 of a dropped path, or of a dropped line
+without its leading and trailing spaces).
+  - a file at a listed path, or a line whose hash is listed, is refused in REV
+    and, with --history, in every commit checked;
+  - with --history and a --base found here, a commit not in any base and
+    authored before the `before` time is refused: a clone made before the
+    rewrite would bring the old history back by a merge or a rebase, which
+    keep author dates. Without a base the dates are not compared.
+A line of .leak-retired that does not parse, or a file with no `before`, is a
+problem, so the rule never turns itself off in silence.
 
 Matched values are never printed: only file or commit, line and kind.
 Known false positives (code that describes secrets) are listed in .leak-allow
@@ -35,7 +48,9 @@ import importlib.util
 import re
 import subprocess
 import sys
+import hashlib
 from collections import Counter
+from datetime import datetime
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -86,35 +101,131 @@ def tree(repo: Path, rev: str) -> dict[str, str]:
     return files
 
 
-def history(repo: Path, rev: str, bases: list[str]) -> dict[str, list[tuple[str, int, str]]]:
-    """Commit -> [(path or '(message)', line in that commit's diff, text)] for added lines and messages."""
-    args = ["log", "-p", "--no-color", "--no-ext-diff", "--format=%x00%h%n%B%x00", rev]
+def known_bases(repo: Path, bases: list[str]) -> list[str]:
+    """The bases present here; a base not fetched would make git log fail, so more is checked instead."""
     known = []
-    for base in bases:  # a base not fetched here would make git log fail: check more instead
+    for base in bases:
         if subprocess.run(["git", "-C", str(repo), "cat-file", "-e", f"{base}^{{commit}}"],
                           capture_output=True).returncode == 0:
             known.append(base)
         else:
             print(f"warning: base {base} is not in this repository (fetch first?); "
                   "checking without it", file=sys.stderr)
-    bases = known
+    return known
+
+
+GIT_ESCAPES = {"a": 7, "b": 8, "t": 9, "n": 10, "v": 11, "f": 12, "r": 13, '"': 34, "\\": 92}
+
+
+def git_unquote(name: str) -> str:
+    """A path as git prints it: possibly C-quoted, possibly with git's trailing TAB."""
+    name = name.rstrip("\t")
+    if name.startswith('"') and name.endswith('"') and len(name) > 1:
+        raw, i, s = bytearray(), 0, name[1:-1]
+        while i < len(s):
+            if s[i] == "\\" and i + 1 < len(s):
+                if s[i + 1].isdigit():
+                    raw.append(int(s[i + 1:i + 4], 8))
+                    i += 4
+                    continue
+                raw.append(GIT_ESCAPES.get(s[i + 1], ord(s[i + 1])))
+                i += 2
+                continue
+            raw += s[i].encode("utf-8")
+            i += 1
+        name = raw.decode("utf-8", errors="replace")
+    return name
+
+
+def diff_path(name: str) -> str | None:
+    """The path of a `+++ ` header: `b/...`; None for /dev/null."""
+    name = git_unquote(name)
+    return name[2:] if name.startswith("b/") else None
+
+
+def history(repo: Path, rev: str, bases: list[str]) -> dict[str, tuple[int, list[tuple[str, int, str]], set[str]]]:
+    """Commit -> (author time, [(path or '(message)', line in that commit's diff, text)] for added
+    lines and messages, paths added or changed, binary and empty files included) for the commits
+    of REV not in any of BASES (all present here)."""
+    # the same output whatever the pusher's git config: fixed prefixes (diff.noprefix), no rename or
+    # copy detection (a renamed file shows its lines), the root commit's diff (log.showRoot)
+    args = ["-c", "core.quotePath=false", "log", "-p", "--raw", "--no-color", "--no-ext-diff", "--no-renames",
+            "--root", "--src-prefix=a/", "--dst-prefix=b/", "--format=%x00%h %at%n%B%x00", rev]
     if bases:
         args += ["--not", *bases]
     out = git(repo, *args).decode("utf-8", errors="replace")
-    commits: dict[str, list[tuple[str, int, str]]] = {}
+    commits: dict[str, tuple[int, list[tuple[str, int, str]], set[str]]] = {}
     parts = out.split("\0")
-    # parts: '', 'sha\nmessage', 'diff…', 'sha\nmessage', 'diff…', ...
+    # parts: '', 'sha time\nmessage', 'diff…', 'sha time\nmessage', 'diff…', ...
     for i in range(1, len(parts) - 1, 2):
-        sha, _, msg = parts[i].partition("\n")
+        head, _, msg = parts[i].partition("\n")
+        sha, _, at = head.partition(" ")
         rows = [("(message)", n, line) for n, line in enumerate(msg.splitlines(), 1)]
-        path = None
+        path, in_header, changed = None, False, set()
         for n, line in enumerate(parts[i + 1].splitlines(), 1):
-            if line.startswith("+++ "):
-                path = line[6:] if line.startswith("+++ b/") else None
+            if line.startswith(":") and "\t" in line:  # --raw: `:mode mode sha sha STATUS\tpath`; no hunk line starts with ':'
+                status, _, name = line.partition("\t")
+                if not status.endswith("D"):
+                    changed.add(git_unquote(name))
+            elif line.startswith("diff --git "):     # a file's header runs from here to its first hunk
+                path, in_header = None, True
+            elif in_header:
+                if line.startswith("+++ "):
+                    path = diff_path(line[4:])
+                elif line.startswith("@@"):
+                    in_header = False
             elif line.startswith("+") and path:
                 rows.append((path, n, line[1:]))
-        commits[sha] = rows
+        commits[sha] = (int(at), rows, changed)
     return commits
+
+
+RETIRED_FILE = ".leak-retired"
+HASH = re.compile(r"[0-9a-f]{24}")
+
+
+def fingerprint(text: str) -> str:
+    """The hash .leak-retired lists for a path or a line: 24 hex digits of its SHA-256."""
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()[:24]
+
+
+class Retired:
+    """What the .leak-retired files say: the latest `before` time, and the dropped paths and lines."""
+
+    def __init__(self) -> None:
+        self.cutoff: int | None = None
+        self.cutoff_text = ""
+        self.paths: set[str] = set()
+        self.lines: set[str] = set()
+        self.errors: list[str] = []
+
+    def add(self, source: str, text: str) -> None:
+        before = False
+        for n, raw in enumerate(text.lstrip("\ufeff").splitlines(), 1):
+            ln = raw.strip()
+            if not ln or ln.startswith("#"):
+                continue
+            kind, _, value = ln.partition(" ")
+            value = value.strip()
+            if kind == "before":
+                try:  # Python 3.9 reads neither `Z` nor `+0500`: write them as `+00:00` and `+05:00`
+                    iso = re.sub(r"Z$", "+00:00", value)
+                    iso = re.sub(r"([+-]\d\d)(\d\d)$", r"\1:\2", iso)
+                    when = datetime.fromisoformat(iso)
+                    if when.tzinfo is None:
+                        raise ValueError(value)
+                except ValueError:
+                    self.errors.append(f"{source} line {n}: `before` needs an ISO time with its offset")
+                    continue
+                before = True
+                if self.cutoff is None or int(when.timestamp()) > self.cutoff:
+                    self.cutoff, self.cutoff_text = int(when.timestamp()), value
+            elif kind in ("path", "line") and HASH.fullmatch(value):
+                (self.paths if kind == "path" else self.lines).add(value)
+            else:
+                self.errors.append(f"{source} line {n}: expected `before <time>`, `path <hash>` or `line <hash>`")
+        if not before:
+            self.errors.append(f"{source}: no `before` line")
 
 
 def load_names(path: Path) -> list[re.Pattern]:
@@ -171,17 +282,36 @@ def main() -> int:
     def name_hits(text: str, path: str = "") -> list[int]:
         return [n for n, line in enumerate(text.splitlines(), 1) if named(path, line)]
 
+    retired = Retired()
+    if RETIRED_FILE in files:
+        retired.add(f"{RETIRED_FILE} in {args.rev}", files[RETIRED_FILE])
+    work_copy = args.repo / RETIRED_FILE
+    if work_copy.is_file():
+        retired.add(f"{RETIRED_FILE} in the working copy", work_copy.read_text(encoding="utf-8"))
+    bases = known_bases(args.repo, args.base) if args.history else []
+    for base in bases:  # what the remote already has also says what was dropped
+        try:
+            text = git(args.repo, "show", f"{base}:{RETIRED_FILE}").decode("utf-8")
+        except subprocess.CalledProcessError:
+            continue
+        retired.add(f"{RETIRED_FILE} in base {base[:12]}", text)
+
     all_paths = git(args.repo, "ls-tree", "-r", "-z", "--name-only", args.rev).decode().split("\0")
     for p in filter(None, all_paths):
         if not args.private_repo and forbidden_path(p):
             report(p, "forbidden path (data never belongs in the kit)")
         if name_hits(p):
             report(p, "private name in the file name")
+        if fingerprint(p) in retired.paths:
+            report(p, f"path dropped from this history ({RETIRED_FILE})")
 
     for p, text in sorted(files.items()):
         lines = name_hits(text, p)
         if lines:
             report(p, f"private name, lines {','.join(map(str, lines[:10]))}")
+        dropped = [n for n, line in enumerate(text.splitlines(), 1) if fingerprint(line.strip()) in retired.lines]
+        if dropped:
+            report(p, f"line dropped from this history ({RETIRED_FILE}), lines {','.join(map(str, dropped[:10]))}")
         kinds = Counter(k for _, k in rc.scan(text, extra))
         for kind, n in sorted(kinds.items()):
             if allow.get((p, kind)) != n:
@@ -193,9 +323,22 @@ def main() -> int:
             print(f"note: .leak-allow lists {p}, which is not in {args.rev}", file=sys.stderr)
 
     if args.history:
-        commits = history(args.repo, args.rev, args.base)
-        for sha, rows in commits.items():
+        commits = history(args.repo, args.rev, bases)
+        old = [sha for sha, (at, _, _) in commits.items()
+               if bases and retired.cutoff is not None and at < retired.cutoff]
+        if old:
+            report(f"{len(old)} commit(s) ({', '.join(old[:5])}{', ...' if len(old) > 5 else ''})",
+                   f"authored before {retired.cutoff_text}, when this history was rewritten ({RETIRED_FILE}): "
+                   "they may bring the old history back. Keep your own work on a local branch you do not push, "
+                   "run git fetch origin && git reset --hard origin/<branch>, then redo only your own "
+                   "changes on top; never re-apply the old commits")
+        for sha, (at, rows, changed) in commits.items():
+            for path in sorted(changed | {path for path, _, _ in rows if path != "(message)"}):
+                if fingerprint(path) in retired.paths:
+                    report(f"commit {sha} {path}", f"path dropped from this history ({RETIRED_FILE})")
             for path, n, line in rows:
+                if path != "(message)" and fingerprint(line.strip()) in retired.lines:
+                    report(f"commit {sha} {path} (diff line {n})", f"line dropped from this history ({RETIRED_FILE})")
                 where = f"commit {sha} {path} (diff line {n})"
                 if named(path, line):
                     report(where, "private name")
@@ -204,6 +347,8 @@ def main() -> int:
                         report(where, kind)
         print(f"history: {len(commits)} commit(s) checked", file=sys.stderr)
 
+    for err in dict.fromkeys(retired.errors):
+        report(RETIRED_FILE, err)
     print(f"leak check: {len(files)} files in {args.rev}, {problems} problem(s)")
     return 1 if problems else 0
 
