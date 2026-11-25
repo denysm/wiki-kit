@@ -5,6 +5,7 @@ sources:
   - raw/data/neolabhq-context-engineering-kit-parts-3.10.0.md
   - raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md
   - raw/notes/trials/2026-11-21-llm-wiki-engine-knowledge-bases.md
+  - raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md
   - raw/repos/blader-humanizer-desk-check-2026-11-21.md
   - raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md
   - raw/repos/neolabhq-context-engineering-kit-desk-check-2026-11-21.md
@@ -51,6 +52,7 @@ Neighbouring areas: [Converting documents and recordings](area-converting-docume
 - [raw/data/neolabhq-context-engineering-kit-parts-3.10.0.md](../../raw/data/neolabhq-context-engineering-kit-parts-3.10.0.md)
 - [raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md](../../raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md)
 - [raw/notes/trials/2026-11-21-llm-wiki-engine-knowledge-bases.md](../../raw/notes/trials/2026-11-21-llm-wiki-engine-knowledge-bases.md)
+- [raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md)
 - [raw/repos/blader-humanizer-desk-check-2026-11-21.md](../../raw/repos/blader-humanizer-desk-check-2026-11-21.md)
 - [raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md](../../raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md)
 - [raw/repos/neolabhq-context-engineering-kit-desk-check-2026-11-21.md](../../raw/repos/neolabhq-context-engineering-kit-desk-check-2026-11-21.md)

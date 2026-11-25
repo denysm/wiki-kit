@@ -29,6 +29,7 @@ sources:
   - raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md
   - raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md
   - raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md
+  - raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md
   - raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md
   - raw/repos/agemagician-prottrans-desk-check-2026-11-21.md
   - raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md
@@ -630,6 +631,7 @@ Area page: [Science](area-science.md).
 - [raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md](../../raw/notes/trials/2026-11-21-whisper-cpp-local-meeting-transcription.md)
 - [raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md](../../raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md)
 - [raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md](../../raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md)
+- [raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md)
 - [raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md](../../raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md)
 - [raw/repos/agemagician-prottrans-desk-check-2026-11-21.md](../../raw/repos/agemagician-prottrans-desk-check-2026-11-21.md)
 - [raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md](../../raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md)

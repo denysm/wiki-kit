@@ -8,6 +8,7 @@ version: "0.1.1"
 licence: Apache-2.0
 desk_checked: 2026-11-21
 sources:
+  - raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md
   - raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md
   - raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md
 created: 2026-11-21
@@ -87,6 +88,7 @@ Parts: 8 skills, 10 personas in `agents/` (Claude adapters in `.claude-plugin/ag
 | Date | Task (by kind) | Part | Result | Cost | Record |
 |------|----------------|------|--------|------|--------|
 | 2026-11-21 | Review of a tool-catalog design document and its sample card against a card standard | `comprehension` | Real use, persona read from the clone, not as a plugin: one Blocker and four Major findings; one fix pass then made the card pass all 29 checks. | 81753 tokens | [use record](../../raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md) |
+| 2026-11-25 | Two diff-review rounds on a leak check's new flags, two pre-push hooks and a bash setup script, across two repositories | `egm-lite` | Real use: 9 findings (4 P1: a hook that checked only HEAD, an ignore-file append that un-ignored `.env`, repeated appends, a folder copied into), 8 fixed, 1 contested; round 2 confirmed all and found 2 P2 caused by the fixes (a push to a new remote always refused; a private name carried into other repositories). | 166681 tokens, about 1.9 USD | [use record](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md) |
 
 ## Verdict
 
@@ -104,3 +106,4 @@ No verdict for the repository as a whole: its parts are read from the clone one 
 
 - [Desk check: google/elephant-goldfish-model 0.1.1](../../raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md): every part read from the clone, freshness through the GitHub API, the kit's use of it.
 - [Use record: comprehension persona, reviewing a catalog design document](../../raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md): the real use behind `comprehension` being in use and the Tried row.
+- [Use record: egm-lite, two diff-review rounds on a leak check, two hooks and a setup script](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md): 9 then 2 findings; round 2 caught defects the fixes introduced.
