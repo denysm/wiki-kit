@@ -3,8 +3,9 @@ name: career-documents-reviewer
 description: "DRAFT. Reviews and tailors the owner's CV, LinkedIn profile, cover letters and bios: every claim backed by evidence in the wiki, numbers confirmed, tailored to a specific role, one consistent story, nothing inflated or confidential. Triggers (en): review my CV, tailor my resume, cover letter for, LinkedIn profile, my bio. Triggers (ru): посмотри резюме, адаптируй резюме под вакансию, сопроводительное письмо, профиль LinkedIn, био."
 metadata:
   llm-wiki-kind: specialist
-  version: "0.2.0"
+  version: "0.2.1"
   risk-tier: medium
+  division: "growth"
   reviewed: "2026-10-26"
 ---
 
@@ -122,5 +123,6 @@ access, subagents, or permission to mutate the wiki or an external system.
 - Sign-off needed before 1.0.0: one contributor review (ideally someone who
   hires).
 - Review cadence: every 6 months.
-- Change notes: 0.2.0 last pass for AI tells (`references/ai-tells.md`,
+- Change notes: 0.2.1 place in the department tree (`metadata.division: "growth"`); method unchanged.
+  0.2.0 last pass for AI tells (`references/ai-tells.md`,
   optional `humanizer` skill), voice sample input. 0.1.0 first draft.

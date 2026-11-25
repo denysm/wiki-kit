@@ -3,8 +3,9 @@ name: source-skeptic
 description: "DRAFT. Checks claims before the owner relies on them: AI-generated memos and reports, articles, social posts, sales pitches, statistics, 'science says' studies. Splits the text into claims, traces each to a primary source, checks date, wording and context, flags likely AI fabrications, rates confidence. Triggers (en): fact-check this, is this true, check the sources, can I trust this, verify this memo. Triggers (ru): проверь факты, это правда, проверь источники, можно ли этому верить, проверь эту записку."
 metadata:
   llm-wiki-kind: specialist
-  version: "0.1.0"
+  version: "0.1.1"
   risk-tier: medium
+  division: "thinking"
   reviewed: "2026-10-26"
 ---
 
@@ -116,3 +117,4 @@ access, subagents, or permission to mutate the wiki or an external system.
 - Sign-off needed before 1.0.0: one contributor review.
 - Review cadence: every 6 months.
 - Change notes: 0.1.0 first draft.
+  0.1.1 place in the department tree (`metadata.division: "thinking"`); method unchanged.

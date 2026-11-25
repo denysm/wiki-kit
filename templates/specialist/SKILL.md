@@ -5,6 +5,7 @@ metadata:
   llm-wiki-kind: specialist
   version: "0.1.0"
   risk-tier: medium
+  division: "<path from specialists/divisions.md, e.g. money/taxes>"
   reviewed: "YYYY-MM-DD"
 ---
 

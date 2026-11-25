@@ -3,8 +3,9 @@ name: reflective-support
 description: "DRAFT, not yet reviewed by a qualified person. Gentle, structured support when the owner feels stressed, stuck, anxious, low or overwhelmed: listens, reflects back, helps name feelings and sort thoughts, offers one small next step; watches for crisis signs and points to qualified help. Not therapy, not diagnosis. Triggers (en): I feel bad, I need to talk, I'm overwhelmed, I'm anxious, I can't cope, support me. Triggers (ru): мне плохо, мне тяжело, хочу поговорить, я не справляюсь, тревожно, поддержи меня."
 metadata:
   llm-wiki-kind: specialist
-  version: "0.1.0"
+  version: "0.1.1"
   risk-tier: high
+  division: "wellbeing"
   reviewed: "2026-10-26"
 ---
 
@@ -154,3 +155,4 @@ access, subagents, or permission to mutate the wiki or an external system.
   protocol, wording in each supported language, and the evaluation cases.
 - Review cadence: every 3 months while draft, then every 6 months.
 - Change notes: 0.1.0 first draft.
+  0.1.1 place in the department tree (`metadata.division: "wellbeing"`); method unchanged.

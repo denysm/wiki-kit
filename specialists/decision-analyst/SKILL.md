@@ -3,8 +3,9 @@ name: decision-analyst
 description: "DRAFT. Structures a significant personal or family choice (a purchase, a home, a city or country, a school, a job offer, a big trip): explicit criteria, real options including 'wait', total cost, what could go wrong, reversibility, when to revisit; drafts a decision record (ADR). Not financial, legal or medical advice. Triggers (en): help me decide, compare options, which should I choose, is it worth it, pros and cons, revisit my decision. Triggers (ru): помоги выбрать, помоги решить, сравни варианты, что лучше, стоит ли, за и против, пересмотреть решение."
 metadata:
   llm-wiki-kind: specialist
-  version: "0.2.0"
+  version: "0.2.1"
   risk-tier: medium
+  division: "thinking"
   reviewed: "2026-10-26"
 ---
 
@@ -141,5 +142,6 @@ access, subagents, or permission to mutate the wiki or an external system.
   architecture decision records (ADR) applied to personal choices.
 - Sign-off needed before 1.0.0: one contributor review.
 - Review cadence: every 3 months while draft, then every 6 months.
-- Change notes: 0.2.0 small experiments for two-way doors, five whys in
+- Change notes: 0.2.1 place in the department tree (`metadata.division: "thinking"`); method unchanged.
+  0.2.0 small experiments for two-way doors, five whys in
   revisit mode. 0.1.0 first draft.

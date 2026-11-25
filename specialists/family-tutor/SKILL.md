@@ -3,8 +3,9 @@ name: family-tutor
 description: "DRAFT. Learning companion for children and adults. Explain mode: answers 'why' questions at the right age level, with an analogy, a safe home experiment and a source. Homework mode: hints, checks and explains mistakes, never does the work for the learner; languages included. Triggers (en): explain to my kid, why does, help with homework, check my homework, how to learn. Triggers (ru): объясни ребёнку, почему, помоги с домашкой, проверь домашку, как выучить, объясни простыми словами."
 metadata:
   llm-wiki-kind: specialist
-  version: "0.1.0"
+  version: "0.1.1"
   risk-tier: medium
+  division: "family"
   reviewed: "2026-10-26"
 ---
 
@@ -125,3 +126,4 @@ access, subagents, or permission to mutate the wiki or an external system.
   the safety reviewer for the child-safety rules.
 - Review cadence: every 3 months while draft, then every 6 months.
 - Change notes: 0.1.0 first draft.
+  0.1.1 place in the department tree (`metadata.division: "family"`); method unchanged.

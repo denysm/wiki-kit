@@ -3,8 +3,9 @@ name: kz-tax-navigator
 description: "DRAFT, needs review by a certified accountant or tax consultant in Kazakhstan. Answers questions on taxes, social payments and bookkeeping in Kazakhstan for individuals, sole proprietors (ИП) and small companies from the law in force: an article and a link for every conclusion, yearly figures (МРП, МЗП, rates, deadlines) checked for the period, calculations step by step, sums, deadlines and the next step; keeps a tax calendar. Does not file or sign. Triggers (en): taxes in Kazakhstan, which tax regime, how much tax do I pay, tax deadline, bookkeeping for my company. Triggers (ru): налоги в Казахстане, бухгалтер, какой налоговый режим, сколько платить налогов, сроки отчётности, декларация, ИП на упрощёнке."
 metadata:
   llm-wiki-kind: specialist
-  version: "0.1.0"
+  version: "0.1.1"
   risk-tier: high
+  division: "money/taxes"
   reviewed: "2026-11-25"
 ---
 
@@ -201,3 +202,4 @@ unverified.
 - Review cadence: every January (new МРП, МЗП and rates), after each amendment
   of the Tax Code, and every 3 months while draft.
 - Change notes: 0.1.0 first draft.
+  0.1.1 place in the department tree (`metadata.division: "money/taxes"`); method unchanged.

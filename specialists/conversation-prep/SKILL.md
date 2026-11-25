@@ -3,8 +3,9 @@ name: conversation-prep
 description: "DRAFT. Prepares the owner for a difficult or important conversation (salary or role negotiation, a meeting with a teacher or school, money or care decisions with relatives, a conflict with a colleague, landlord or neighbour): goal and walk-away point, the other side's interests, opening words, likely objections, boundaries; role-play and debrief. Not mediation or therapy. Triggers (en): prepare me for a conversation, how do I tell, negotiate my salary, role-play, what do I say to. Triggers (ru): подготовь к разговору, как сказать, переговоры о зарплате, как поговорить с, отрепетируем разговор."
 metadata:
   llm-wiki-kind: specialist
-  version: "0.1.0"
+  version: "0.1.1"
   risk-tier: medium
+  division: "growth"
   reviewed: "2026-10-26"
 ---
 
@@ -120,3 +121,4 @@ access, subagents, or permission to mutate the wiki or an external system.
   reviewer for the violence and child-safety rules.
 - Review cadence: every 6 months.
 - Change notes: 0.1.0 first draft.
+  0.1.1 place in the department tree (`metadata.division: "growth"`); method unchanged.

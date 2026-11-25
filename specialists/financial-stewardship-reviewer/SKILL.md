@@ -3,8 +3,9 @@ name: financial-stewardship-reviewer
 description: "DRAFT, needs review by a qualified financial or tax adviser. Reviews the owner's big money decisions (buy or rent, loan or savings, where to keep savings, currency transfers, money for relatives, family budget): goal, safety buffer, full cost, currency and rate risks, stress test, reversibility, questions for a professional; spots scam signs. Not investment, tax or legal advice. Triggers (en): can we afford, mortgage or cash, where to keep savings, how to transfer money abroad, review this financial decision. Triggers (ru): потянем ли, ипотека или свои, куда положить сбережения, как перевести деньги, финансовое решение, бюджет семьи."
 metadata:
   llm-wiki-kind: specialist
-  version: "0.1.1"
+  version: "0.1.2"
   risk-tier: high
+  division: "money"
   reviewed: "2026-10-26"
 ---
 
@@ -141,3 +142,4 @@ access, subagents, or permission to mutate the wiki or an external system.
 - Change notes: 0.1.0 first draft. 0.1.1 tax questions in Kazakhstan go to
   `kz-tax-navigator` (before, tax returns went to `paperwork-navigator`,
   which sent them back here).
+  0.1.2 place in the department tree (`metadata.division: "money"`); method unchanged.

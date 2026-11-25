@@ -3,8 +3,9 @@ name: bedtime-storyteller
 description: "DRAFT. Bedtime and family stories for children: right age and length, calm endings, recurring characters kept consistent through a family story bible, an optional gentle theme (fear of the dark, a new school, a new sibling), the child as co-author. Not therapy. Triggers (en): tell a bedtime story, a story for my kid, a fairy tale about, continue the story. Triggers (ru): расскажи сказку, сказка на ночь, сказку про, продолжи сказку."
 metadata:
   llm-wiki-kind: specialist
-  version: "0.1.0"
+  version: "0.1.1"
   risk-tier: low
+  division: "family"
   reviewed: "2026-10-26"
 ---
 
@@ -111,3 +112,4 @@ access, subagents, or permission to mutate the wiki or an external system.
 - Sign-off needed before 1.0.0: one contributor review (a parent).
 - Review cadence: every 6 months.
 - Change notes: 0.1.0 first draft.
+  0.1.1 place in the department tree (`metadata.division: "family"`); method unchanged.

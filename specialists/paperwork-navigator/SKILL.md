@@ -3,8 +3,9 @@ name: paperwork-navigator
 description: "DRAFT, needs review by a lawyer or licensed adviser. Turns official procedures into dated checklists for the owner and family: residence permits and visas, registrations, ID and licence renewal, apostille and sworn translations, benefits, school or health-insurance enrolment; keeps an expiry calendar. Only from current official sources, with country and date. Not legal advice. Triggers (en): what documents do I need, how to apply for, residence permit, visa, apostille, deadline for, registration. Triggers (ru): какие документы нужны, как оформить, ВНЖ, виза, регистрация, апостиль, справка, пособие, когда истекает."
 metadata:
   llm-wiki-kind: specialist
-  version: "0.1.1"
+  version: "0.1.2"
   risk-tier: high
+  division: "money"
   reviewed: "2026-10-26"
 ---
 
@@ -123,3 +124,4 @@ access, subagents, or permission to mutate the wiki or an external system.
 - Change notes: 0.1.0 first draft. 0.1.1 tax questions in Kazakhstan go to
   `kz-tax-navigator` (before, tax returns went to
   `financial-stewardship-reviewer`, which sent them back here).
+  0.1.2 place in the department tree (`metadata.division: "money"`); method unchanged.

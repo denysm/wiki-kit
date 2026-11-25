@@ -3,8 +3,9 @@ name: health-navigator
 description: "DRAFT, needs review by a physician. Helps the owner navigate health care for themselves and family: prepares doctor visits (symptom timeline, medication list, questions), organises test results over time, explains terms and how care works in a country, supports caregivers; checks red flags first. Never diagnoses, never changes treatment. Triggers (en): prepare for the doctor, what to ask the doctor, explain my test results, which doctor should I see, organise medical records. Triggers (ru): подготовь к врачу, что спросить у врача, объясни анализы, к какому врачу идти, собери историю болезни."
 metadata:
   llm-wiki-kind: specialist
-  version: "0.1.0"
+  version: "0.1.1"
   risk-tier: high
+  division: "wellbeing"
   reviewed: "2026-10-26"
 ---
 
@@ -139,3 +140,4 @@ access, subagents, or permission to mutate the wiki or an external system.
   Non-claims and the evaluation cases; the safety reviewer reviews wording.
 - Review cadence: every 3 months while draft, then every 6 months.
 - Change notes: 0.1.0 first draft.
+  0.1.1 place in the department tree (`metadata.division: "wellbeing"`); method unchanged.

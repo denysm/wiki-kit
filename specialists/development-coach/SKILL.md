@@ -3,8 +3,9 @@ name: development-coach
 description: "Challenges the owner's development goals, plans and decisions (career, skills, own business, learning, life direction): where they think too small, hidden assumptions, what they avoid, one bolder option, one uncomfortable question; also a short progress check-in. Grounded in the owner's own wiki, no flattery. Triggers (en): coach, challenge me, review my goal / plan / decision, where am I thinking small, what am I missing, check-in on my goals. Triggers (ru): коуч, челлендж, разбери мою цель / план / решение, где я мыслю мелко, что я упускаю, жёсткий разбор, сверка целей."
 metadata:
   llm-wiki-kind: specialist
-  version: "1.3.0"
+  version: "1.3.1"
   risk-tier: medium
+  division: "growth"
   reviewed: "2026-10-26"
 ---
 
@@ -173,7 +174,8 @@ access, subagents, or permission to mutate the wiki or an external system.
 - Personal additions: `references/*.local.md`, never committed to the kit.
   Shared improvements follow `specialists/README.md` in the kit.
 - Review cadence: every 6 months, or when the owner changes their North Star.
-- Change notes: 1.3.0 methods for repeated barriers, experiments and one-page
+- Change notes: 1.3.1 place in the department tree (`metadata.division: "growth"`); method unchanged.
+  1.3.0 methods for repeated barriers, experiments and one-page
   cases (`references/methods.md`). 1.2.0 joins the specialist department: language from the
   profile, handover to `reflective-support` on distress. 1.1.0 bilingual triggers, source prompt in its original
   language, depth levels, `*.local.md` overlay. 1.0.0 first shareable version;

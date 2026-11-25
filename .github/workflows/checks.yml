@@ -25,6 +25,8 @@ jobs:
         run: python -I -c 'import sys; [compile(open(f, encoding="utf-8").read(), f, "exec") for f in sys.argv[1:]]' scripts/*.py
       - name: SKILL.md frontmatter (skills/ and specialists/)
         run: python -I scripts/skill_check.py
+      - name: Specialist department tree (divisions, handoffs, Staff table, front desk description names no specialist)
+        run: python -I scripts/department_map.py --check
       - name: Tool catalog (every number, date and quote grounded; generated pages match the cards)
         run: |
           python -I scripts/check_evidence.py --strict catalog
