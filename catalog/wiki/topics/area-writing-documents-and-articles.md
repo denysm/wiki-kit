@@ -6,6 +6,7 @@ sources:
   - raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md
   - raw/notes/trials/2026-11-21-llm-wiki-engine-knowledge-bases.md
   - raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md
+  - raw/notes/trials/2026-11-25-egm-lite-diff-review-retired-history-guard.md
   - raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md
   - raw/repos/blader-humanizer-desk-check-2026-11-21.md
   - raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md
@@ -54,6 +55,7 @@ Neighbouring areas: [Converting documents and recordings](area-converting-docume
 - [raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md](../../raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md)
 - [raw/notes/trials/2026-11-21-llm-wiki-engine-knowledge-bases.md](../../raw/notes/trials/2026-11-21-llm-wiki-engine-knowledge-bases.md)
 - [raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md)
+- [raw/notes/trials/2026-11-25-egm-lite-diff-review-retired-history-guard.md](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-retired-history-guard.md)
 - [raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md](../../raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md)
 - [raw/repos/blader-humanizer-desk-check-2026-11-21.md](../../raw/repos/blader-humanizer-desk-check-2026-11-21.md)
 - [raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md](../../raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md)

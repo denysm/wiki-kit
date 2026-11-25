@@ -17,3 +17,7 @@
 ## [2026-11-25] lint | local command: 0 critical, 0 warnings, 0 suggestions, 8 auto-fixed
 
 ## [2026-11-25] retract | 21 records about the owner's private app moved to the owner's private repository (17 egm-lite use records, 3 trials, 1 lesson note); the egm-lite card keeps their totals in raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md; parts that only those trials had run go back to `candidate`
+
+## [2026-11-25] trial | egm-lite use record — four rounds on a leak-check rule against a rewritten history coming back → raw/notes/trials/2026-11-25-egm-lite-diff-review-retired-history-guard.md; egm card Tried row and sources
+
+## [2026-11-25] lint | local command: 0 critical, 0 warnings, 0 suggestions, 3 auto-fixed

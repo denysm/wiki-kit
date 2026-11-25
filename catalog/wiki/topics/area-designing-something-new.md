@@ -7,6 +7,7 @@ sources:
   - raw/notes/trials/2026-11-21-llm-wiki-engine-knowledge-bases.md
   - raw/notes/trials/2026-11-21-superpowers-brainstorming-catalog-design.md
   - raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md
+  - raw/notes/trials/2026-11-25-egm-lite-diff-review-retired-history-guard.md
   - raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md
   - raw/repos/fission-ai-openspec-desk-check-2026-11-21.md
   - raw/repos/github-spec-kit-desk-check-2026-11-21.md
@@ -78,6 +79,7 @@ Neighbouring areas: [Writing code with agents](area-writing-code-with-agents.md)
 - [raw/notes/trials/2026-11-21-llm-wiki-engine-knowledge-bases.md](../../raw/notes/trials/2026-11-21-llm-wiki-engine-knowledge-bases.md)
 - [raw/notes/trials/2026-11-21-superpowers-brainstorming-catalog-design.md](../../raw/notes/trials/2026-11-21-superpowers-brainstorming-catalog-design.md)
 - [raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md)
+- [raw/notes/trials/2026-11-25-egm-lite-diff-review-retired-history-guard.md](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-retired-history-guard.md)
 - [raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md](../../raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md)
 - [raw/repos/fission-ai-openspec-desk-check-2026-11-21.md](../../raw/repos/fission-ai-openspec-desk-check-2026-11-21.md)
 - [raw/repos/github-spec-kit-desk-check-2026-11-21.md](../../raw/repos/github-spec-kit-desk-check-2026-11-21.md)
