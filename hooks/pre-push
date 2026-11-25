@@ -17,11 +17,16 @@ while read -r _ local_sha _ remote_sha; do
     # a new branch, or the remote has commits not fetched here: check everything not on
     # this remote as last fetched (git itself then refuses a push that is not a fast-forward)
     bases=$(git for-each-ref --format='--base=%(objectname)' "refs/remotes/$remote")
+    # a remote never fetched (a new mirror): what any other remote has is public already; without this
+    # the whole history is checked, and its early commits carry names the kit-only list now refuses
+    [ -n "$bases" ] || bases=$(git for-each-ref --format='--base=%(objectname)' refs/remotes)
   else
     bases="--base=$remote_sha"
   fi
   # shellcheck disable=SC2086
-  $py -I "$root/scripts/leak_check.py" --repo "$root" --rev "$local_sha" --history $bases || status=1
+  # kit-only names: allowed in the owner's private repositories, refused in this public one
+  $py -I "$root/scripts/leak_check.py" --repo "$root" --rev "$local_sha" --history $bases \
+    --more-names "$HOME/.config/wiki-kit/kit-only-names.txt" || status=1
 done
 if [ "$status" -ne 0 ]; then
   echo "pre-push: leak check failed, nothing was pushed. Fix the commits (or list a false positive in .leak-allow)." >&2

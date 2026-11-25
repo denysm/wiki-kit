@@ -3,14 +3,18 @@
 
 Usage:
   leak_check.py [--repo DIR] [--rev REV] [--history [--base REV ...]]
-                [--names FILE] [--patterns FILE] [--allow FILE]
+                [--names FILE] [--more-names FILE ...] [--patterns FILE] [--allow FILE]
+                [--private-repo]
 
 Checks the committed tree of REV (default HEAD), not the working copy:
   1. forbidden paths: topics/, raw/, inbox/, *.local.md (except catalog/raw/ and
-     catalog/wiki/topics/, the public tool catalog);
+     catalog/wiki/topics/, the public tool catalog); skipped with --private-repo,
+     for the owner's private repositories that may hold a wiki of their own;
   2. private names: every line of --names (default
      ~/.config/wiki-kit/private-names.txt) is a case-insensitive regex, as in
-     `grep -iEf`; file names are checked too;
+     `grep -iEf`; file names are checked too; each --more-names list is added
+     to it (a missing file is skipped: the kit's hook passes its kit-only list,
+     names that private repositories may carry but this public one may not);
   3. secrets, internal hosts and infrastructure ids: the raw_check.py rules,
      with its internal-domains list.
 --history also checks the lines added and the messages of the commits in REV
@@ -134,6 +138,10 @@ def main() -> int:
     ap.add_argument("--history", action="store_true", help="also check commits of REV not in any --base")
     ap.add_argument("--base", action="append", default=[], help="commit already pushed (repeatable)")
     ap.add_argument("--names", type=Path, default=NAMES)
+    ap.add_argument("--private-repo", action="store_true",
+                    help="a private repository: data paths allowed; names, secrets and hosts still checked")
+    ap.add_argument("--more-names", type=Path, action="append", default=[],
+                    help="another names list added to --names; skipped when missing (repeatable)")
     ap.add_argument("--patterns", type=Path, help="internal hosts, as raw_check.py --patterns")
     ap.add_argument("--allow", type=Path, help="false-positive list (default: .leak-allow in REV)")
     args = ap.parse_args()
@@ -141,8 +149,11 @@ def main() -> int:
     rc = load_raw_check()
     extra = rc.load_patterns(args.patterns)
     names = load_names(args.names) if args.names.exists() else []
+    more_names = [n for more in args.more_names if more.exists() for n in load_names(more)]
     if not names:
-        print(f"warning: no private names list at {args.names}; names not checked", file=sys.stderr)
+        rest = "only the --more-names lists are checked" if more_names else "names not checked"
+        print(f"warning: no private names list at {args.names}; {rest}", file=sys.stderr)
+    names += more_names
     files = tree(args.repo, args.rev)
     allow = load_allow(args.allow.read_text(encoding="utf-8") if args.allow else files.get(".leak-allow"))
     problems = 0
@@ -162,7 +173,7 @@ def main() -> int:
 
     all_paths = git(args.repo, "ls-tree", "-r", "-z", "--name-only", args.rev).decode().split("\0")
     for p in filter(None, all_paths):
-        if forbidden_path(p):
+        if not args.private_repo and forbidden_path(p):
             report(p, "forbidden path (data never belongs in the kit)")
         if name_hits(p):
             report(p, "private name in the file name")
