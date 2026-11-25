@@ -20,7 +20,7 @@ summary: "Small voice activity detector (MIT, no telemetry, under 1 ms per 30 ms
 
 # snakers4/silero-vad
 
-> A voice activity detector (kind `model`, licence MIT, version `6.2.3` read through the GitHub API): tells speech from silence in 30 ms chunks, in under 1 ms on one CPU thread, at 8 or 16 kHz. Its model files are about 1.2 to 2.8 MB. Tried through whisper.cpp (`--vad`, ggml v6.2.0) on synthetic call tracks, 2026-11-24.
+> A voice activity detector (kind `model`, licence MIT, version `6.2.3` read through the GitHub API): tells speech from silence in 30 ms chunks, in under 1 ms on one CPU thread, at 8 or 16 kHz. Its model files are about 1.2 to 2.8 MB. Read, not run here.
 
 ## Tasks it serves
 
@@ -39,12 +39,14 @@ summary: "Small voice activity detector (MIT, no telemetry, under 1 ms per 30 ms
 
 | Part | What it does | Status | Needs | Check when |
 |------|--------------|--------|-------|------------|
-| the copy inside the recogniser | Silero VAD as shipped in whisper.cpp, NeMo-Speech.cpp and FluidAudio. | tried | The recogniser's own VAD file | Try it with the live recogniser that wins the bench. |
+| the copy inside the recogniser | Silero VAD as shipped in whisper.cpp, NeMo-Speech.cpp and FluidAudio. | candidate | The recogniser's own VAD file | Try it with the live recogniser that wins the bench. |
 | `silero_vad.onnx` | ONNX model, 2327524 bytes; C++ example with ONNX Runtime. | candidate | ONNX Runtime | Try it only if the chosen recogniser has no VAD. |
 | `silero_vad_16k_op15.onnx`, `silero_vad_half.onnx`, `silero_vad_16k_sequence.onnx`, `silero_vad_op18_ifless.onnx`, `silero_vad_openvino_16k.onnx` | Variants for 16 kHz, half precision, sequence inference, older runtimes and OpenVINO. | listed | ONNX Runtime or OpenVINO | Read when the default file does not load in a runtime. |
 | `silero_vad.jit` | PyTorch JIT model, 2272526 bytes. | listed | PyTorch | Read when a Python reference result is needed. |
 
 ## Tried
+
+None yet: no part has been run here.
 
 | Date | Task (by kind) | Part | Result | Cost | Record |
 |------|----------------|------|--------|------|--------|

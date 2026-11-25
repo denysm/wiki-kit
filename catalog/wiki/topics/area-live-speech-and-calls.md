@@ -35,13 +35,14 @@ Neighbouring areas: [Converting documents and recordings](area-converting-docume
 
 | Card | Part | Status |
 |------|------|--------|
-| [3loi Odyssey 2024 WavLM baselines (SER-Odyssey-Baseline-WavLM)](../references/3loi-ser-odyssey-baseline-wavlm.md) | Categorical | tried |
-| [3loi Odyssey 2024 WavLM baselines (SER-Odyssey-Baseline-WavLM)](../references/3loi-ser-odyssey-baseline-wavlm.md) | Multi-Attributes | tried |
+| [3loi Odyssey 2024 WavLM baselines (SER-Odyssey-Baseline-WavLM)](../references/3loi-ser-odyssey-baseline-wavlm.md) | Categorical | candidate |
+| [3loi Odyssey 2024 WavLM baselines (SER-Odyssey-Baseline-WavLM)](../references/3loi-ser-odyssey-baseline-wavlm.md) | Multi-Attributes | candidate |
 | [Apple speech synthesis (say, AVSpeechSynthesizer)](../references/apple-speech-synthesis.md) | `AVSpeechSynthesizer` | candidate |
 | [Apple speech synthesis (say, AVSpeechSynthesizer)](../references/apple-speech-synthesis.md) | `say` | tried |
 | [Apple speech synthesis (say, AVSpeechSynthesizer)](../references/apple-speech-synthesis.md) | installed voices | tried |
 | [Apple Translation](../references/apple-translation.md) | `LanguageAvailability` | tried |
 | [Apple Translation](../references/apple-translation.md) | `TranslationSession(installedSource:target:)` | tried |
+| [emotion2vec/emotion2vec_plus_large](../references/emotion2vec-emotion2vec-plus-large.md) | `model.pt` through FunASR | candidate |
 | [FluidInference/FluidAudio](../references/fluidinference-fluidaudio.md) | LocalVQE | candidate |
 | [FluidInference/FluidAudio](../references/fluidinference-fluidaudio.md) | Nemotron Speech Streaming Multilingual 0.6B | candidate |
 | [FluidInference/FluidAudio](../references/fluidinference-fluidaudio.md) | Showcase apps | reference |
@@ -55,16 +56,17 @@ Neighbouring areas: [Converting documents and recordings](area-converting-docume
 | [makeusabrew/audiotee](../references/makeusabrew-audiotee.md) | `--sample-rate` | reference |
 | [makeusabrew/audiotee](../references/makeusabrew-audiotee.md) | `AudioTapManager` | reference |
 | [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `NeMoSpeech::ASR` streaming API | candidate |
+| [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `diarize` | candidate |
 | [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `serve` | candidate |
 | [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `synthesize` | candidate |
 | [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `transcribe --live` | candidate |
 | [NVIDIA/NeMo-Speech.cpp](../references/nvidia-nemo-speech-cpp.md) | `translate` | candidate |
 | [nvidia/nemotron-3.5-asr-streaming-0.6b](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | `q8_0.gguf` | tried |
 | [nvidia/parakeet-tdt-0.6b-v3](../references/nvidia-parakeet-tdt-0-6b-v3.md) | Parakeet Ultra (FluidAudio) | candidate |
-| [salute-developers/GigaAM](../references/salute-developers-gigaam.md) | GigaAM-Emo | tried |
+| [salute-developers/GigaAM](../references/salute-developers-gigaam.md) | GigaAM-Emo | candidate |
 | [salute-developers/GigaAM](../references/salute-developers-gigaam.md) | GigaAM-v3 | candidate |
 | [snakers4/silero-vad](../references/snakers4-silero-vad.md) | `silero_vad.onnx` | candidate |
-| [snakers4/silero-vad](../references/snakers4-silero-vad.md) | the copy inside the recogniser | tried |
+| [snakers4/silero-vad](../references/snakers4-silero-vad.md) | the copy inside the recogniser | candidate |
 
 ## See Also
 

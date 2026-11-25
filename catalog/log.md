@@ -14,3 +14,6 @@
 
 ## [2026-11-25] retract | 4 lesson notes of a private project moved to that project's private repository; 2 trial records no longer name its bench file
 
+## [2026-11-25] lint | local command: 0 critical, 0 warnings, 0 suggestions, 8 auto-fixed
+
+## [2026-11-25] retract | 21 records about the owner's private app moved to the owner's private repository (17 egm-lite use records, 3 trials, 1 lesson note); the egm-lite card keeps their totals in raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md; parts that only those trials had run go back to `candidate`

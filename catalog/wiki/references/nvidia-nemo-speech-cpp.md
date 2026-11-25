@@ -22,6 +22,7 @@ summary: "NVIDIA's native C++ runtime for its speech models on ggml (Metal on Ap
 
 # NVIDIA/NeMo-Speech.cpp
 
+> A local speech runtime (kind `cli`, licence Apache-2.0, version `0.3.0` read in a clone): NVIDIA's "official solution for local speech inference", running its speech models as GGUF files on ggml, with Metal on Apple Silicon. One binary covers recognition (including streaming and the live microphone), diarization, translation and synthesis; a C SDK exposes the same in-process. `transcribe` is tried.
 
 ## Tasks it serves
 
@@ -52,6 +53,7 @@ Parts are the commands of `app/main.cpp` and the SDK component that matters here
 | `NeMoSpeech::ASR` streaming API | `nemo_speech_asr_stream_push_f32` / `nemo_speech_asr_stream_next`, results flagged final or not, per-stream VAD, endpointing, language code or `auto`, speech contexts, word time offsets. | candidate | The release archive's headers and shared libraries, a GGUF model | Try it as the recogniser inside a native capture app, one stream per track. |
 | `transcribe` | Transcribe WAV files with any supported model and language; `--stream` feeds a file through the streaming recogniser. | tried | The archive and a GGUF model (sizes on the Parakeet v3 and Nemotron 3.5 cards) | The real task that would move it to `in use`: the accuracy bench on the owner's recordings, then the after-call pass. |
 | `transcribe --live` | Live transcription of the default microphone (miniaudio capture). | candidate | The archive, a model, a microphone | Try it to measure time to first text before building the native path. |
+| `diarize` | Streaming Sortformer 4-speaker v2 (`cc-by-4.0`) or Nemotron 3 Diarization (`openmdw-1.1`, up to eight speakers), alone or with ASR. The default is a stateful streaming pass. | candidate | The archive and a diarization GGUF | Try it on a recording with a speaker-labelled reference, as it runs and afterwards. |
 | `translate` | Riva Translate 4B Instruct v2 (`nvidia-open-model-license`): English and 36 other languages, including Russian, Ukrainian, French, German and Dutch; not Kazakh. | candidate | The archive, a 4B-parameter model (several GB of memory) | Try it against Apple Translation and a local LLM on call sentences. |
 | `synthesize` | MagpieTTS Multilingual 357M (`nvidia-open-model-license`); no Russian, Ukrainian or Kazakh. | candidate | The archive and the TTS model with its codec | Try it for French or German speech in an earpiece against the system voices. |
 | `serve` | Local HTTP server with OpenAI-compatible routes and realtime WebSocket transcription. | candidate | The archive; loopback only | Try it when a second program needs live text without linking the SDK. |
@@ -66,6 +68,7 @@ Parts are the commands of `app/main.cpp` and the SDK component that matters here
 
 ## Verdict
 
+A strong candidate for the live recogniser of a native call app: one runtime, a stable C streaming API and Metal, covering Russian and Ukrainian through Nemotron 3.5 and Parakeet v3. Recognition has run on Apple Silicon (trial below); its claimed speeds are for NVIDIA GPUs and a CPU, not Apple Silicon. Revisit after the speech-recognition bench trial, or when a release after `0.3.0` ships. Freshness re-check 2026-11-23: no release after `0.3.0`; `nightly` adds two commits (CUDA, speech-LLM quantisation), none touching `diarize`; the 2026-11-22 push went to side branches. `0.3.0` already carries the diarization fix #87 (speaker attribution at speaker changes, `<v Speaker N>` labels in WebVTT), so this desk check stands ([freshness re-check](../../raw/repos/nvidia-nemo-speech-cpp-freshness-2026-11-23.md)).
 
 ## See Also
 

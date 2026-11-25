@@ -30,6 +30,7 @@ sources:
   - raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md
   - raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md
   - raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md
+  - raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md
   - raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md
   - raw/repos/agemagician-prottrans-desk-check-2026-11-21.md
   - raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md
@@ -427,7 +428,8 @@ Area page: [Live speech and calls](area-live-speech-and-calls.md).
 
 | Task | Go to | Status | Not this, because |
 |------|-------|--------|-------------------|
-| Track how aroused and how positive a speaker sounds, as numbers from 0 to 1, during a call | [3loi Odyssey 2024 WavLM baselines (SER-Odyssey-Baseline-WavLM): Multi-Attributes](../references/3loi-ser-odyssey-baseline-wavlm.md) | tried |  |
+| Score how aroused and how positive speech sounds, as numbers from 0 to 1, per utterance | [3loi Odyssey 2024 WavLM baselines (SER-Odyssey-Baseline-WavLM): Multi-Attributes](../references/3loi-ser-odyssey-baseline-wavlm.md) | candidate |  |
+| Label an utterance with one of eight emotions | [3loi Odyssey 2024 WavLM baselines (SER-Odyssey-Baseline-WavLM): Categorical](../references/3loi-ser-odyssey-baseline-wavlm.md) | candidate |  |
 | Speak a translated sentence into a headset during a call, in the listener's language | [Apple speech synthesis (say, AVSpeechSynthesizer): `AVSpeechSynthesizer`](../references/apple-speech-synthesis.md) | candidate |  |
 | Read an assistant's answer aloud from a script or a hook | [Apple speech synthesis (say, AVSpeechSynthesizer): `say`](../references/apple-speech-synthesis.md) | tried |  |
 | Send speech to the headset only, not the speakers (`--audio-device`) | [Apple speech synthesis (say, AVSpeechSynthesizer): `say`](../references/apple-speech-synthesis.md) | tried |  |
@@ -436,6 +438,8 @@ Area page: [Live speech and calls](area-live-speech-and-calls.md).
 | Translate the listener's own sentence into the call language to read or hear it back | [Apple Translation: `TranslationSession(installedSource:target:)`](../references/apple-translation.md) | tried |  |
 | Check which language pairs a Mac can translate before a call | [Apple Translation: `LanguageAvailability`](../references/apple-translation.md) | tried |  |
 | Kazakh. The pair status is `unsupported` | [Apple Translation: `LanguageAvailability`](../references/apple-translation.md) | tried | see the card's rejected row |
+| Label the emotion of an utterance, in Russian or English, on this machine | [emotion2vec/emotion2vec_plus_large: `model.pt` through FunASR](../references/emotion2vec-emotion2vec-plus-large.md) | candidate |  |
+| Get a speech-emotion embedding to train a small classifier on your own labelled speech | [emotion2vec/emotion2vec_plus_large: `model.pt` through FunASR](../references/emotion2vec-emotion2vec-plus-large.md) | candidate |  |
 | Show live text for an English, French, German or Spanish speaker in a Swift app | [FluidInference/FluidAudio: Nemotron Speech Streaming Multilingual 0.6B](../references/fluidinference-fluidaudio.md) | candidate |  |
 | Tell up to 4 speakers apart while a call runs | [FluidInference/FluidAudio: Sortformer](../references/fluidinference-fluidaudio.md) | candidate |  |
 | Cut speech from silence before recognition | [FluidInference/FluidAudio: Silero VAD](../references/fluidinference-fluidaudio.md) | candidate |  |
@@ -450,6 +454,7 @@ Area page: [Live speech and calls](area-live-speech-and-calls.md).
 | reuse its code in the kit. No licence | [makeusabrew/audiotee: `AudioTapManager`](../references/makeusabrew-audiotee.md) | reference | see the card's rejected row |
 | Recognise speech as it is spoken inside a native app, pushing audio from your own capture and reading partial and final text | [NVIDIA/NeMo-Speech.cpp: `NeMoSpeech::ASR` streaming API](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
 | Transcribe the microphone live from a terminal on this machine | [NVIDIA/NeMo-Speech.cpp: `transcribe --live`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
+| Tell up to eight speakers apart in a call, as it runs or afterwards | [NVIDIA/NeMo-Speech.cpp: `diarize`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
 | Translate text locally between English and Russian, Ukrainian, French, German or Dutch | [NVIDIA/NeMo-Speech.cpp: `translate`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
 | Speak text aloud locally in English, French, German or Spanish | [NVIDIA/NeMo-Speech.cpp: `synthesize`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
 | Serve live transcription to other local programs over a WebSocket | [NVIDIA/NeMo-Speech.cpp: `serve`](../references/nvidia-nemo-speech-cpp.md) | candidate |  |
@@ -457,8 +462,9 @@ Area page: [Live speech and calls](area-live-speech-and-calls.md).
 | Transcribe a call where the language changes, with a language tag per utterance | [nvidia/nemotron-3.5-asr-streaming-0.6b: `q8_0.gguf`](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | tried |  |
 | Kazakh speech. It is in none of the card's language tiers | [nvidia/nemotron-3.5-asr-streaming-0.6b: `q8_0.gguf`](../references/nvidia-nemotron-3-5-asr-streaming-0-6b.md) | tried | see the card's rejected row |
 | Transcribe on the Neural Engine from a Swift app, with a more accurate post-trained variant | [nvidia/parakeet-tdt-0.6b-v3: Parakeet Ultra (FluidAudio)](../references/nvidia-parakeet-tdt-0-6b-v3.md) | candidate |  |
+| Label the emotion of Russian speech (angry, sad, neutral, positive) on this machine | [salute-developers/GigaAM: GigaAM-Emo](../references/salute-developers-gigaam.md) | candidate |  |
 | Transcribe Russian speech, as a bench candidate against Whisper and Parakeet | [salute-developers/GigaAM: GigaAM-v3](../references/salute-developers-gigaam.md) | candidate |  |
-| Cut live call audio into speech segments before recognition, so the recogniser skips silence | [snakers4/silero-vad: the copy inside the recogniser](../references/snakers4-silero-vad.md) | tried |  |
+| Cut live call audio into speech segments before recognition, so the recogniser skips silence | [snakers4/silero-vad: the copy inside the recogniser](../references/snakers4-silero-vad.md) | candidate |  |
 | Detect speech in a native app with ONNX Runtime and no Python | [snakers4/silero-vad: `silero_vad.onnx`](../references/snakers4-silero-vad.md) | candidate |  |
 
 ## Science
@@ -632,6 +638,7 @@ Area page: [Science](area-science.md).
 - [raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md](../../raw/notes/trials/2026-11-22-whisper-cpp-chunked-stream-emulation-synthetic.md)
 - [raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md](../../raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md)
 - [raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md)
+- [raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md](../../raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md)
 - [raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md](../../raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md)
 - [raw/repos/agemagician-prottrans-desk-check-2026-11-21.md](../../raw/repos/agemagician-prottrans-desk-check-2026-11-21.md)
 - [raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md](../../raw/repos/apple-speech-synthesis-desk-check-2026-11-21.md)
