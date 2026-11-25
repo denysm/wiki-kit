@@ -11,6 +11,7 @@ sources:
   - raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md
   - raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md
   - raw/notes/trials/2026-11-25-egm-lite-diff-review-retired-history-guard.md
+  - raw/notes/trials/2026-11-25-egm-lite-diff-review-skill-router-tree.md
   - raw/repos/google-elephant-goldfish-model-desk-check-2026-11-21.md
   - raw/notes/trials/2026-11-21-egm-comprehension-catalog-design-review.md
 created: 2026-11-21
@@ -93,6 +94,7 @@ Parts: 8 skills, 10 personas in `agents/` (Claude adapters in `.claude-plugin/ag
 | 2026-11-22 to 2026-11-25 | 17 diff reviews of small changes in a private native macOS app (Swift, with Python and shell scripts) | `egm-lite` | Real use: 35 rounds, 185 findings, 3 rounds with no finding; in several, the second round caught a defect the first round's fixes had brought in. The per-change records are kept in the owner's private repository. | about 42.5 USD | [summary record](../../raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md) |
 | 2026-11-25 | Two diff-review rounds on a leak check's new flags, two pre-push hooks and a bash setup script, across two repositories | `egm-lite` | Real use: 9 findings (4 P1: a hook that checked only HEAD, an ignore-file append that un-ignored `.env`, repeated appends, a folder copied into), 8 fixed, 1 contested; round 2 confirmed all and found 2 P2 caused by the fixes (a push to a new remote always refused; a private name carried into other repositories). | 166681 tokens, about 1.9 USD | [use record](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md) |
 | 2026-11-25 | Four diff-review rounds on a leak-check rule that keeps a rewritten history's dropped files, lines and old commits out | `egm-lite` | Real use: 7, 6, 5, then 1 findings; P1s in rounds 1 to 3 (a new branch, re-authored content, paths with a space or quotes); round 4 passed at the P1 bar. One P1 lies outside any in-repository check and was covered by host rules and resetting old clones. | 407923 tokens, about 5.5 USD | [use record](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-retired-history-guard.md) |
+| 2026-11-25 | One diff-review round on a skill router turned from a flat list of method packages into a tree with a map script and a CI check | `egm-lite` | Real use: 9 findings (2 P1: a crash on a Windows code page, a package that vanished from routing when its division had no parent row), all fixed after the owner's triage; no second round. | 130736 tokens, about 2.1 USD | [use record](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-skill-router-tree.md) |
 
 ## Verdict
 
@@ -113,3 +115,4 @@ No verdict for the repository as a whole: its parts are read from the clone one 
 - [Use record summary: egm-lite, 17 diff reviews on a private native macOS app](../../raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md): totals of the per-change records kept in the owner's private repository; the source of `egm-lite` being in use and of its re-read at `ef27af6`.
 - [Use record: egm-lite, two diff-review rounds on a leak check, two hooks and a setup script](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md): 9 then 2 findings; round 2 caught defects the fixes introduced.
 - [Use record: egm-lite, four diff-review rounds on a rule against a rewritten history coming back](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-retired-history-guard.md): 7, 6, 5, then 1 findings; probes on throwaway clones and a real rewrite.
+- [Use record: egm-lite, one diff-review round on a skill router turned into a tree](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-skill-router-tree.md): 9 findings, all fixed after triage, cost of the round.

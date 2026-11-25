@@ -11,6 +11,7 @@ sources:
   - raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md
   - raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md
   - raw/notes/trials/2026-11-25-egm-lite-diff-review-retired-history-guard.md
+  - raw/notes/trials/2026-11-25-egm-lite-diff-review-skill-router-tree.md
   - raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md
   - raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md
   - raw/repos/apple-xcode-agent-tools-desk-check-2026-11-25.md
@@ -131,6 +132,7 @@ Neighbouring areas: [Designing something new](area-designing-something-new.md), 
 - [raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md](../../raw/notes/trials/2026-11-25-apple-xcode-agent-tools-bridge-and-xctrace.md)
 - [raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-leak-check-and-setup-script.md)
 - [raw/notes/trials/2026-11-25-egm-lite-diff-review-retired-history-guard.md](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-retired-history-guard.md)
+- [raw/notes/trials/2026-11-25-egm-lite-diff-review-skill-router-tree.md](../../raw/notes/trials/2026-11-25-egm-lite-diff-review-skill-router-tree.md)
 - [raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md](../../raw/notes/trials/2026-11-25-egm-lite-private-app-summary.md)
 - [raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md](../../raw/repos/a2ui-project-a2ui-desk-check-2026-11-21.md)
 - [raw/repos/apple-xcode-agent-tools-desk-check-2026-11-25.md](../../raw/repos/apple-xcode-agent-tools-desk-check-2026-11-25.md)
